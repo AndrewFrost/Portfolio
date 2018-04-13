@@ -1,0 +1,514 @@
+<!DOCTYPE HTML>
+<html lang = "en">
+	<head>
+		<meta charset = "utf-8">
+		<style>
+			button
+			{
+				width: 160px;
+				margin-right: 10px;
+			}
+
+			table
+			{
+				border-collapse: collapse;
+			}
+
+			th
+			{
+				background-color: rgba(225, 225, 225, 1.0);
+			}
+
+			td
+			{
+				text-align: center;
+			}
+
+			.filter_Title
+			{
+				width: 165px;
+				display: inline-block;
+				white-space: nowrap;
+			}
+
+			.filter_Number_Input
+			{
+				width: 70px;
+			}
+
+			.filter_Text_Input
+			{
+				width: 164px;
+			}
+
+			.alphabetical_Column
+			{
+				min-width: 175px;
+			}
+
+			.numerical_Column
+			{
+				min-width: 50px;
+			}
+		</style>
+	</head>
+	<body>
+		<div style = "width: 800px"><button onclick = "save_To_Local_Storage()">Save to Local Storage</button><button onclick = "delete_Local_Storage()">Delete Local Storage</button><a id = "download_Raw_String_Link" download = "raw_Table_String.js" draggable = "false"><button onclick = "convert_Table_To_Raw_String()">Save to computer</button></a><button onclick = "toggle_Filters_Section_Visibility()" id = "filters_Section_Toggle_Button">Show Filters</button><span id = "number_Of_Items_Sorted"></span><br></div>
+		<div id = "filters_Section" style = "display: none; width: 680px" onchange = "filter_Table()">
+			<br>
+			<span class = "filter_Title">Level: </span><input type = "number" class = "filter_Number_Input" id = "level_Lower_Limit_Input_Box" value = "1"></input> to <input type = "number" class = "filter_Number_Input" id = "level_Upper_Limit_Input_Box" value = "32"></input><br>
+			<span class = "filter_Title">Experience: </span><input type = "number" class = "filter_Number_Input" id = "experience_Lower_Limit_Input_Box" value = "0"></input> to <input type = "number" class = "filter_Number_Input" id = "experience_Upper_Limit_Input_Box" value = "1000000"></input><br>
+			<span class = "filter_Title">Time: </span><input type = "number" class = "filter_Number_Input" id = "estimated_Time_Lower_Limit_Input_Box" value = "0"></input> to <input type = "number" class = "filter_Number_Input" id = "estimated_Time_Upper_Limit_Input_Box" value = "120"></input><br>
+			<span class = "filter_Title">Favor: </span><input type = "number" class = "filter_Number_Input" id = "favor_Lower_Limit_Input_Box" value = "0"></input> to <input type = "number" class = "filter_Number_Input" id = "favor_Upper_Limit_Input_Box" value = "42"></input><br>
+			<br>
+			<span class = "filter_Title">Experience Weight: </span><input type = "number" class = "filter_Number_Input" id = "experience_Weight_Input_Box" value = 1></input><br>
+			<span class = "filter_Title">Favor Weight: </span><input type = "number" class = "filter_Number_Input" id = "favor_Weight_Input_Box" value = 1000></input><br>
+			<span class = "filter_Title">Minimum Weight / Time: </span><input type = "number" class = "filter_Number_Input" id = "weighted_Experience_And_Favor_Per_Time_Lower_Limit_Input_Box" value = 0></input><br>
+			<br>
+			<span class = "filter_Title">Contains phrases: </span><input type = "text" class = "filter_Text_Input" id = "contains_Phrases_Input_Box"><br>
+			<span class = "filter_Title">Does not contain phrases: </span><input type = "text" class = "filter_Text_Input" id = "does_Not_Contain_Phrases_Input_Box"><br>
+			<br>
+			<button onclick = "reset_Filters()">Reset Filters</button>
+		</div>
+		<br>
+		<table>
+			<caption></caption>
+			<thead>
+				<tr>
+					<th onclick = "sort_Table(0)" class = "numerical_Column">Level</th>
+					<th onclick = "sort_Table(1)" class = "alphabetical_Column">Quest Name</th>
+					<th onclick = "sort_Table(2)" class = "numerical_Column">Exp</th>
+					<th onclick = "sort_Table(3)" class = "numerical_Column">Time</th>
+					<th onclick = "sort_Table(4)" class = "numerical_Column">Favor</th>
+					<th onclick = "sort_Table(5)" class = "alphabetical_Column">Location</th>
+					<th onclick = "sort_Table(6)" class = "alphabetical_Column">Adventure Pack</th>
+					<th onclick = "sort_Table(7)" class = "alphabetical_Column">Damage Reduction Information</th>
+					<th onclick = "sort_Table(8)" class = "alphabetical_Column">Notes</th>
+				</tr>
+			</thead>
+			<tbody id = "table_Body">
+			</tbody>
+		</table>
+		<script type = "text/javascript" src = "raw_Table_String.js"><!--Just includes the variable raw_Table_String in the global scope which is the starting point for the table if no local changes have been saved-->
+		</script>
+		<script type = "text/javascript">
+			window.addEventListener	//Listens for navigation away from the page
+			(
+				"beforeunload", function(event)
+				{
+					event.preventDefault();
+				}
+			);
+
+			var table_Body_Element = document.getElementById("table_Body");
+			var download_Raw_String_Link_Element = document.getElementById("download_Raw_String_Link");
+
+			var filters_Section_Toggle_Button_Element = document.getElementById("filters_Section_Toggle_Button");
+			var filters_Section_Element = document.getElementById("filters_Section");
+			var level_Lower_Limit_Input_Box_Element = document.getElementById("level_Lower_Limit_Input_Box");
+			var level_Upper_Limit_Input_Box_Element = document.getElementById("level_Upper_Limit_Input_Box");
+			var experience_Lower_Limit_Input_Box_Element = document.getElementById("experience_Lower_Limit_Input_Box");
+			var experience_Upper_Limit_Input_Box_Element = document.getElementById("experience_Upper_Limit_Input_Box");
+			var time_Lower_Limit_Input_Box_Element = document.getElementById("estimated_Time_Lower_Limit_Input_Box");
+			var time_Upper_Limit_Input_Box_Element = document.getElementById("estimated_Time_Upper_Limit_Input_Box");
+			var favor_Lower_Limit_Input_Box_Element = document.getElementById("favor_Lower_Limit_Input_Box");
+			var favor_Upper_Limit_Input_Box_Element = document.getElementById("favor_Upper_Limit_Input_Box");
+			var experience_Weight_Input_Box_Element = document.getElementById("experience_Weight_Input_Box");
+			var favor_Weight_Input_Box_Element = document.getElementById("favor_Weight_Input_Box");
+			var weighted_Experience_And_Favor_Per_Time_Lower_Limit_Input_Box_Element = document.getElementById("weighted_Experience_And_Favor_Per_Time_Lower_Limit_Input_Box");
+			var contains_Phrases_Input_Box_Element = document.getElementById("contains_Phrases_Input_Box");
+			var does_Not_Contain_Phrases_Input_Box_Element = document.getElementById("does_Not_Contain_Phrases_Input_Box");
+			var number_Of_Items_Sorted_Element = document.getElementById("number_Of_Items_Sorted");
+
+			var table_Body_Array = [];		//Stores the table rows, which are themselves arrays of strings
+			var table_Data_Array_Copy = [];	//A copy of the array used to stablize the sort in Chrome. Data order will often be intentionally one update behind
+
+			var sort_Selection_Type_Array = ["Numerical", "Quest Name", "Numerical", "Numerical", "Numerical", "Alphabetical", "Alphabetical", "Alphabetical", "Alphabetical"];	//The type of sort to use on each selection
+			var sort_Selection_Ascending_State_Array = [1, 1, 1, 1, 1, 1, 1, 1, 1];	//1 represents that the values for a selection type are increasing as the rows go down, -1 represents values lowering as the rows go down
+			var current_Sort_Selection = 0;
+			var number_Of_Items_Filtered = 0;
+
+			function filter_Table()
+			{
+				table_Body_Element.style.display = "none";	//Avoid unnecessary redrawing of Table
+				number_Of_Items_Filtered = 0;
+				for(i = 0; i < table_Body_Element.children.length; i++)
+				{
+					table_Body_Element.children[i].style.display = "table-row";
+					if
+					(
+						Number(table_Body_Array[i][0]) < level_Lower_Limit_Input_Box_Element.value || Number(table_Body_Array[i][0]) > level_Upper_Limit_Input_Box_Element.value
+						|| Number(table_Body_Array[i][2]) < experience_Lower_Limit_Input_Box_Element.value || Number(table_Body_Array[i][2]) > experience_Upper_Limit_Input_Box_Element.value
+						|| Number(table_Body_Array[i][3]) < time_Lower_Limit_Input_Box_Element.value || Number(table_Body_Array[i][3]) > time_Upper_Limit_Input_Box_Element.value
+						|| Number(table_Body_Array[i][4]) < favor_Lower_Limit_Input_Box_Element.value || Number(table_Body_Array[i][4]) > favor_Upper_Limit_Input_Box_Element.value
+					)
+					{
+						table_Body_Element.children[i].style.display = "none";
+						number_Of_Items_Filtered = number_Of_Items_Filtered + 1;
+						continue;
+					}
+
+					if(((Number(table_Body_Array[i][2]) * experience_Weight_Input_Box_Element.value) + (Number(table_Body_Array[i][4]) * favor_Weight_Input_Box_Element.value) / Number(table_Body_Array[i][3])) < weighted_Experience_And_Favor_Per_Time_Lower_Limit_Input_Box_Element.value)
+					{
+						table_Body_Element.children[i].style.display = "none";
+						number_Of_Items_Filtered = number_Of_Items_Filtered + 1;
+						continue;
+					}
+
+					var contains_Phrases_Array = contains_Phrases_Input_Box_Element.value.split("  ");
+					if(contains_Phrases_Array.length === 1 && contains_Phrases_Array[0] === "")
+					{
+						contains_Phrases_Array = [];
+					}
+					for(j = 0; j < contains_Phrases_Array.length; j++)
+					{
+						if
+						(
+							table_Body_Element.children[i].children[1].textContent.toLowerCase().includes(contains_Phrases_Array[j].toLowerCase()) === false	//Uses the table itself rather than array to avoid matching hidden URLs
+							&& table_Body_Array[i][5].toLowerCase().includes(contains_Phrases_Array[j].toLowerCase()) === false
+							&& table_Body_Array[i][6].toLowerCase().includes(contains_Phrases_Array[j].toLowerCase()) === false
+							&& table_Body_Array[i][7].toLowerCase().includes(contains_Phrases_Array[j].toLowerCase()) === false
+							&& table_Body_Array[i][8].toLowerCase().includes(contains_Phrases_Array[j].toLowerCase()) === false
+						)
+						{
+							table_Body_Element.children[i].style.display = "none";
+							number_Of_Items_Filtered = number_Of_Items_Filtered + 1;
+							break;
+						}
+					}
+					if(table_Body_Element.children[i].style.display === "none")
+					{
+						continue;
+					}
+
+					var does_Not_Contain_Phrases_Array = does_Not_Contain_Phrases_Input_Box_Element.value.split("  ");
+					if(does_Not_Contain_Phrases_Array.length === 1 && does_Not_Contain_Phrases_Array[0] === "")
+					{
+						does_Not_Contain_Phrases_Array = [];
+					}
+					for(j = 0; j < does_Not_Contain_Phrases_Array.length; j++)
+					{
+						if
+						(
+							table_Body_Element.children[i].children[1].textContent.toLowerCase().includes(does_Not_Contain_Phrases_Array[j].toLowerCase()) === true	//Uses the table itself rather than array to avoid matching hidden URLs
+							|| table_Body_Array[i][5].toLowerCase().includes(does_Not_Contain_Phrases_Array[j].toLowerCase()) === true
+							|| table_Body_Array[i][6].toLowerCase().includes(does_Not_Contain_Phrases_Array[j].toLowerCase()) === true
+							|| table_Body_Array[i][7].toLowerCase().includes(does_Not_Contain_Phrases_Array[j].toLowerCase()) === true
+							|| table_Body_Array[i][8].toLowerCase().includes(does_Not_Contain_Phrases_Array[j].toLowerCase()) === true
+						)
+						{
+							table_Body_Element.children[i].style.display = "none";
+							number_Of_Items_Filtered = number_Of_Items_Filtered + 1;
+							break;
+						}
+					}
+
+					if((i - number_Of_Items_Filtered) % 2 === 0)	//Apply the alternating color background stripes to visible rows
+					{
+						table_Body_Element.children[i].style.backgroundColor = "rgba(255, 255, 255, 1.0)";
+					}
+					else
+					{
+						table_Body_Element.children[i].style.backgroundColor = "rgba(235, 235, 235, 1.0)";
+					}
+				}
+				number_Of_Items_Sorted_Element.textContent = number_Of_Items_Filtered + " Items Filtered";
+				table_Body_Element.style.display = "table-row-group";	//Return the Table to visible
+			}
+
+			function update_Table()	//Converts the contents of the array into HTML
+			{
+				table_Body_Element.style.display = "none";	//Avoid unnecessary redrawing of Table
+				while(table_Body_Element.children[0] !== undefined)	//Destroys the old table
+				{
+					table_Body_Element.removeChild(table_Body_Element.lastChild);
+				}
+				for(i = 0; i < table_Body_Array.length; i++)	//Fills the table with rows and data
+				{
+					var new_Table_Row = document.createElement("TR");
+					for(j = 0; j < sort_Selection_Type_Array.length; j++)
+					{
+						var new_Table_Data = document.createElement("TD");
+						new_Table_Data.innerHTML = table_Body_Array[i][j];
+						if(j === 2 || j === 3 || j === 7 || j === 8)
+						{
+							new_Table_Data.setAttribute("contenteditable", "true");
+						}
+						new_Table_Data.setAttribute("oninput", "table_Data_Changed(" + i + ", " + j + ")");
+						new_Table_Row.appendChild(new_Table_Data);
+					}
+					table_Body_Element.appendChild(new_Table_Row);
+				}
+				filter_Table();	//Also changes style back to normal for redraw
+			}
+
+			function numerical_Sort(item_1, item_2)
+			{
+				if(Number(item_1[current_Sort_Selection]) < Number(item_2[current_Sort_Selection]))
+				{
+					return -1 * sort_Selection_Ascending_State_Array[current_Sort_Selection];
+				}
+				else if(Number(item_1[current_Sort_Selection]) === Number(item_2[current_Sort_Selection]))
+				{
+					if(table_Data_Array_Copy.indexOf(item_1) < table_Data_Array_Copy.indexOf(item_2))
+					{
+						return -1;
+					}
+					else
+					{
+						return 1;
+					}
+				}
+				else
+				{
+					return 1 * sort_Selection_Ascending_State_Array[current_Sort_Selection];
+				}
+			}
+
+			function quest_Name_Sort(item_1, item_2)	//Quest names should not contain the > character side from the the ones present in <a>Name</a> and should always be closed properly if it has a hidden URL
+			{
+				var item_1_Quest_Name = item_1[current_Sort_Selection][item_1[current_Sort_Selection].length - 1] === ">" ? item_1[current_Sort_Selection].split(">")[1].split("<")[0] : item_1[current_Sort_Selection];
+				var item_2_Quest_Name = item_2[current_Sort_Selection][item_2[current_Sort_Selection].length - 1] === ">" ? item_2[current_Sort_Selection].split(">")[1].split("<")[0] : item_2[current_Sort_Selection];
+				if(item_1_Quest_Name < item_2_Quest_Name)
+				{
+					return -1 * sort_Selection_Ascending_State_Array[current_Sort_Selection];
+				}
+				else if(item_1_Quest_Name === item_2_Quest_Name)	//Shouldn't occur, but left just in case someone messes up the list
+				{
+					if(table_Data_Array_Copy.indexOf(item_1) < table_Data_Array_Copy.indexOf(item_2))
+					{
+						return -1;
+					}
+					else
+					{
+						return 1;
+					}
+				}
+				else
+				{
+					return 1 * sort_Selection_Ascending_State_Array[current_Sort_Selection];
+				}
+			}
+
+			function alphabetical_Sort(item_1, item_2)
+			{
+				if(item_1[current_Sort_Selection] < item_2[current_Sort_Selection])
+				{
+					return -1 * sort_Selection_Ascending_State_Array[current_Sort_Selection];
+				}
+				else if(item_1[current_Sort_Selection] === item_2[current_Sort_Selection])
+				{
+					if(table_Data_Array_Copy.indexOf(item_1) < table_Data_Array_Copy.indexOf(item_2))
+					{
+						return -1;
+					}
+					else
+					{
+						return 1;
+					}
+				}
+				else
+				{
+					return 1 * sort_Selection_Ascending_State_Array[current_Sort_Selection];
+				}
+			}
+
+			function sort_Table(sort_Selection)	//Orders the table by a column
+			{
+				if(sort_Selection === current_Sort_Selection)	//Flip from ascending to/from descending if the user clicks on the already selected category to sort
+				{
+					sort_Selection_Ascending_State_Array[sort_Selection] = sort_Selection_Ascending_State_Array[sort_Selection] * -1;
+				}
+				current_Sort_Selection = sort_Selection;
+
+				table_Data_Array_Copy = [];
+				for(i = 0; i < table_Body_Array.length; i++)
+				{
+					table_Data_Array_Copy[i] = table_Body_Array[i];
+				}
+
+				if(sort_Selection_Type_Array[current_Sort_Selection] === "Numerical")	//Numerical Sort
+				{
+					table_Body_Array.sort(numerical_Sort);
+				}
+				else if(sort_Selection_Type_Array[current_Sort_Selection] === "Quest Name")	//Quest Name Sort
+				{
+					table_Body_Array.sort(quest_Name_Sort);
+				}
+				else	//Regular Alphabetical
+				{
+					table_Body_Array.sort(alphabetical_Sort);
+				}
+
+				update_Table();
+			}
+
+			function save_To_Local_Storage()
+			{
+				window.localStorage.setItem("table_Body_Data", JSON.stringify(table_Body_Array));
+				window.localStorage.setItem("table_Filter_Level_Lower_Limit", level_Lower_Limit_Input_Box_Element.value);
+				window.localStorage.setItem("table_Filter_Level_Upper_Limit", level_Upper_Limit_Input_Box_Element.value);
+				window.localStorage.setItem("table_Filter_Experience_Lower_Limit", experience_Lower_Limit_Input_Box_Element.value);
+				window.localStorage.setItem("table_Filter_Experience_Upper_Limit", experience_Upper_Limit_Input_Box_Element.value);
+				window.localStorage.setItem("table_Filter_Time_Lower_Limit", time_Lower_Limit_Input_Box_Element.value);
+				window.localStorage.setItem("table_Filter_Time_Upper_Limit", time_Upper_Limit_Input_Box_Element.value);
+				window.localStorage.setItem("table_Filter_Favor_Lower_Limit", favor_Lower_Limit_Input_Box_Element.value);
+				window.localStorage.setItem("table_Filter_Favor_Upper_Limit", favor_Upper_Limit_Input_Box_Element.value);
+				window.localStorage.setItem("table_Filter_Experience_Weight", experience_Weight_Input_Box_Element.value);
+				window.localStorage.setItem("table_Filter_Favor_Weight", favor_Weight_Input_Box_Element.value);
+				window.localStorage.setItem("table_Filter_Weighted_Experience_And_Favor_Per_Time_Lower_Limit_Input_Box", weighted_Experience_And_Favor_Per_Time_Lower_Limit_Input_Box_Element.value);
+				window.localStorage.setItem("table_Filter_Contains_Phrases_Input_Box", contains_Phrases_Input_Box_Element.value);
+				window.localStorage.setItem("table_Filter_Does_Not_Contain_Phrases_Input_Box", does_Not_Contain_Phrases_Input_Box_Element.value);
+				window.onbeforeunload = null;
+			}
+
+			function delete_Local_Storage()
+			{
+				if(window.confirm("Click 'OK' to delete local storage. It is recommended to do so after updates and to save the text file to your device periodically."))
+				{
+					window.localStorage.clear();
+				}
+			}
+
+			function convert_Table_To_Raw_String()
+			{
+				var raw_Text_Tab_Length = 4;
+				var raw_Text_Table_Column_Tab_Lengths_Array = [2, 35, 1, 4, 2, 9, 8, 46, 0];
+				var number_Of_Extra_Characters_In_Row = 0;
+				var table_String = "//Level,Name,																																		Experience,	Time,	Favor,	Location,							Adventure Pack,					Damage Reduction Types,																																									Notes\r\nvar raw_Table_String = \r\n\"";
+				for(i = 0; i < table_Body_Element.children.length; i++)
+				{
+					for(j = 0; j < sort_Selection_Type_Array.length; j++)
+					{
+						number_Of_Extra_Characters_In_Row = 0;
+						for(k = 0; k < table_Body_Element.children[i].children[j].innerHTML.length; k++)
+						{
+							if(table_Body_Element.children[i].children[j].innerHTML[k] === '\'' || table_Body_Element.children[i].children[j].innerHTML[k] === '\"')
+							{
+								table_String = table_String + '\\';
+								number_Of_Extra_Characters_In_Row = number_Of_Extra_Characters_In_Row + 1;
+							}
+							table_String = table_String + table_Body_Element.children[i].children[j].innerHTML[k];
+						}
+						for(k = 0; k < Math.max(raw_Text_Table_Column_Tab_Lengths_Array[j] - ((table_Body_Element.children[i].children[j].innerHTML.length + number_Of_Extra_Characters_In_Row) / raw_Text_Tab_Length), raw_Text_Table_Column_Tab_Lengths_Array[j] === 0 ? 0 : 1); k++)
+						{
+							table_String = table_String + "\t";
+						}
+					}
+					table_String = table_String + "\\n\\\r\n";
+				}
+				table_String = table_String + "\";\r\n"
+
+				window.URL.revokeObjectURL(download_Raw_String_Link_Element.href);
+				var table_Blob = new Blob
+				(
+					[table_String],
+					{
+						type: 'text/plain'
+					}
+				);
+				download_Raw_String_Link_Element.href = window.URL.createObjectURL(table_Blob);
+			}
+
+			function convert_Raw_String_To_Table()
+			{
+				//raw_Table_String is a global string available from raw_String_Table.js
+				var temporary_Table_Data_String = "";
+				var temporary_Table_Row_Array = [];
+				for(i = 0; i < raw_Table_String.length; i++)
+				{
+					if(raw_Table_String[i] !== "\t" && raw_Table_String[i] !== "\n")
+					{
+						temporary_Table_Data_String = temporary_Table_Data_String + raw_Table_String[i];
+					}
+					else if(raw_Table_String[i] === "\t")
+					{
+						if(temporary_Table_Data_String.length != 0)
+						{
+							temporary_Table_Row_Array.push(temporary_Table_Data_String);
+						}
+						temporary_Table_Data_String = "";
+					}
+					else
+					{
+						if(temporary_Table_Data_String.length != 0)
+						{
+							temporary_Table_Row_Array.push(temporary_Table_Data_String);
+						}
+						while(temporary_Table_Row_Array.length < sort_Selection_Type_Array.length)
+						{
+							temporary_Table_Row_Array.push("");
+						}
+						table_Body_Array.push(temporary_Table_Row_Array);
+						temporary_Table_Row_Array = [];
+						temporary_Table_Data_String = "";
+					}
+				}
+			}
+
+			var exit_Warning_Function = function() {return true;};	//Simple function to trigger the page navigation confirmation event
+			function table_Data_Changed(table_Row, table_Column)
+			{
+				table_Body_Array[table_Row][table_Column] = table_Body_Element.children[table_Row].children[table_Column].textContent;
+				filter_Table();
+				window.onbeforeunload = exit_Warning_Function;	//Sets a warning if the user navigates away after making changes, warning is removed when local storage is saved
+			}
+
+			function toggle_Filters_Section_Visibility()
+			{
+				if(filters_Section_Element.style.display === "block")
+				{
+					filters_Section_Toggle_Button_Element.textContent = "Show Filters";
+					filters_Section_Element.style.display = "none";
+				}
+				else
+				{
+					filters_Section_Toggle_Button_Element.textContent = "Hide Filters";
+					filters_Section_Element.style.display = "block";
+				}
+			}
+
+			function reset_Filters()
+			{
+				level_Lower_Limit_Input_Box_Element.value = level_Lower_Limit_Input_Box_Element.getAttribute("value");	//Gets the initial value that the element began with rather than current value
+				level_Upper_Limit_Input_Box_Element.value = level_Upper_Limit_Input_Box_Element.getAttribute("value");
+				experience_Lower_Limit_Input_Box_Element.value = experience_Lower_Limit_Input_Box_Element.getAttribute("value");
+				experience_Upper_Limit_Input_Box_Element.value = experience_Upper_Limit_Input_Box_Element.getAttribute("value");
+				time_Lower_Limit_Input_Box_Element.value = time_Lower_Limit_Input_Box_Element.getAttribute("value");
+				time_Upper_Limit_Input_Box_Element.value = time_Upper_Limit_Input_Box_Element.getAttribute("value");
+				favor_Lower_Limit_Input_Box_Element.value = favor_Lower_Limit_Input_Box_Element.getAttribute("value");
+				favor_Upper_Limit_Input_Box_Element.value = favor_Upper_Limit_Input_Box_Element.getAttribute("value");
+				experience_Weight_Input_Box_Element.value = experience_Weight_Input_Box_Element.getAttribute("value");
+				favor_Weight_Input_Box_Element.value = favor_Weight_Input_Box_Element.getAttribute("value");
+				weighted_Experience_And_Favor_Per_Time_Lower_Limit_Input_Box_Element.value = weighted_Experience_And_Favor_Per_Time_Lower_Limit_Input_Box_Element.getAttribute("value");
+				contains_Phrases_Input_Box_Element.value = contains_Phrases_Input_Box_Element.getAttribute("value");
+				does_Not_Contain_Phrases_Input_Box_Element.value = does_Not_Contain_Phrases_Input_Box_Element.getAttribute("value");
+				filter_Table();
+			}
+
+
+			if(window.localStorage.getItem("table_Body_Data") === null)
+			{
+				convert_Raw_String_To_Table();
+			}
+			else
+			{
+				table_Body_Array = JSON.parse(window.localStorage.getItem("table_Body_Data"));
+				level_Lower_Limit_Input_Box_Element.value = window.localStorage.getItem("table_Filter_Level_Lower_Limit");
+				level_Upper_Limit_Input_Box_Element.value = window.localStorage.getItem("table_Filter_Level_Upper_Limit");
+				experience_Lower_Limit_Input_Box_Element.value = window.localStorage.getItem("table_Filter_Experience_Lower_Limit");
+				experience_Upper_Limit_Input_Box_Element.value = window.localStorage.getItem("table_Filter_Experience_Upper_Limit");
+				time_Lower_Limit_Input_Box_Element.value = window.localStorage.getItem("table_Filter_Time_Lower_Limit");
+				time_Upper_Limit_Input_Box_Element.value = window.localStorage.getItem("table_Filter_Time_Upper_Limit");
+				favor_Lower_Limit_Input_Box_Element.value = window.localStorage.getItem("table_Filter_Favor_Lower_Limit");
+				favor_Upper_Limit_Input_Box_Element.value = window.localStorage.getItem("table_Filter_Favor_Upper_Limit");
+				experience_Weight_Input_Box_Element.value = window.localStorage.getItem("table_Filter_Experience_Weight");
+				favor_Weight_Input_Box_Element.value = window.localStorage.getItem("table_Filter_Favor_Weight");
+				weighted_Experience_And_Favor_Per_Time_Lower_Limit_Input_Box_Element.value = window.localStorage.getItem("table_Filter_Weighted_Experience_And_Favor_Per_Time_Lower_Limit_Input_Box");
+				contains_Phrases_Input_Box_Element.value = window.localStorage.getItem("table_Filter_Contains_Phrases_Input_Box");
+				does_Not_Contain_Phrases_Input_Box_Element.value = window.localStorage.getItem("table_Filter_Does_Not_Contain_Phrases_Input_Box");
+			}
+			update_Table();
+		</script>
+	</body>
+</html>

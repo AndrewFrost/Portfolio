@@ -1,0 +1,146 @@
+<!DOCTYPE HTML>
+<html lang = "en">
+	<head>
+		<meta charset = "utf-8">
+		<title>Andrew Frost - Game Programming Portfolio</title>
+		<style>
+			*
+			{
+				box-sizing: inherit;
+			}
+
+			html
+			{
+				box-sizing: border-box;
+				background-color: black;
+			}
+
+			body
+			{
+				margin: auto;
+				width: 75%;
+				min-width: 450px;
+			}
+
+			.title_Bar_Item
+			{
+				display: inline-block;
+				width: 33.33333%;
+				padding: 4px;
+				border: 1px solid black;
+				margin: auto;
+				font-size: xx-large;
+				text-decoration: none;
+				text-align: center;
+				color: black;
+				background-color: #1860C0;
+			}
+
+			.title_Bar_Item:hover
+			{
+				background-color: #1658B0;
+			}
+
+			.title_Bar_Item:active
+			{
+				background-color: #104080;
+			}
+
+			.title_Bar_Item_Current_Selection
+			{
+				background-color: #1450A0;
+			}
+
+			.page_Content
+			{
+				border: 1px solid black;
+				padding: 16px;
+				background-color: #B0B0B0;
+			}
+
+			.pdf_Container
+			{
+				position: relative;
+				width: 100%;
+			}
+
+			.pdf_Container::before
+			{
+				content: "";
+				display: block;
+				padding-top: 138%;
+			}
+
+			.pdf_Viewer
+			{
+				width: 100%;
+				height: 100%;
+				position: absolute;
+				top: 0;
+				left: 0;
+				bottom: 0;
+				right: 0;
+			}
+
+			#title_Bar
+			{
+				border: 1px solid black;
+				background-color: black;
+			}
+		</style>
+	</head>
+	<body>
+		<div id = "title_Bar">
+			<a id = "About_Me_Title_Bar_Item" class = "title_Bar_Item title_Bar_Item_Current_Selection" href = "#0" onclick = "event.preventDefault(); display_Selected_Page_Content(0)">About Me</a><a id = "Projects_Title_Bar_Item" class = "title_Bar_Item" href = "#1" onclick = "event.preventDefault(); display_Selected_Page_Content(1)">Projects</a><a id = "Resume_Title_Bar_Item" class = "title_Bar_Item" href = "#2" onclick = "event.preventDefault(); display_Selected_Page_Content(2)">Résumé</a>
+		</div>
+		<div id = "About_Me_Page_Content" class = "page_Content">
+			<h1>About Me</h1>
+			<p>Welcome to my portfolio- I'm Andrew Frost and this website is a showcase of projects that I've worked on.</p>
+			<p>I've always had an interest in video games, but didn't decide to pursue it as a career until a little later in life. I first started programming in late 2012 by following some online JavaScript tutorials, and I liked it enough to pursue a degree in programming. I began my studies at Texas A&M University - Corpus Christi in Fall of 2013 where I was first introduced to C++ and got to delve deeper into programming. I gained a lot of experience at college and would recommend it for most people interested in programming, but it's far from the only way to learn. I graduated Cum Laude and received a Bachelor of Science Degree in Game Programming in May of 2016.</p>
+			<p>Feel free to look around, browse the source code, and play the demos of anything that catches your eye!</p>
+			<p>If you're a recruiter in the Austin area looking for a strong C++ programmer, you can contact me by email at andrewdylanfrost@gmail.com.</p>
+		</div>
+
+		<div id = "Projects_Page_Content" class = "page_Content" style = "display: none">
+			<h1>Projects</h1>
+			<a href = "https://andrewfrost.github.io/Dungeons-and-Dragons-5e-Average-Damage-Calculator/">Dungeons and Dragons 5e Average Damage Calculator</a><br>
+			<a href = "Sortable_Tables/Sortable_Tables.html">Dungeons and Dragons Online Quest Tables</a><br>
+		</div>
+
+		<div id = "Resume_Page_Content" class = "page_Content" style = "display: none">
+			<h1>Résumé</h1>
+			<a href = "Andrew_Frost_Résumé.pdf" download>Download</a><br>
+			<br>
+			<div class = "pdf_Container">
+				<object class = "pdf_Viewer" type = "application/pdf" data = "Andrew_Frost_Résumé.pdf#view=FitH">
+			</div>
+		</div>
+
+		<script type = "text/javascript">
+			var currently_Displayed_Page_Layout_Element_Index = 0;
+			var page_Layout_Elements_Array = [];
+			page_Layout_Elements_Array.push({page_Content_Element: document.getElementById("About_Me_Page_Content"), title_Bar_Selection_Element: document.getElementById("About_Me_Title_Bar_Item")});
+			page_Layout_Elements_Array.push({page_Content_Element: document.getElementById("Projects_Page_Content"), title_Bar_Selection_Element: document.getElementById("Projects_Title_Bar_Item")});
+			page_Layout_Elements_Array.push({page_Content_Element: document.getElementById("Resume_Page_Content"), title_Bar_Selection_Element: document.getElementById("Resume_Title_Bar_Item")});
+
+			function display_Selected_Page_Content(new_Page_Layout_Element_Index)	//Sets the visible page content and selected menu bar item based on the index passed in
+			{
+				page_Layout_Elements_Array[currently_Displayed_Page_Layout_Element_Index].page_Content_Element.style.display = "none";
+				page_Layout_Elements_Array[currently_Displayed_Page_Layout_Element_Index].title_Bar_Selection_Element.className = "title_Bar_Item";
+				page_Layout_Elements_Array[new_Page_Layout_Element_Index].page_Content_Element.style.display = "block";
+				page_Layout_Elements_Array[new_Page_Layout_Element_Index].title_Bar_Selection_Element.className = "title_Bar_Item title_Bar_Item_Current_Selection";
+				currently_Displayed_Page_Layout_Element_Index = new_Page_Layout_Element_Index;
+			}
+
+			function initialize_Page()	//Allows opening new tabs or windows from the title bar into a specific section
+			{
+				var initial_Page_Content_String_Array = window.location.hash.split("#");
+				if(initial_Page_Content_String_Array.length !== 1)
+				{
+					display_Selected_Page_Content(Number(initial_Page_Content_String_Array[1]));
+				}
+			}
+			initialize_Page();
+		</script>
+	</body>
+</html>

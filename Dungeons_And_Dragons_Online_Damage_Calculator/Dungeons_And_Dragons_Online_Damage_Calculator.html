@@ -1,0 +1,153 @@
+<!DOCTYPE HTML>
+<html lang = "en">
+	<head>
+		<meta charset = "utf-8">
+		<style>
+			span
+			{
+				display: inline-block;
+				width: 275px;
+			}
+		</style>
+	</head>
+	<body>
+		<span>Average Base Weapon Damage: </span><input id = "average_Base_Weapon_Damage_Input_Box" onchange = "calculate_Damage()" type = "number" value = "9"></input><br>
+		<span>Base Weapon Damage Multiplier (X[W]): </span><input id = "base_Weapon_Damage_Multiplier_Input_Box" onchange = "calculate_Damage()" type = "number" value = "9.5"></input><br>
+		<br>
+		<span>Enhancement Bonus: </span><input id = "enhancement_Bonus_Input_Box" onchange = "calculate_Damage()" type = "number" value = "12"></input><br>
+		<span>Deadly: </span><input id = "deadly_Input_Box" onchange = "calculate_Damage()" type = "number" value = "21"></input><br>
+		<span>Ability Score Damage Modifier: </span><input id = "ability_Score_Damage_Modifier_Input_Box" onchange = "calculate_Damage()" type = "number" value = "20"></input><br>
+		<span>Feat and Enhancement Bonuses: </span><input id = "feat_And_Enhancement_Bonuses_Input_Box" onchange = "calculate_Damage()" type = "number" value = "15"></input><br>
+		<span>Other (Power Attack, etc.): </span><input id = "deadly_Other_Input_Box" onchange = "calculate_Damage()" type = "number" value = "9"></input><br>
+		<br>
+		<span>Critical Range: </span><input id = "critical_Range_Input_Box" onchange = "calculate_Damage()" type = "number" value = "6"></input><br>
+		<span>Critical Multiplier: </span><input id = "critical_Multiplier_Input_Box" onchange = "calculate_Damage()" type = "number" value = "4"></input><br>
+		<span>19 to 20 Bonus Multiplier: </span><input id = "bonus_Multiplier_On_19_And_20_Input_Box" onchange = "calculate_Damage()" type = "number" value = "1"></input><br>
+		<span>Seeker: </span><input id = "seeker_Input_Box" onchange = "calculate_Damage()" type = "number" value = "28"></input><br>
+		<span>Vorpal Range: </span><input id = "vorpal_Range_Input_Box" onchange = "calculate_Damage()" type = "number" value = "2"></input><br>
+		<br>
+		<span>Number of Sneak Attack Dice: </span><input id = "number_Of_Sneak_Attack_Dice_Input_Box" onchange = "calculate_Damage()" type = "number" value = "24"></input><br>
+		<span>Deception Bonuses: </span><input id = "deception_Bonuses_Input_Box" onchange = "calculate_Damage()" type = "number" value = "28"></input><br>
+		<br>
+		<span>Ranged or Melee Power: </span><input id = "ranged_Or_Melee_Power_Input_Box" onchange = "calculate_Damage()" type = "number" value = "100"></input><br>
+		<br>
+		<span>Average On-Hit Bonus Damage: </span><input id = "average_On_Hit_Bonus_Damage_Input_Box" onchange = "calculate_Damage()" type = "number" value = "140.5"></input><br>
+		<span>Average Critical Bonus Damage: </span><input id = "average_Critical_Bonus_Damage_Input_Box" onchange = "calculate_Damage()" type = "number" value = "0"></input><br>
+		<span>Average Vorpal Bonus Damage: </span><input id = "average_Vorpal_Bonus_Damage_Input_Box" onchange = "calculate_Damage()" type = "number" value = "300"></input><br>
+		<br>
+		<span>Enemy Fortification: </span><input id = "enemy_Fortification_Input_Box" onchange = "calculate_Damage()" type = "number" value = "0"></input><br>
+		<span>Fortification Bypass: </span><input id = "fortification_Bypass_Input_Box" onchange = "calculate_Damage()" type = "number" value = "0"></input><br>
+		<br>
+		<span>Base Average Damage Per Hit: </span><span id = "base_Average_Damage_Per_Hit_Span"></span><br>
+		<span>Average Damage Per Sneak Attack: </span><span id = "average_Damage_Per_Sneak_Attack_Span"></span><br>
+		<span>Average Bonus Damage Per Hit: </span><span id = "average_Bonus_Damage_Per_Hit_Span"></span><br>
+		<span>Total Average Damage Per Hit: </span><span id = "total_Average_Damage_Per_Hit_Span"></span><br>
+		<br>
+		<br>
+		<span>Doubleshot or Doublestrike: </span><input id = "doubleshot_Or_Doublestrike_Input_Box" onchange = "calculate_Damage()" type = "number" value = "50"></input><br>
+		<span>Attacks Per Second:</span><input id = "attacks_Per_Second_Input_Box" onchange = "calculate_Damage()" type = "number" value = "2.5"></input><br>
+		<br>
+		<span>Average Damage Per Second: </span><span id = "average_Damage_Per_Second_Span"></span><br>
+		<script type = "text/javascript">
+			window.addEventListener	//Listens for navigation away from the page
+			(
+				"beforeunload", function(event)
+				{
+					event.preventDefault();
+				}
+			);
+			var exit_Warning_Function = function() {return true;};	//Simple function to trigger the page navigation confirmation event
+			window.onbeforeunload = exit_Warning_Function;
+
+			var average_Base_Weapon_Damage_Input_Box_Element = document.getElementById("average_Base_Weapon_Damage_Input_Box");
+			var base_Weapon_Damage_Multiplier_Input_Box_Element = document.getElementById("base_Weapon_Damage_Multiplier_Input_Box");
+
+			var enhancement_Bonus_Input_Box_Element = document.getElementById("enhancement_Bonus_Input_Box");
+			var deadly_Input_Box_Element = document.getElementById("deadly_Input_Box");
+			var ability_Score_Damage_Modifier_Input_Box_Element = document.getElementById("ability_Score_Damage_Modifier_Input_Box");
+			var feat_And_Enhancement_Bonuses_Input_Box_Element = document.getElementById("feat_And_Enhancement_Bonuses_Input_Box");
+			var deadly_Other_Input_Box_Element = document.getElementById("deadly_Other_Input_Box");
+
+			var critical_Range_Input_Box_Element = document.getElementById("critical_Range_Input_Box");
+			var critical_Multiplier_Input_Box_Element = document.getElementById("critical_Multiplier_Input_Box");
+			var bonus_Multiplier_On_19_And_20_Input_Box_Element = document.getElementById("bonus_Multiplier_On_19_And_20_Input_Box");
+			var seeker_Input_Box_Element = document.getElementById("seeker_Input_Box");
+			var vorpal_Range_Input_Box_Element = document.getElementById("vorpal_Range_Input_Box");
+
+			var number_Of_Sneak_Attack_Dice_Input_Box_Element = document.getElementById("number_Of_Sneak_Attack_Dice_Input_Box");
+			var deception_Bonuses_Input_Box_Element = document.getElementById("deception_Bonuses_Input_Box");
+
+			var ranged_Or_Melee_Power_Input_Box_Element = document.getElementById("ranged_Or_Melee_Power_Input_Box");
+			var average_On_Hit_Bonus_Damage_Input_Box_Element = document.getElementById("average_On_Hit_Bonus_Damage_Input_Box");
+			var average_Critical_Bonus_Damage_Input_Box_Element = document.getElementById("average_Critical_Bonus_Damage_Input_Box");
+			var average_Vorpal_Bonus_Damage_Input_Box_Element = document.getElementById("average_Vorpal_Bonus_Damage_Input_Box");
+
+			var enemy_Fortification_Input_Box_Element = document.getElementById("enemy_Fortification_Input_Box");
+			var fortification_Bypass_Input_Box_Element = document.getElementById("fortification_Bypass_Input_Box");
+
+			var average_Damage_Per_Sneak_Attack_Span_Element = document.getElementById("average_Damage_Per_Sneak_Attack_Span");
+			var average_Damage_Per_Hit_Span_Element = document.getElementById("average_Damage_Per_Hit_Span");
+			var average_Bonus_Damage_Per_Hit_Span_Element = document.getElementById("average_Bonus_Damage_Per_Hit_Span");
+			var total_Average_Damage_Per_Hit_Span_Element = document.getElementById("total_Average_Damage_Per_Hit_Span");
+
+
+			var doubleshot_Or_Doublestrike_Input_Box_Element = document.getElementById("doubleshot_Or_Doublestrike_Input_Box");
+			var attacks_Per_Second_Input_Box_Element = document.getElementById("attacks_Per_Second_Input_Box");
+
+			var average_Damage_Per_Second_Span_Element = document.getElementById("average_Damage_Per_Second_Span");
+
+			function calculate_Damage()
+			{
+				var average_Base_Weapon_Damage = Number(average_Base_Weapon_Damage_Input_Box.value);
+				var base_Weapon_Damage_Multiplier = Number(base_Weapon_Damage_Multiplier_Input_Box.value);
+				var enhancement_Bonus = Number(enhancement_Bonus_Input_Box.value);
+				var deadly = Number(deadly_Input_Box.value);
+				var ability_Score_Damage_Modifier = Number(ability_Score_Damage_Modifier_Input_Box.value);
+				var feat_And_Enhancement_Bonuses = Number(feat_And_Enhancement_Bonuses_Input_Box.value);
+				var deadly_Other = Number(deadly_Other_Input_Box.value);
+				var critical_Range = Number(critical_Range_Input_Box.value);
+				var critical_Multiplier = Number(critical_Multiplier_Input_Box.value);
+				var bonus_Multiplier_On_19_And_20 = Number(bonus_Multiplier_On_19_And_20_Input_Box.value);
+				var seeker = Number(seeker_Input_Box.value);
+				var vorpal_Range = Number(vorpal_Range_Input_Box.value);
+				var number_Of_Sneak_Attack_Dice = Number(number_Of_Sneak_Attack_Dice_Input_Box.value);
+				var deception_Bonuses = Number(deception_Bonuses_Input_Box.value);
+				var ranged_Or_Melee_Power = Number(ranged_Or_Melee_Power_Input_Box.value);
+				var average_On_Hit_Bonus_Damage = Number(average_On_Hit_Bonus_Damage_Input_Box.value);
+				var average_Critical_Bonus_Damage = Number(average_Critical_Bonus_Damage_Input_Box.value);
+				var average_Vorpal_Bonus_Damage = Number(average_Vorpal_Bonus_Damage_Input_Box.value);
+				var enemy_Fortification = Number(enemy_Fortification_Input_Box_Element.value);
+				var fortification_Bypass = Number(fortification_Bypass_Input_Box_Element.value);
+				var doubleshot_Or_Doublestrike = Number(doubleshot_Or_Doublestrike_Input_Box.value);
+				var attacks_Per_Second = Number(attacks_Per_Second_Input_Box.value);
+
+				var effective_Enemy_Fortification = Math.min(100.0, Math.max(0.0, enemy_Fortification - fortification_Bypass));	//Temporary fortification solution, update if accuracy is implemented
+				var fortification_Multiplier = (100.0 - effective_Enemy_Fortification) / 100.0;
+				critical_Range = critical_Range * fortification_Multiplier;
+				vorpal_Range = vorpal_Range * fortification_Multiplier;
+				bonus_Multiplier_On_19_And_20 = bonus_Multiplier_On_19_And_20 * fortification_Multiplier;
+				number_Of_Sneak_Attack_Dice = number_Of_Sneak_Attack_Dice * fortification_Multiplier;
+				deception_Bonuses = deception_Bonuses * fortification_Multiplier;
+
+				var damage_Per_Hit = (average_Base_Weapon_Damage * base_Weapon_Damage_Multiplier) + enhancement_Bonus + deadly + ability_Score_Damage_Modifier + feat_And_Enhancement_Bonuses + deadly_Other;
+
+				damage_Per_Hit = ((damage_Per_Hit * (19.0 - critical_Range)) + (((damage_Per_Hit + seeker) * critical_Multiplier) * critical_Range) + ((damage_Per_Hit + seeker) * bonus_Multiplier_On_19_And_20 * 2.0)) / 19.0;
+
+				damage_Per_Hit = damage_Per_Hit * (ranged_Or_Melee_Power * 0.01 + 1.0);
+				base_Average_Damage_Per_Hit_Span.textContent = Math.round(damage_Per_Hit * 100000.0) / 100000.0;
+
+				var damage_Per_Sneak_Attack = number_Of_Sneak_Attack_Dice * 3.5 + deception_Bonuses * (ranged_Or_Melee_Power * 0.015 + 1.0);
+				average_Damage_Per_Sneak_Attack_Span.textContent = Math.round(damage_Per_Sneak_Attack * 100000.0) / 100000.0;
+
+				var damage_Per_Hit_Bonuses = ((average_On_Hit_Bonus_Damage * 19.0) + (average_Critical_Bonus_Damage * critical_Range) + (average_Vorpal_Bonus_Damage * vorpal_Range)) / 19.0;
+				average_Bonus_Damage_Per_Hit_Span.textContent = Math.round(damage_Per_Hit_Bonuses * 100000.0) / 100000.0;
+
+				damage_Per_Hit = damage_Per_Hit + damage_Per_Sneak_Attack + damage_Per_Hit_Bonuses;
+				total_Average_Damage_Per_Hit_Span.textContent = Math.round(damage_Per_Hit * 100000.0) / 100000.0;
+
+				average_Damage_Per_Second_Span.textContent = Math.round(damage_Per_Hit * (doubleshot_Or_Doublestrike * 0.01 + 1.0) * attacks_Per_Second * (19.0 / 20.0) * 100000.0) / 100000.0;
+			}
+			calculate_Damage();
+		</script>
+	</body>
+</html>
