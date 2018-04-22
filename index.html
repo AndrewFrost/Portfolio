@@ -22,14 +22,88 @@
 				min-width: 450px;
 			}
 
+			h1
+			{
+				margin: 18px 0px;
+				padding: 12px 0px 12px 0px;
+				font-size: 32px;
+				line-height: 1;
+				text-align: center;
+			}
+
+			h2
+			{
+				margin: 0px;
+				border: 1px solid black;
+				padding: 10px 0px 10px 0px;
+				font-size: 24px;
+				line-height: 1;
+				text-align: center;
+				cursor: pointer;
+				background-color: #007070;
+			}
+
+			h2.collapsed_Header
+			{
+				background-color: #009090;
+				border-radius: 0px 0px 5px 5px;
+			}
+
+			h2:hover
+			{
+				background-color: #006060;
+			}
+
+			h2.collapsed_Header:hover
+			{
+				background-color: #008080;
+			}
+
+			h2:active, h2.collapsed_Header:active
+			{
+				background-color: #005050;
+			}
+
+			h3
+			{
+				margin: 0px;
+				padding: 8px 0px 8px 0px;
+				font-size: 18px;
+				line-height: 1;
+				cursor: pointer;
+				background-color: #008040;
+			}
+
+			h3.collapsed_Header
+			{
+				background-color: #00A050;
+				border-radius: 0px 0px 4px 4px;
+			}
+
+			h3:hover
+			{
+				background-color: #007038;
+			}
+
+			h3.collapsed_Header:hover
+			{
+				background-color: #009048;
+			}
+
+			h3:active, h3.collapsed_Header:active
+			{
+				background-color: #006030;
+			}
+
 			.title_Bar_Item
 			{
 				display: inline-block;
-				width: 33.33333%;
-				padding: 4px;
-				border: 1px solid black;
 				margin: auto;
-				font-size: xx-large;
+				height: 46px;
+				padding: 6px;
+				border: 1px solid black;
+				width: 33.33333%;
+				font-size: 32px;
 				text-decoration: none;
 				text-align: center;
 				color: black;
@@ -41,21 +115,59 @@
 				background-color: #1658B0;
 			}
 
-			.title_Bar_Item:active
-			{
-				background-color: #104080;
-			}
-
 			.title_Bar_Item_Current_Selection
 			{
 				background-color: #1450A0;
 			}
 
+			.title_Bar_Item_Current_Selection:hover
+			{
+				background-color: #124890;
+			}
+
+			.title_Bar_Item:active
+			{
+				background-color: #104080;
+			}
+
 			.page_Content
 			{
 				border: 1px solid black;
-				padding: 16px;
+				border-radius: 0px 0px 5px 5px;
+				padding: 0px 16px 16px 16px;
 				background-color: #B0B0B0;
+			}
+
+			.collapsed_Header + div
+			{
+				display: none;
+			}
+
+			.project_Section_Holder
+			{
+				border-left: 1px solid black;
+				border-right: 1px solid black;
+				border-radius: 0px 0px 5px 5px;
+				background-color: black;
+			}
+
+			.project_Section
+			{
+				border: 1px solid black;
+				border-radius: 0px 0px 10px 5px;
+			}
+
+			.project_Holder
+			{
+				border: 1px solid black;
+				border-radius: 0px 0px 5px 5px;
+				background-color: #A0A0A0;
+			}
+
+			.project_Image
+			{
+				max-height: 250px;
+				max-width: 100%;
 			}
 
 			.pdf_Container
@@ -73,13 +185,13 @@
 
 			.pdf_Viewer
 			{
-				width: 100%;
-				height: 100%;
 				position: absolute;
 				top: 0;
 				left: 0;
 				bottom: 0;
 				right: 0;
+				height: 100%;
+				width: 100%;
 			}
 
 			#title_Bar
@@ -91,28 +203,129 @@
 	</head>
 	<body>
 		<div id = "title_Bar">
-			<a id = "About_Me_Title_Bar_Item" class = "title_Bar_Item title_Bar_Item_Current_Selection" href = "#0" onclick = "event.preventDefault(); display_Selected_Page_Content(0)">About Me</a><a id = "Projects_Title_Bar_Item" class = "title_Bar_Item" href = "#1" onclick = "event.preventDefault(); display_Selected_Page_Content(1)">Projects</a><a id = "Resume_Title_Bar_Item" class = "title_Bar_Item" href = "#2" onclick = "event.preventDefault(); display_Selected_Page_Content(2)">Résumé</a>
+			<a id = "About_Me_Title_Bar_Item" class = "title_Bar_Item" href = "#0" onclick = "display_Selected_Page_Content(0)">About Me</a><a id = "Projects_Title_Bar_Item" class = "title_Bar_Item" href = "#1" onclick = "display_Selected_Page_Content(1)">Projects</a><a id = "Résumé_Title_Bar_Item" class = "title_Bar_Item" href = "#2" onclick = "display_Selected_Page_Content(2)">Résumé</a>
 		</div>
-		<div id = "About_Me_Page_Content" class = "page_Content">
+
+		<div id = "About_Me_Page_Content" class = "page_Content" style = "display: none">
 			<h1>About Me</h1>
-			<p>Welcome to my portfolio- I'm Andrew Frost and this website is a showcase of projects that I've worked on.</p>
+			<p>Welcome to my portfolio- I'm Andrew Frost and this website is a showcase of projects that I've worked on. Be sure to check the Projects page to see an overview, browse the source code, and play around with anything that catches your eye!</p>
 			<p>I've always had an interest in video games, but didn't decide to pursue it as a career until a little later in life. I first started programming in late 2012 by following some online JavaScript tutorials, and I liked it enough to pursue a degree in programming. I began my studies at Texas A&M University - Corpus Christi in Fall of 2013 where I was first introduced to C++ and got to delve deeper into programming. I gained a lot of experience at college and would recommend it for most people interested in programming, but it's far from the only way to learn. I graduated Cum Laude and received a Bachelor of Science Degree in Game Programming in May of 2016.</p>
-			<p>Feel free to look around, browse the source code, and play the demos of anything that catches your eye!</p>
+			<p>After graduating, I've been busy pursuing a few other opportunities, but in my free time I've been working on a game engine along with implementing a game in it, as well as a variety of small programming projects.</p>
+			<p>I love making programs that surprise people at how fast they work- there's something very satisfying about a tool that does its job spectacularly with no useless bloat.</p>
 			<p>If you're a recruiter in the Austin area looking for a strong C++ programmer, you can contact me by email at andrewdylanfrost@gmail.com.</p>
 		</div>
 
 		<div id = "Projects_Page_Content" class = "page_Content" style = "display: none">
 			<h1>Projects</h1>
-			<a href = "https://andrewfrost.github.io/Dungeons-and-Dragons-5e-Average-Damage-Calculator/">Dungeons and Dragons 5e Average Damage Calculator</a><br>
-			<a href = "Sortable_Tables/Sortable_Tables.html">Dungeons and Dragons Online Quest Tables</a><br>
+			<div class = "project_Section_Holder">
+				<div class = "project_Section">
+					<h2 onclick = "toggle_Collapse(this)">Video Games</h2>
+					<div>
+						<div class = "project_Holder">
+							<h3 onclick = "toggle_Collapse(this)">Endless</h3>
+							<div>
+								<img class = "project_Image" src = "Endless/Endless_Example_Image.png">
+								<p>Unity project</p>
+							</div>
+						</div>
+						<div class = "project_Holder">
+							<h3 onclick = "toggle_Collapse(this)">Paladin</h3>
+							<div>
+								<img class = "project_Image" src = "Paladin/Paladin_Example_Image.png">
+								<p>Unity project</p>
+							</div>
+						</div>
+						<div class = "project_Holder">
+							<h3 onclick = "toggle_Collapse(this)">Adapt</h3>
+							<div>
+								<img class = "project_Image" src = "Adapt/Adapt_Example_Image.png">
+								<p>A video game that I designed alongside a small team in early 2014. While the focus of my work was on creating fun levels, gameplay, and creatures, I also dabbled in creating terrain tiles and helped the programming team implement them into the game.</p>
+								<p>Source code of the project is unavailable, but the game design document can be downloaded <a href = "Adapt/Adapt_Game_Design_Document.pdf" download>here</a>.</p>
+								<p>If interested in the terrain tiles, feel free to have a look at them by downloading them <a href = "Adapt/Adapt_Terrain_Tiles.zip" download>here</a>.</p>
+							</div>
+						</div>
+						<div class = "project_Holder">
+							<h3 onclick = "toggle_Collapse(this)">The name escapes me at the moment</h3>
+							<div>
+								<img class = "project_Image" src = "Uncertain/Uncertain_Example_Image.png">
+								<p>A game that's played on a 5x5 grid.</p>
+							</div>
+						</div>
+						<div class = "project_Holder">
+							<h3 onclick = "toggle_Collapse(this)">Tic-tac-toe</h3>
+							<div>
+								<img class = "project_Image" src = "Tic_Tac_Toe/Tic_Tac_Toe_Example_Image.png">
+								<p>Early C++ program</p>
+							</div>
+						</div>
+						<div class = "project_Holder">
+							<h3 onclick = "toggle_Collapse(this)">Blackjack</h3>
+							<div>
+								<img class = "project_Image" src = "Blackjack/Blackjack_Example_Image.png">
+								<p>First program I made.</p>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class = "project_Section">
+					<h2 onclick = "toggle_Collapse(this)">JavaScript Tools</h2>
+					<div>
+						<div class = "project_Holder">
+							<h3 onclick = "toggle_Collapse(this)">Dungeons & Dragons 5th Edition Damage Calculator</h3>
+							<div>
+								<img class = "project_Image" src = "Dungeons_And_Dragons_5th_Edition_Damage_Calculator/Dungeons_And_Dragons_5th_Edition_Damage_Calculator_Example_Image.png">
+								<p>A useful tool for calculating expected damage output in combat for 5th edition D&D across a variety of situations.</p>
+								<p>Take a look at it <a href = "https://andrewfrost.github.io/Dungeons-and-Dragons-5e-Average-Damage-Calculator/">here</a>.</p>
+							</div>
+						</div>
+						<div class = "project_Holder">
+							<h3 onclick = "toggle_Collapse(this)">Dungeons & Dragons Online Quest Table</h3>
+							<div>
+								<img class = "project_Image" src = "Dungeons_And_Dragons_Online_Quest_Table/Dungeons_And_Dragons_Online_Quest_Table_Example_Image.png">
+								<p>While more of a personal list that I use, players of Dungeons & Dragons Online (DDO) may find this sortable table to be convenient.</p>
+								<p>Check it out <a href = "Dungeons_And_Dragons_Online_Quest_Table/Quest_Table.html">here</a>.</p>
+							</div>
+						</div>
+						<div class = "project_Holder">
+							<h3 onclick = "toggle_Collapse(this)">Dungeons & Dragons Online Damage Calculator</h3>
+							<div>
+								<img class = "project_Image" src = "Dungeons_And_Dragons_Online_Damage_Calculator/Dungeons_And_Dragons_Online_Damage_Calculator_Example_Image.png">
+								<p>Another DDO tool that I've found to be helpful- this one is just some straightforward calculations to determine average damage output, great to help decide between many items and abilities.</p>
+								<p>Available <a href = "Dungeons_And_Dragons_Online_Damage_Calculator/Damage_Calculator.html">here</a>.</p>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class = "project_Section">
+					<h2 onclick = "toggle_Collapse(this)">Other</h2>
+					<div>
+						<div class = "project_Holder">
+							<h3 onclick = "toggle_Collapse(this)">Weather On Wheels</h3>
+							<div>
+								<img class = "project_Image" src = "Weather_On_Wheels/Weather_On_Wheels_Example.png">
+								<p>A project I contributed to at the Conrad Blucher Institute (CBI) that would give forecasted weather and severe weather events along a travel route. I worked with an existing codebase to improve speed, reliability, and implement additional features such as optional overlays for temperatures, precipitation levels, and windspeeds along a route. Weather On Wheels was available on a website and in the Android and Apple stores, but unfortunately, CBI no longer maintains the project and handed it off to another company that has left it nonfunctioning for a long time.</p>
+								<p>A poster I used for a presentation on Weather On Wheels that contains some additional information and screenshots of it in a late stage of development can be downloaded <a href = "Weather_On_Wheels/Weather_On_Wheels_Poster.png" download>here</a>.</p>
+							</div>
+						</div>
+						<div class = "project_Holder">
+							<h3 onclick = "toggle_Collapse(this)">Miscellaneous</h3>
+							<div>
+								<p>In addition, I've worked on a large number of small projects, mostly for college. I'll add a link and more information about them in the future.</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
 		</div>
 
-		<div id = "Resume_Page_Content" class = "page_Content" style = "display: none">
+		<div id = "Résumé_Page_Content" class = "page_Content" style = "display: none">
 			<h1>Résumé</h1>
-			<a href = "Andrew_Frost_Résumé.pdf" download>Download</a><br>
+			<a href = "Résumé/Andrew_Frost_Résumé.pdf" download>Download</a><br>
 			<br>
 			<div class = "pdf_Container">
-				<object class = "pdf_Viewer" type = "application/pdf" data = "Andrew_Frost_Résumé.pdf#view=FitH">
+				<object class = "pdf_Viewer" type = "application/pdf" data = "Résumé/Andrew_Frost_Résumé.pdf#view=FitH">The PDF Viewer couldn't display the résumé- <a href = "Résumé/Andrew_Frost_Résumé.pdf" download>download it here</a>.<br></object>
 			</div>
 		</div>
 
@@ -121,7 +334,7 @@
 			var page_Layout_Elements_Array = [];
 			page_Layout_Elements_Array.push({page_Content_Element: document.getElementById("About_Me_Page_Content"), title_Bar_Selection_Element: document.getElementById("About_Me_Title_Bar_Item")});
 			page_Layout_Elements_Array.push({page_Content_Element: document.getElementById("Projects_Page_Content"), title_Bar_Selection_Element: document.getElementById("Projects_Title_Bar_Item")});
-			page_Layout_Elements_Array.push({page_Content_Element: document.getElementById("Resume_Page_Content"), title_Bar_Selection_Element: document.getElementById("Resume_Title_Bar_Item")});
+			page_Layout_Elements_Array.push({page_Content_Element: document.getElementById("Résumé_Page_Content"), title_Bar_Selection_Element: document.getElementById("Résumé_Title_Bar_Item")});
 
 			function display_Selected_Page_Content(new_Page_Layout_Element_Index)	//Sets the visible page content and selected menu bar item based on the index passed in
 			{
@@ -132,14 +345,24 @@
 				currently_Displayed_Page_Layout_Element_Index = new_Page_Layout_Element_Index;
 			}
 
+			function toggle_Collapse(element_To_Toggle)
+			{
+				element_To_Toggle.classList.toggle("collapsed_Header");
+			}
+
 			function initialize_Page()	//Allows opening new tabs or windows from the title bar into a specific section
 			{
 				var initial_Page_Content_String_Array = window.location.hash.split("#");
-				if(initial_Page_Content_String_Array.length !== 1)
+				if(initial_Page_Content_String_Array.length === 2)
 				{
 					display_Selected_Page_Content(Number(initial_Page_Content_String_Array[1]));
 				}
+				else
+				{
+					display_Selected_Page_Content(0);
+				}
 			}
+			window.onpopstate = initialize_Page;	//Will trigger initialize_Page() when the a user navigates their browser history
 			initialize_Page();
 		</script>
 	</body>
