@@ -371,7 +371,7 @@
 			function initialize_Page()	//Allows opening new tabs or windows from the title bar into a specific section
 			{
 				var initial_Page_Content_String_Array = window.location.hash.split("#");
-				if(initial_Page_Content_String_Array.length === 2)
+				if(initial_Page_Content_String_Array.length === 2 && Number(initial_Page_Content_String_Array[1]) >= 0 && Number(initial_Page_Content_String_Array[1]) <= 2)
 				{
 					display_Selected_Page_Content(Number(initial_Page_Content_String_Array[1]));
 				}
