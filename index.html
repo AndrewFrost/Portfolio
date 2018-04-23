@@ -4,14 +4,8 @@
 		<meta charset = "utf-8">
 		<title>Andrew Frost - Game Programming Portfolio</title>
 		<style>
-			*
-			{
-				box-sizing: inherit;
-			}
-
 			html
 			{
-				box-sizing: border-box;
 				background-color: black;
 			}
 
@@ -24,8 +18,8 @@
 
 			h1
 			{
-				margin: 18px 0px;
-				padding: 12px 0px 12px 0px;
+				margin: 0px;
+				padding: 30px 0px 30px 0px;
 				font-size: 32px;
 				line-height: 1;
 				text-align: center;
@@ -67,6 +61,7 @@
 			h3
 			{
 				margin: 0px;
+				border-bottom: 1px solid black;
 				padding: 8px 0px 8px 0px;
 				font-size: 18px;
 				line-height: 1;
@@ -77,6 +72,7 @@
 			h3.collapsed_Header
 			{
 				background-color: #00A050;
+				border-bottom: none;
 				border-radius: 0px 0px 4px 4px;
 			}
 
@@ -98,12 +94,12 @@
 			.title_Bar_Item
 			{
 				display: inline-block;
-				margin: auto;
-				height: 46px;
+				box-sizing: border-box;
 				padding: 6px;
 				border: 1px solid black;
 				width: 33.33333%;
 				font-size: 32px;
+				line-height: 1;
 				text-decoration: none;
 				text-align: center;
 				color: black;
@@ -176,11 +172,11 @@
 				width: 100%;
 			}
 
-			.pdf_Container::before
+			.pdf_Container::before	/*Allows the PDF to maintain the same aspect ratio regardless of screen size, there may be a better way to implement this*/
 			{
 				content: "";
 				display: block;
-				padding-top: 138%;
+				padding-top: 132%;
 			}
 
 			.pdf_Viewer
@@ -199,6 +195,28 @@
 				border: 1px solid black;
 				background-color: black;
 			}
+
+			.hidden	/*Imitates "display: none" due to Chrome's PDF viewer reloading each time display is toggled, but not when visibility is toggled*/
+			{
+				visibility: hidden;
+				position: absolute;
+				top: 0;
+				left: 0;
+				bottom: 0;
+				right: 0;
+				margin: 0px;
+				border: none;
+				padding: 0px;
+				height: 0px;
+			}
+
+			.hidden *, .hidden *::before
+			{
+				margin: 0px;
+				border: 0px;
+				padding: 0px;
+				height: 0px;
+			}
 		</style>
 	</head>
 	<body>
@@ -206,7 +224,7 @@
 			<a id = "About_Me_Title_Bar_Item" class = "title_Bar_Item" href = "#0" onclick = "display_Selected_Page_Content(0)">About Me</a><a id = "Projects_Title_Bar_Item" class = "title_Bar_Item" href = "#1" onclick = "display_Selected_Page_Content(1)">Projects</a><a id = "Résumé_Title_Bar_Item" class = "title_Bar_Item" href = "#2" onclick = "display_Selected_Page_Content(2)">Résumé</a>
 		</div>
 
-		<div id = "About_Me_Page_Content" class = "page_Content" style = "display: none">
+		<div id = "About_Me_Page_Content" class = "page_Content hidden">
 			<h1>About Me</h1>
 			<p>Welcome to my portfolio- I'm Andrew Frost and this website is a showcase of projects that I've worked on. Be sure to check the Projects page to see an overview, browse the source code, and play around with anything that catches your eye!</p>
 			<p>I've always had an interest in video games, but didn't decide to pursue it as a career until a little later in life. I first started programming in late 2012 by following some online JavaScript tutorials, and I liked it enough to pursue a degree in programming. I began my studies at Texas A&M University - Corpus Christi in Fall of 2013 where I was first introduced to C++ and got to delve deeper into programming. I gained a lot of experience at college and would recommend it for most people interested in programming, but it's far from the only way to learn. I graduated Cum Laude and received a Bachelor of Science Degree in Game Programming in May of 2016.</p>
@@ -215,7 +233,7 @@
 			<p>If you're a recruiter in the Austin area looking for a strong C++ programmer, you can contact me by email at andrewdylanfrost@gmail.com.</p>
 		</div>
 
-		<div id = "Projects_Page_Content" class = "page_Content" style = "display: none">
+		<div id = "Projects_Page_Content" class = "page_Content hidden">
 			<h1>Projects</h1>
 			<div class = "project_Section_Holder">
 				<div class = "project_Section">
@@ -320,12 +338,12 @@
 			</div>
 		</div>
 
-		<div id = "Résumé_Page_Content" class = "page_Content" style = "display: none">
+		<div id = "Résumé_Page_Content" class = "page_Content hidden">
 			<h1>Résumé</h1>
 			<a href = "Résumé/Andrew_Frost_Résumé.pdf" download>Download</a><br>
 			<br>
 			<div class = "pdf_Container">
-				<object class = "pdf_Viewer" type = "application/pdf" data = "Résumé/Andrew_Frost_Résumé.pdf#view=FitH">The PDF Viewer couldn't display the résumé- <a href = "Résumé/Andrew_Frost_Résumé.pdf" download>download it here</a>.<br></object>
+				<object class = "pdf_Viewer" type = "application/pdf" data = "Résumé/Andrew_Frost_Résumé.pdf#zoom=Fit&view=Fit">The PDF Viewer couldn't display the résumé- <a href = "Résumé/Andrew_Frost_Résumé.pdf" download>download it here</a>.<br></object>
 			</div>
 		</div>
 
@@ -338,9 +356,9 @@
 
 			function display_Selected_Page_Content(new_Page_Layout_Element_Index)	//Sets the visible page content and selected menu bar item based on the index passed in
 			{
-				page_Layout_Elements_Array[currently_Displayed_Page_Layout_Element_Index].page_Content_Element.style.display = "none";
+				page_Layout_Elements_Array[currently_Displayed_Page_Layout_Element_Index].page_Content_Element.className = "page_Content hidden";
 				page_Layout_Elements_Array[currently_Displayed_Page_Layout_Element_Index].title_Bar_Selection_Element.className = "title_Bar_Item";
-				page_Layout_Elements_Array[new_Page_Layout_Element_Index].page_Content_Element.style.display = "block";
+				page_Layout_Elements_Array[new_Page_Layout_Element_Index].page_Content_Element.className = "page_Content";
 				page_Layout_Elements_Array[new_Page_Layout_Element_Index].title_Bar_Selection_Element.className = "title_Bar_Item title_Bar_Item_Current_Selection";
 				currently_Displayed_Page_Layout_Element_Index = new_Page_Layout_Element_Index;
 			}
