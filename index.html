@@ -108,6 +108,7 @@
 				text-decoration: none;
 				text-align: center;
 				color: black;
+				cursor: pointer;
 				background-color: #1860C0;
 			}
 
@@ -254,7 +255,7 @@
 	</head>
 	<body>
 		<div id = "title_Bar">
-			<a id = "About_Me_Title_Bar_Item" class = "title_Bar_Item" href = "#0" onmousedown = "display_Selected_Page_Content(0)">About Me</a><a id = "Projects_Title_Bar_Item" class = "title_Bar_Item" href = "#1" onmousedown = "display_Selected_Page_Content(1)">Projects</a><a id = "Résumé_Title_Bar_Item" class = "title_Bar_Item" href = "#2" onmousedown = "display_Selected_Page_Content(2)">Résumé</a>
+			<span id = "About_Me_Title_Bar_Item" class = "title_Bar_Item" onmousedown = "display_Selected_Page_Content(0)">About Me</span><span id = "Projects_Title_Bar_Item" class = "title_Bar_Item" onmousedown = "display_Selected_Page_Content(1)">Projects</span><span id = "Résumé_Title_Bar_Item" class = "title_Bar_Item" onmousedown = "display_Selected_Page_Content(2)">Résumé</span>
 		</div>
 
 		<div id = "About_Me_Page_Content" class = "page_Content hidden">
@@ -397,8 +398,12 @@
 			page_Layout_Elements_Array.push({page_Content_Element: document.getElementById("Projects_Page_Content"), title_Bar_Selection_Element: document.getElementById("Projects_Title_Bar_Item")});
 			page_Layout_Elements_Array.push({page_Content_Element: document.getElementById("Résumé_Page_Content"), title_Bar_Selection_Element: document.getElementById("Résumé_Title_Bar_Item")});
 
-			function display_Selected_Page_Content(new_Page_Layout_Element_Index)	//Sets the visible page content and selected menu bar item based on the index passed in
+			function display_Selected_Page_Content(new_Page_Layout_Element_Index)	//Sets the visible page content and selected menu bar item based on the index passed in, along with manipulating the history to allow navigation in that manner
 			{
+				if(window.location.hash !== "#" + new_Page_Layout_Element_Index)
+				{
+					window.history.pushState(null, "", "#" + new_Page_Layout_Element_Index);
+				}
 				page_Layout_Elements_Array[currently_Displayed_Page_Layout_Element_Index].page_Content_Element.className = "page_Content hidden";
 				page_Layout_Elements_Array[currently_Displayed_Page_Layout_Element_Index].title_Bar_Selection_Element.className = "title_Bar_Item";
 				page_Layout_Elements_Array[new_Page_Layout_Element_Index].page_Content_Element.className = "page_Content";
@@ -415,6 +420,7 @@
 				}
 				else
 				{
+					window.history.replaceState(null, "", "#0");	//Defaults any invalid URL to the About Me page and loads it
 					display_Selected_Page_Content(0);
 				}
 			}
@@ -426,7 +432,7 @@
 				element_To_Toggle.classList.toggle("collapsed_Header");
 			}
 
-			function collapsable_Element_Key_Pressed(event, element_To_Toggle)	//Project's page key event handler- requires proper HTML layout, see project_Section_Holder for current implementation
+			function collapsable_Element_Key_Pressed(event, element_To_Toggle)	//Project's list key event handler- requires proper HTML layout, see project_Section_Holder for current implementation
 			{
 				switch(event.key)
 				{
@@ -454,11 +460,11 @@
 						{
 							if(element_To_Toggle.parentNode.previousElementSibling !== null)
 							{
-								element_To_Toggle.parentNode.previousElementSibling.firstElementChild.focus();
+								element_To_Toggle.parentNode.previousElementSibling.firstElementChild.focus();	//Moves the focus to the previous project_Holder unless it's the first project_Holder
 							}
 							else
 							{
-								element_To_Toggle.parentNode.parentNode.parentNode.firstElementChild.focus();
+								element_To_Toggle.parentNode.parentNode.parentNode.firstElementChild.focus();	//Moves the focus to the containing project_Section if it's the first project_Holder
 							}
 						}
 						event.preventDefault();
