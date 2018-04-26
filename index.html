@@ -43,13 +43,15 @@
 				border-radius: 0px 0px 5px 5px;
 			}
 
-			h2:hover
+			h2:hover, h2:focus
 			{
+				outline: none;
 				background-color: #006060;
 			}
 
-			h2.collapsed_Header:hover
+			h2.collapsed_Header:hover, h2.collapsed_Header:focus
 			{
+				outline: none;
 				background-color: #008080;
 			}
 
@@ -65,6 +67,7 @@
 				padding: 8px 0px 8px 0px;
 				font-size: 18px;
 				line-height: 1;
+				text-align: center;
 				cursor: pointer;
 				background-color: #008040;
 			}
@@ -76,13 +79,15 @@
 				border-radius: 0px 0px 4px 4px;
 			}
 
-			h3:hover
+			h3:hover, h3:focus
 			{
+				outline: none;
 				background-color: #007038;
 			}
 
-			h3.collapsed_Header:hover
+			h3.collapsed_Header:hover, h3.collapsed_Header:focus
 			{
+				outline: none;
 				background-color: #009048;
 			}
 
@@ -106,8 +111,9 @@
 				background-color: #1860C0;
 			}
 
-			.title_Bar_Item:hover
+			.title_Bar_Item:hover, .title_Bar_Item:focus
 			{
+				outline: none;
 				background-color: #1658B0;
 			}
 
@@ -116,8 +122,9 @@
 				background-color: #1450A0;
 			}
 
-			.title_Bar_Item_Current_Selection:hover
+			.title_Bar_Item_Current_Selection:hover, .title_Bar_Item_Current_Selection:focus
 			{
+				outline: none;
 				background-color: #124890;
 			}
 
@@ -162,8 +169,12 @@
 
 			.project_Image
 			{
-				max-height: 250px;
+				display: block;
+				margin: auto;
+				max-height: 300px;
 				max-width: 100%;
+				cursor: pointer;
+				user-select: none;
 			}
 
 			.pdf_Container
@@ -172,28 +183,22 @@
 				width: 100%;
 			}
 
-			.pdf_Container::before	/*Allows the PDF to maintain the same aspect ratio regardless of screen size, there may be a better way to implement this*/
+			.pdf_Container::before	/*Allows the PDF to maintain the same aspect ratio (8.5:11 page plus some extra vertical space for the PDF Reader's UI)- there may be a better way to implement this*/
 			{
 				content: "";
 				display: block;
-				padding-top: 132%;
+				padding-top: 133%;
 			}
 
 			.pdf_Viewer
 			{
 				position: absolute;
 				top: 0;
-				left: 0;
-				bottom: 0;
 				right: 0;
+				bottom: 0;
+				left: 0;
 				height: 100%;
 				width: 100%;
-			}
-
-			#title_Bar
-			{
-				border: 1px solid black;
-				background-color: black;
 			}
 
 			.hidden	/*Imitates "display: none" due to Chrome's PDF viewer reloading each time display is toggled, but not when visibility is toggled*/
@@ -201,9 +206,9 @@
 				visibility: hidden;
 				position: absolute;
 				top: 0;
-				left: 0;
-				bottom: 0;
 				right: 0;
+				bottom: 0;
+				left: 0;
 				margin: 0px;
 				border: none;
 				padding: 0px;
@@ -217,11 +222,39 @@
 				padding: 0px;
 				height: 0px;
 			}
+
+			#title_Bar
+			{
+				border: 1px solid black;
+				background-color: black;
+			}
+
+			#expanded_Project_Image_Holder
+			{
+				display: none;	/*Is toggled to and from flex to display the overlayed image*/
+				position: fixed;
+				top: 0;
+				right: 0;
+				bottom: 0;
+				left: 0;
+				cursor: pointer;
+				outline: none;
+				user-select: none;
+			}
+
+			#expanded_Project_Image
+			{
+				display: block;
+				margin: auto;
+				object-fit: contain;
+				height: 100%;
+				max-width: 100%;
+			}
 		</style>
 	</head>
 	<body>
 		<div id = "title_Bar">
-			<a id = "About_Me_Title_Bar_Item" class = "title_Bar_Item" href = "#0" onclick = "display_Selected_Page_Content(0)">About Me</a><a id = "Projects_Title_Bar_Item" class = "title_Bar_Item" href = "#1" onclick = "display_Selected_Page_Content(1)">Projects</a><a id = "Résumé_Title_Bar_Item" class = "title_Bar_Item" href = "#2" onclick = "display_Selected_Page_Content(2)">Résumé</a>
+			<a id = "About_Me_Title_Bar_Item" class = "title_Bar_Item" href = "#0" onmousedown = "display_Selected_Page_Content(0)">About Me</a><a id = "Projects_Title_Bar_Item" class = "title_Bar_Item" href = "#1" onmousedown = "display_Selected_Page_Content(1)">Projects</a><a id = "Résumé_Title_Bar_Item" class = "title_Bar_Item" href = "#2" onmousedown = "display_Selected_Page_Content(2)">Résumé</a>
 		</div>
 
 		<div id = "About_Me_Page_Content" class = "page_Content hidden">
@@ -230,56 +263,59 @@
 			<p>I've always had an interest in video games, but didn't decide to pursue it as a career until a little later in life. I first started programming in late 2012 by following some online JavaScript tutorials, and I liked it enough to pursue a degree in programming. I began my studies at Texas A&M University - Corpus Christi in Fall of 2013 where I was first introduced to C++ and got to delve deeper into programming. I gained a lot of experience at college and would recommend it for most people interested in programming, but it's far from the only way to learn. I graduated Cum Laude and received a Bachelor of Science Degree in Game Programming in May of 2016.</p>
 			<p>After graduating, I've been busy pursuing a few other opportunities, but in my free time I've been working on a game engine along with implementing a game in it, as well as a variety of small programming projects.</p>
 			<p>I love making programs that surprise people at how fast they work- there's something very satisfying about a tool that does its job spectacularly with no useless bloat.</p>
-			<p>If you're a recruiter in the Austin area looking for a strong C++ programmer, you can contact me by email at andrewdylanfrost@gmail.com.</p>
+			<p>If you're a recruiter in the Austin area looking for a strong C++ programmer, you can contact me by email at <a href = "mailto:andrewdylanfrost@gmail.com">andrewdylanfrost@gmail.com</a>.</p>
 		</div>
 
 		<div id = "Projects_Page_Content" class = "page_Content hidden">
+			<div id = "expanded_Project_Image_Holder" onmousedown = "toggle_Image_Expand(this.firstElementChild)" onkeydown = "toggle_Image_Expand(this.firstElementChild)" onwheel = "toggle_Image_Expand(this.firstElementChild)">
+				<img id = "expanded_Project_Image" src = "a">
+			</div>
 			<h1>Projects</h1>
 			<div class = "project_Section_Holder">
 				<div class = "project_Section">
-					<h2 onclick = "toggle_Collapse(this)">Video Games</h2>
+					<h2 onmousedown = "toggle_Collapse(this)" onkeydown = "collapsable_Element_Key_Pressed(this)" tabindex = "0">Video Games</h2>
 					<div>
 						<div class = "project_Holder">
-							<h3 onclick = "toggle_Collapse(this)">Endless</h3>
+							<h3 onmousedown = "toggle_Collapse(this)" onkeydown = "collapsable_Element_Key_Pressed(this)" tabindex = "0">Endless</h3>
 							<div>
-								<img class = "project_Image" src = "Endless/Endless_Example_Image.png">
+								<img class = "project_Image" onclick = "toggle_Image_Expand(this)" onkeydown = "toggle_Image_Expand(this)" tabindex = "0" src = "Endless/Endless_Example_Image.png">
 								<p>Unity project</p>
 							</div>
 						</div>
 						<div class = "project_Holder">
-							<h3 onclick = "toggle_Collapse(this)">Paladin</h3>
+							<h3 onmousedown = "toggle_Collapse(this)" onkeydown = "collapsable_Element_Key_Pressed(this)" tabindex = "0">Paladin</h3>
 							<div>
-								<img class = "project_Image" src = "Paladin/Paladin_Example_Image.png">
+								<img class = "project_Image" onclick = "toggle_Image_Expand(this)" onkeydown = "toggle_Image_Expand(this)" tabindex = "0" src = "Paladin/Paladin_Example_Image.png">
 								<p>Unity project</p>
 							</div>
 						</div>
 						<div class = "project_Holder">
-							<h3 onclick = "toggle_Collapse(this)">Adapt</h3>
+							<h3 onmousedown = "toggle_Collapse(this)" onkeydown = "collapsable_Element_Key_Pressed(this)" tabindex = "0">Adapt</h3>
 							<div>
-								<img class = "project_Image" src = "Adapt/Adapt_Example_Image.png">
+								<img class = "project_Image" onclick = "toggle_Image_Expand(this)" onkeydown = "toggle_Image_Expand(this)" tabindex = "0" src = "Adapt/Adapt_Example_Image.png">
 								<p>A video game that I designed alongside a small team in early 2014. While the focus of my work was on creating fun levels, gameplay, and creatures, I also dabbled in creating terrain tiles and helped the programming team implement them into the game.</p>
 								<p>Source code of the project is unavailable, but the game design document can be downloaded <a href = "Adapt/Adapt_Game_Design_Document.pdf" download>here</a>.</p>
 								<p>If interested in the terrain tiles, feel free to have a look at them by downloading them <a href = "Adapt/Adapt_Terrain_Tiles.zip" download>here</a>.</p>
 							</div>
 						</div>
 						<div class = "project_Holder">
-							<h3 onclick = "toggle_Collapse(this)">The name escapes me at the moment</h3>
+							<h3 onmousedown = "toggle_Collapse(this)" onkeydown = "collapsable_Element_Key_Pressed(this)" tabindex = "0">The name escapes me at the moment</h3>
 							<div>
-								<img class = "project_Image" src = "Uncertain/Uncertain_Example_Image.png">
+								<img class = "project_Image" onclick = "toggle_Image_Expand(this)" onkeydown = "toggle_Image_Expand(this)" tabindex = "0" src = "Uncertain/Uncertain_Example_Image.png">
 								<p>A game that's played on a 5x5 grid.</p>
 							</div>
 						</div>
 						<div class = "project_Holder">
-							<h3 onclick = "toggle_Collapse(this)">Tic-tac-toe</h3>
+							<h3 onmousedown = "toggle_Collapse(this)" onkeydown = "collapsable_Element_Key_Pressed(this)" tabindex = "0">Tic-tac-toe</h3>
 							<div>
-								<img class = "project_Image" src = "Tic_Tac_Toe/Tic_Tac_Toe_Example_Image.png">
+								<img class = "project_Image" onclick = "toggle_Image_Expand(this)" onkeydown = "toggle_Image_Expand(this)" tabindex = "0" src = "Tic_Tac_Toe/Tic_Tac_Toe_Example_Image.png">
 								<p>Early C++ program</p>
 							</div>
 						</div>
 						<div class = "project_Holder">
-							<h3 onclick = "toggle_Collapse(this)">Blackjack</h3>
+							<h3 onmousedown = "toggle_Collapse(this)" onkeydown = "collapsable_Element_Key_Pressed(this)" tabindex = "0">Blackjack</h3>
 							<div>
-								<img class = "project_Image" src = "Blackjack/Blackjack_Example_Image.png">
+								<img class = "project_Image" onclick = "toggle_Image_Expand(this)" onkeydown = "toggle_Image_Expand(this)" tabindex = "0" src = "Blackjack/Blackjack_Example_Image.png">
 								<p>First program I made.</p>
 							</div>
 						</div>
@@ -287,28 +323,28 @@
 				</div>
 
 				<div class = "project_Section">
-					<h2 onclick = "toggle_Collapse(this)">JavaScript Tools</h2>
+					<h2 onmousedown = "toggle_Collapse(this)" onkeydown = "collapsable_Element_Key_Pressed(this)" tabindex = "0">JavaScript Tools</h2>
 					<div>
 						<div class = "project_Holder">
-							<h3 onclick = "toggle_Collapse(this)">Dungeons & Dragons 5th Edition Damage Calculator</h3>
+							<h3 onmousedown = "toggle_Collapse(this)" onkeydown = "collapsable_Element_Key_Pressed(this)" tabindex = "0">Dungeons & Dragons 5th Edition Damage Calculator</h3>
 							<div>
-								<img class = "project_Image" src = "Dungeons_And_Dragons_5th_Edition_Damage_Calculator/Dungeons_And_Dragons_5th_Edition_Damage_Calculator_Example_Image.png">
+								<img class = "project_Image" onclick = "toggle_Image_Expand(this)" onkeydown = "toggle_Image_Expand(this)" tabindex = "0" src = "Dungeons_And_Dragons_5th_Edition_Damage_Calculator/Dungeons_And_Dragons_5th_Edition_Damage_Calculator_Example_Image.png">
 								<p>A useful tool for calculating expected damage output in combat for 5th edition D&D across a variety of situations.</p>
 								<p>Take a look at it <a href = "https://andrewfrost.github.io/Dungeons-and-Dragons-5e-Average-Damage-Calculator/">here</a>.</p>
 							</div>
 						</div>
 						<div class = "project_Holder">
-							<h3 onclick = "toggle_Collapse(this)">Dungeons & Dragons Online Quest Table</h3>
+							<h3 onmousedown = "toggle_Collapse(this)" onkeydown = "collapsable_Element_Key_Pressed(this)" tabindex = "0">Dungeons & Dragons Online Quest Table</h3>
 							<div>
-								<img class = "project_Image" src = "Dungeons_And_Dragons_Online_Quest_Table/Dungeons_And_Dragons_Online_Quest_Table_Example_Image.png">
+								<img class = "project_Image" onclick = "toggle_Image_Expand(this)" onkeydown = "toggle_Image_Expand(this)" tabindex = "0" src = "Dungeons_And_Dragons_Online_Quest_Table/Dungeons_And_Dragons_Online_Quest_Table_Example_Image.png">
 								<p>While more of a personal list that I use, players of Dungeons & Dragons Online (DDO) may find this sortable table to be convenient.</p>
 								<p>Check it out <a href = "Dungeons_And_Dragons_Online_Quest_Table/Quest_Table.html">here</a>.</p>
 							</div>
 						</div>
 						<div class = "project_Holder">
-							<h3 onclick = "toggle_Collapse(this)">Dungeons & Dragons Online Damage Calculator</h3>
+							<h3 onmousedown = "toggle_Collapse(this)" onkeydown = "collapsable_Element_Key_Pressed(this)" tabindex = "0">Dungeons & Dragons Online Damage Calculator</h3>
 							<div>
-								<img class = "project_Image" src = "Dungeons_And_Dragons_Online_Damage_Calculator/Dungeons_And_Dragons_Online_Damage_Calculator_Example_Image.png">
+								<img class = "project_Image" onclick = "toggle_Image_Expand(this)" onkeydown = "toggle_Image_Expand(this)" tabindex = "0" src = "Dungeons_And_Dragons_Online_Damage_Calculator/Dungeons_And_Dragons_Online_Damage_Calculator_Example_Image.png">
 								<p>Another DDO tool that I've found to be helpful- this one is just some straightforward calculations to determine average damage output, great to help decide between many items and abilities.</p>
 								<p>Available <a href = "Dungeons_And_Dragons_Online_Damage_Calculator/Damage_Calculator.html">here</a>.</p>
 							</div>
@@ -317,18 +353,25 @@
 				</div>
 
 				<div class = "project_Section">
-					<h2 onclick = "toggle_Collapse(this)">Other</h2>
+					<h2 onmousedown = "toggle_Collapse(this)" onkeydown = "collapsable_Element_Key_Pressed(this)" tabindex = "0">Other</h2>
 					<div>
 						<div class = "project_Holder">
-							<h3 onclick = "toggle_Collapse(this)">Weather On Wheels</h3>
+							<h3 onmousedown = "toggle_Collapse(this)" onkeydown = "collapsable_Element_Key_Pressed(this)" tabindex = "0">Weather On Wheels</h3>
 							<div>
-								<img class = "project_Image" src = "Weather_On_Wheels/Weather_On_Wheels_Example.png">
+								<img class = "project_Image" onclick = "toggle_Image_Expand(this)" onkeydown = "toggle_Image_Expand(this)" tabindex = "0" src = "Weather_On_Wheels/Weather_On_Wheels_Example_Image.png">
 								<p>A project I contributed to at the Conrad Blucher Institute (CBI) that would give forecasted weather and severe weather events along a travel route. I worked with an existing codebase to improve speed, reliability, and implement additional features such as optional overlays for temperatures, precipitation levels, and windspeeds along a route. Weather On Wheels was available on a website and in the Android and Apple stores, but unfortunately, CBI no longer maintains the project and handed it off to another company that has left it nonfunctioning for a long time.</p>
 								<p>A poster I used for a presentation on Weather On Wheels that contains some additional information and screenshots of it in a late stage of development can be downloaded <a href = "Weather_On_Wheels/Weather_On_Wheels_Poster.png" download>here</a>.</p>
 							</div>
 						</div>
 						<div class = "project_Holder">
-							<h3 onclick = "toggle_Collapse(this)">Miscellaneous</h3>
+							<h3 onmousedown = "toggle_Collapse(this)" onkeydown = "collapsable_Element_Key_Pressed(this)" tabindex = "0">HTML Canvas Painter</h3>
+							<div>
+								<img class = "project_Image" onclick = "toggle_Image_Expand(this)" onkeydown = "toggle_Image_Expand(this)" tabindex = "0" src = "HTML_Canvas_Painter/HTML_Canvas_Painter_Example_Image.png">
+								<p>A primitive paint program I made to assist with an early Graphics Programming project. You can play around with it <a href = "HTML_Canvas_Painter/HTML_Canvas_Painter.html">here</a>.</p>
+							</div>
+						</div>
+						<div class = "project_Holder">
+							<h3 onmousedown = "toggle_Collapse(this)" onkeydown = "collapsable_Element_Key_Pressed(this)" tabindex = "0">Miscellaneous</h3>
 							<div>
 								<p>In addition, I've worked on a large number of small projects, mostly for college. I'll add a link and more information about them in the future.</p>
 							</div>
@@ -363,11 +406,6 @@
 				currently_Displayed_Page_Layout_Element_Index = new_Page_Layout_Element_Index;
 			}
 
-			function toggle_Collapse(element_To_Toggle)
-			{
-				element_To_Toggle.classList.toggle("collapsed_Header");
-			}
-
 			function initialize_Page()	//Allows opening new tabs or windows from the title bar into a specific section
 			{
 				var initial_Page_Content_String_Array = window.location.hash.split("#");
@@ -382,6 +420,138 @@
 			}
 			window.onpopstate = initialize_Page;	//Will trigger initialize_Page() when the a user navigates their browser history
 			initialize_Page();
+
+			function toggle_Collapse(element_To_Toggle)
+			{
+				element_To_Toggle.classList.toggle("collapsed_Header");
+			}
+
+			function collapsable_Element_Key_Pressed(element_To_Toggle)	//Project's page key event handler- requires proper HTML layout, see project_Section_Holder for current implementation
+			{
+				switch(event.key)
+				{
+					case "Enter":	//Toggles a selection's collapse state
+						toggle_Collapse(element_To_Toggle);
+						event.preventDefault();
+						break;
+
+					case "ArrowUp":	//Moves the focus to the previous selection
+						if(element_To_Toggle.parentNode.className === "project_Section")
+						{
+							if(element_To_Toggle.parentNode.previousElementSibling !== null)
+							{
+								if(element_To_Toggle.parentNode.previousElementSibling.firstElementChild.className === "collapsed_Header")
+								{
+									element_To_Toggle.parentNode.previousElementSibling.firstElementChild.focus();	//Moves the focus to the previous project_Section if it is collapsed
+								}
+								else
+								{
+									element_To_Toggle.parentNode.previousElementSibling.children[1].lastElementChild.firstElementChild.focus();	//Moves the focus to the last project_Holder in the previous project_Section if it is not collapsed
+								}
+							}
+						}
+						else if(element_To_Toggle.parentNode.className === "project_Holder")
+						{
+							if(element_To_Toggle.parentNode.previousElementSibling !== null)
+							{
+								element_To_Toggle.parentNode.previousElementSibling.firstElementChild.focus();
+							}
+							else
+							{
+								element_To_Toggle.parentNode.parentNode.parentNode.firstElementChild.focus();
+							}
+						}
+						event.preventDefault();
+						break;
+
+					case "ArrowRight":	//Expands out a selection
+						if(element_To_Toggle.className === "collapsed_Header")
+						{
+							toggle_Collapse(element_To_Toggle);	//Expands a project_Section or project_Holder if it is not currently collapsed
+						}
+						else if(element_To_Toggle.parentNode.className === "project_Section")
+						{
+							element_To_Toggle.nextElementSibling.firstElementChild.firstElementChild.focus();	//Move the focus to the first project_Holder in a project_Section if the project_Section is not collapsed
+						}
+						event.preventDefault();
+						break;
+
+					case "ArrowDown":	//Moves the focus to the next selection
+						if(element_To_Toggle.parentNode.className === "project_Section")
+						{
+							if(element_To_Toggle.className === "collapsed_Header")
+							{
+								if(element_To_Toggle.parentNode.nextElementSibling !== null)
+								{
+									element_To_Toggle.parentNode.nextElementSibling.firstElementChild.focus();	//Moves the focus to the next project_Section for collapsed project_Sections unless it's the last project_Section
+								}
+							}
+							else
+							{
+								element_To_Toggle.nextElementSibling.firstElementChild.firstElementChild.focus();	//Moves the focus to the first project_Holder of a non-collapsed project_Section
+							}
+						}
+						else if(element_To_Toggle.parentNode.className === "project_Holder")
+						{
+							if(element_To_Toggle.parentNode.nextElementSibling !== null)
+							{
+								element_To_Toggle.parentNode.nextElementSibling.firstElementChild.focus();	//Moves the focus to the next project_Holder unless it's the last project_Holder in a project_Section
+							}
+							else if(element_To_Toggle.parentNode.parentNode.parentNode.nextElementSibling !== null)
+							{
+								element_To_Toggle.parentNode.parentNode.parentNode.nextElementSibling.firstElementChild.focus();	//Moves the focus from the last project_Holder to the next project_Section unless it's the last project_Section
+							}
+						}
+						event.preventDefault();
+						break;
+
+					case "ArrowLeft":	//Collapses a selection
+						if(element_To_Toggle.className !== "collapsed_Header")
+						{
+							toggle_Collapse(element_To_Toggle);	//Collapses a project_Section or project_Holder if it is not currently collapsed
+						}
+						else
+						{
+							if(element_To_Toggle.parentNode.className === "project_Section")
+							{
+								element_To_Toggle.parentNode.parentNode.firstElementChild.firstElementChild.focus();	//Moves the focus to the first project_Section (Video Games) when current project_Section is collapsed
+							}
+							else if(element_To_Toggle.parentNode.className === "project_Holder")
+							{
+								element_To_Toggle.parentNode.parentNode.parentNode.firstElementChild.focus();	//Moves the focus to the containing project_Section when the project_Holder is collapsed
+							}
+						}
+						event.preventDefault();
+						break;
+				}
+			}
+
+			var expanded_Project_Image_Holder_Element = document.getElementById("expanded_Project_Image_Holder");
+			var expanded_Project_Image_Element = document.getElementById("expanded_Project_Image");
+			var original_Expanded_Project_Image = expanded_Project_Image_Element;
+			function toggle_Image_Expand(element_To_Toggle)
+			{
+				if(expanded_Project_Image_Element.src !== element_To_Toggle.src)
+				{
+					if(event.type !== "keydown" || event.key === "Enter")
+					{
+						expanded_Project_Image_Holder_Element.style.display = "flex";
+						expanded_Project_Image_Element.src = element_To_Toggle.src;
+						original_Expanded_Project_Image = element_To_Toggle;
+						expanded_Project_Image_Holder_Element.focus();
+					}
+				}
+				else
+				{
+					expanded_Project_Image_Holder_Element.style.display = "none";
+					expanded_Project_Image_Element.src = "a";	//Empty src can cause issues, "a" is the filename for a very small gif
+					original_Expanded_Project_Image.focus();
+					if(event.type === "mousedown")	//Prevents focus from leaving the small image
+					{
+						event.preventDefault();
+					}
+				}
+			}
 		</script>
 	</body>
 </html>

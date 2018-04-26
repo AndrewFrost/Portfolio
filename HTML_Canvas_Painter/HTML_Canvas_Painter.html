@@ -1,0 +1,370 @@
+<!doctype html>
+
+<head>
+	<meta charset="UTF-8">
+</head>
+
+<body>
+<div>
+	<canvas id = "canvas" width = "750" height = "500" style = "border:1px solid">
+	</canvas>
+</div>
+<div id = "options_Div">
+	<div id = "color_Div">
+		<span style = "display:inline-block; width:50px">Red:</span>
+		<input id = "red_Color_Input" value = "0"><br>
+		<span style = "display:inline-block; width:50px">Green:</span>
+		<input id = "green_Color_Input" value = "0"><br>
+		<span style = "display:inline-block; width:50px">Blue:</span>
+		<input id = "blue_Color_Input" value = "0"><br>
+		<span style = "display:inline-block; width:50px">Alpha:</span>
+		<input id = "alpha_Input" value = "1"><br>
+	</div>
+	<div>
+		<span style = "display:inline-block; width:184px">Solid Fill: </span><input id = "draw_Filled" type = "checkbox"><br>
+		<span style = "display:inline-block; width:184px">Continuous Path: </span><input id = "continuous_Path" type = "checkbox"><br>
+		<span style = "display:inline-block; width:184px">Draw Line: </span><input id = "radio_Button_Line" type = "radio" name = "draw_Mode" checked><br>
+		<span style = "display:inline-block; width:184px">Draw Quadratic Bezier: </span><input id = "radio_Button_Quadratic_Bezier" type = "radio" name = "draw_Mode"><br>
+		<span style = "display:inline-block; width:184px">Draw Cubic Bezier: </span><input id = "radio_Button_Cubic_Bezier" type = "radio" name = "draw_Mode"><br>
+		<span style = "display:inline-block; width:184px">Draw Circle: </span><input id = "radio_Button_Circle" type = "radio" name = "draw_Mode"><br>
+		<span style = "display:inline-block; width:184px">Draw Rectangle: </span><input id = "radio_Button_Rectangle" type = "radio" name = "draw_Mode"><br>
+	</div>
+</div>
+<textarea id = "instructions_Text" rows = "30" cols = "75" readonly>
+</textarea>
+<script>
+function draw_To_Canvas()
+{
+	if(document.getElementById("draw_Filled").checked === true)
+	{
+		draw_Filled();
+	}
+	else
+	{
+		draw_Stroke();
+	}
+}
+
+function draw_Filled()
+{
+	draw.fillStyle = "rgba(" + document.getElementById("red_Color_Input").value + ", " + document.getElementById("green_Color_Input").value + ", " + document.getElementById("blue_Color_Input").value + ", " + document.getElementById("alpha_Input").value + ")";
+	current_Instruction = current_Instruction + "draw.fillStyle = \"rgba(" + document.getElementById("red_Color_Input").value + ", " + document.getElementById("green_Color_Input").value + ", " + document.getElementById("blue_Color_Input").value + ", " + document.getElementById("alpha_Input").value + ")\";";
+	draw.fill();
+	current_Instruction = current_Instruction + "draw.fill();";
+	instructions_Array.push(current_Instruction);
+	current_Instruction = "";
+}
+
+function draw_Stroke()
+{
+	draw.strokeStyle = "rgba(" + document.getElementById("red_Color_Input").value + ", " + document.getElementById("green_Color_Input").value + ", " + document.getElementById("blue_Color_Input").value + ", " + document.getElementById("alpha_Input").value + ")";
+	current_Instruction = current_Instruction + "draw.strokeStyle = \"rgba(" + document.getElementById("red_Color_Input").value + ", " + document.getElementById("green_Color_Input").value + ", " + document.getElementById("blue_Color_Input").value + ", " + document.getElementById("alpha_Input").value + ")\";";
+	draw.stroke();
+	current_Instruction = current_Instruction + "draw.stroke();";
+	instructions_Array.push(current_Instruction);
+	current_Instruction = "";
+}
+
+	var canvas = document.getElementById("canvas");
+	var draw = canvas.getContext("2d");
+	var line_Mode = 0;
+	var shape_Began = false;
+	var shape_X_Start = 0;
+	var shape_Y_Start = 0;
+	var bezier_Curve_Step = 0;
+	var bezier_X_Start = 0;
+	var bezier_Y_Start = 0;
+	var bezier_X_Control_Point_1 = 0;
+	var bezier_Y_Control_Point_1 = 0;
+	var bezier_X_Control_Point_2 = 0;
+	var bezier_Y_Control_Point_2 = 0;
+	var options_Div_Clicked = false;
+	var color_Div_Active = false;
+	var client_Bounding_Rectangle;
+	var current_Instruction = "draw.beginPath();";
+	draw.beginPath();
+	var instructions_Array = ["draw.beginPath();"];
+	addEventListener("keypress", handle_Keypress);
+	function handle_Keypress(keydown_Event)
+	{
+		color_Div_Active = false;
+		try
+		{
+			if(document.activeElement.parentElement.id === "color_Div")
+			{
+				color_Div_Active = true;
+			}
+		}
+		finally
+		{
+			if(color_Div_Active === false)
+			{
+				if(keydown_Event.which === 115)
+				{
+					var instructions_String = "";
+					for(var i = 0; i < instructions_Array.length; i++)
+					{
+						instructions_String = instructions_String + instructions_Array[i] + "\n";
+					}
+					document.getElementById("instructions_Text").value = instructions_String;
+				}
+				else if(keydown_Event.which === 122)
+				{
+					if(instructions_Array[(instructions_Array.length - 1)].indexOf("quadratic") >= 0 || instructions_Array[(instructions_Array.length - 1)].indexOf("bezier") >= 0)
+					{
+						if(bezier_Curve_Step > 0)
+						{
+							console.log(instructions_Array[(instructions_Array.length - 1)]);
+							var regular_Expression = /\d+, \d+/;
+							var substring = regular_Expression.exec(instructions_Array[(instructions_Array.length - 1)]);
+							regular_Expression = /\d+/;
+							bezier_X_Start = regular_Expression.exec(substring)[0];
+							regular_Expression = / \d+/;
+							substring = regular_Expression.exec(substring);
+							regular_Expression = /\d+/;
+							bezier_Y_Start = regular_Expression.exec(substring)[0];
+//							draw.moveTo(bezier_X_Start, bezier_Y_Start);
+							bezier_Curve_Step = 1;
+						}
+					}
+//					else if(instructions_Array[(instructions_Array.length - 1)].indexOf("bezier") >= 0)
+//					{
+//						if(bezier_Curve_Step > 0)
+//						{
+//							bezier_Curve_Step = 1;
+//						}
+//					}
+					else if(instructions_Array[(instructions_Array.length - 1)].indexOf("line") >= 0)
+					{
+//						console.log(instructions_Array[(instructions_Array.length - 1)]);
+//						console.log(instructions_Array[(instructions_Array.length - 2)]);
+//						line_Mode = 0;
+						shape_Began = false;
+//						bezier_Curve_Step = 0;
+//						console.log(instructions_Array[(instructions_Array.length - 1)]);
+						var regular_Expression = /\d+, \d+/;
+						var substring = regular_Expression.exec(instructions_Array[(instructions_Array.length - 2)]);
+						if(substring !== null)
+						{
+							regular_Expression = /\d+/;
+							bezier_X_Start = regular_Expression.exec(substring)[0];
+							regular_Expression = / \d+/;
+							substring = regular_Expression.exec(substring);
+							regular_Expression = /\d+/;
+							bezier_Y_Start = regular_Expression.exec(substring)[0];
+	//							draw.moveTo(bezier_X_Start, bezier_Y_Start);
+							bezier_Curve_Step = 1;
+						}
+					}
+					if(instructions_Array.length > 1)
+					{
+						instructions_Array.pop();
+					}
+					var instructions_String = "";
+					for(var i = 0; i < instructions_Array.length; i++)
+					{
+						instructions_String = instructions_String + instructions_Array[i] + "\n";
+					}
+					draw.clearRect(0, 0, canvas.width, canvas.height);
+					eval(instructions_String);
+				}
+				else if(keydown_Event.which === 113)
+				{
+					if(document.getElementById("draw_Filled").checked === false)
+					{
+						document.getElementById("draw_Filled").checked = true;
+					}
+					else
+					{
+						document.getElementById("draw_Filled").checked = false;
+					}
+				}
+				else if(keydown_Event.which === 119)
+				{
+					if(document.getElementById("continuous_Path").checked === false)
+					{
+						document.getElementById("continuous_Path").checked = true;
+					}
+					else
+					{
+						line_Mode = 0;
+						bezier_Curve_Step = 0;
+						document.getElementById("continuous_Path").checked = false;
+					}
+				}
+				else if(keydown_Event.which === 49)
+				{
+					shape_Began = false;
+					document.getElementById("radio_Button_Line").checked = true;
+				}
+				else if(keydown_Event.which === 50)
+				{
+					shape_Began = false;
+					document.getElementById("radio_Button_Quadratic_Bezier").checked = true;
+				}
+				else if(keydown_Event.which === 51)
+				{
+					shape_Began = false;
+					document.getElementById("radio_Button_Cubic_Bezier").checked = true;
+				}
+				else if(keydown_Event.which === 52)
+				{
+					draw.beginPath();
+					current_Instruction = current_Instruction + "draw.beginPath();";
+					line_Mode = 0;
+					bezier_Curve_Step = 0;
+					document.getElementById("radio_Button_Circle").checked = true;
+				}
+				else if(keydown_Event.which === 53)
+				{
+					draw.beginPath();
+					current_Instruction = current_Instruction + "draw.beginPath();";
+					line_Mode = 0;
+					bezier_Curve_Step = 0;
+					document.getElementById("radio_Button_Rectangle").checked = true;
+				}
+			}
+		}
+	}
+	addEventListener("click", update_Canvas);
+	function update_Canvas(click_Event)
+	{
+		options_Div_Clicked = false;
+		try
+		{
+			if(click_Event.target.parentElement.parentElement.id === "options_Div")
+			{
+				options_Div_Clicked = true;
+			}
+		}
+		finally
+		{
+			if(options_Div_Clicked === false)
+			{
+				client_Bounding_Rectangle = canvas.getBoundingClientRect();
+				if(document.getElementById("radio_Button_Line").checked === true)
+				{
+					if(line_Mode === 0)
+					{
+						draw.beginPath();
+						current_Instruction = current_Instruction + "draw.beginPath();";
+						draw.moveTo((click_Event.clientX - client_Bounding_Rectangle.left), (click_Event.clientY - client_Bounding_Rectangle.top));
+						current_Instruction = current_Instruction + "draw.moveTo(" + (click_Event.clientX - client_Bounding_Rectangle.left) + ", " + (click_Event.clientY - client_Bounding_Rectangle.top) + ");";
+						line_Mode = 1;
+					}
+					else
+					{
+						draw.lineTo((click_Event.clientX - client_Bounding_Rectangle.left), (click_Event.clientY - client_Bounding_Rectangle.top));
+						current_Instruction = current_Instruction + "draw.lineTo(" + (click_Event.clientX - client_Bounding_Rectangle.left) + ", " + (click_Event.clientY - client_Bounding_Rectangle.top) + ");";
+						if(document.getElementById("draw_Filled").checked === true && document.getElementById("continuous_Path").checked === false)
+						{
+							draw.strokeStyle = "rgba(" + document.getElementById("red_Color_Input").value + ", " + document.getElementById("green_Color_Input").value + ", " + document.getElementById("blue_Color_Input").value + ", " + document.getElementById("alpha_Input").value + ")";
+							current_Instruction = current_Instruction + "draw.strokeStyle = \"rgba(" + document.getElementById("red_Color_Input").value + ", " + document.getElementById("green_Color_Input").value + ", " + document.getElementById("blue_Color_Input").value + ", " + document.getElementById("alpha_Input").value + ")\";";
+							draw.stroke();
+							current_Instruction = current_Instruction + "draw.stroke();";
+						}
+						draw_To_Canvas();
+						if(document.getElementById("continuous_Path").checked === false)
+						{
+							bezier_Curve_Step = 0;
+							line_Mode = 0;
+						}
+						else
+						{
+							bezier_X_Start = (click_Event.clientX - client_Bounding_Rectangle.left);
+							bezier_Y_Start = (click_Event.clientY - client_Bounding_Rectangle.top);
+							bezier_Curve_Step = 1;
+						}
+					}
+				}
+				else if(document.getElementById("radio_Button_Quadratic_Bezier").checked === true || document.getElementById("radio_Button_Cubic_Bezier").checked === true)
+				{
+					if(bezier_Curve_Step === 0)
+					{
+						bezier_X_Start = click_Event.clientX - client_Bounding_Rectangle.left;
+						bezier_Y_Start = click_Event.clientY - client_Bounding_Rectangle.top;
+						bezier_Curve_Step = 1;
+						line_Mode = 0;
+					}
+					else if(bezier_Curve_Step === 1)
+					{
+						bezier_X_Control_Point_1 = click_Event.clientX - client_Bounding_Rectangle.left;
+						bezier_Y_Control_Point_1 = click_Event.clientY - client_Bounding_Rectangle.top;
+						bezier_Curve_Step = 2;
+					}
+					else if(bezier_Curve_Step === 2 && document.getElementById("radio_Button_Cubic_Bezier").checked === true)
+					{
+						bezier_X_Control_Point_2 = click_Event.clientX - client_Bounding_Rectangle.left;
+						bezier_Y_Control_Point_2 = click_Event.clientY - client_Bounding_Rectangle.top;
+						bezier_Curve_Step = 3;
+					}
+					else
+					{
+						if(document.getElementById("continuous_Path").checked === false)
+						{
+							draw.beginPath();
+							current_Instruction = current_Instruction + "draw.beginPath();";
+						}
+						draw.moveTo(bezier_X_Start, bezier_Y_Start);
+						current_Instruction = current_Instruction + "draw.moveTo(" + bezier_X_Start + ", " + bezier_Y_Start + ");";
+						if(bezier_Curve_Step === 2 && document.getElementById("radio_Button_Quadratic_Bezier").checked === true)
+						{
+							draw.quadraticCurveTo(bezier_X_Control_Point_1, bezier_Y_Control_Point_1, (click_Event.clientX - client_Bounding_Rectangle.left), (click_Event.clientY - client_Bounding_Rectangle.top));
+							current_Instruction = current_Instruction + "draw.quadraticCurveTo(" + bezier_X_Control_Point_1 + ", " + bezier_Y_Control_Point_1 + ", " + (click_Event.clientX - client_Bounding_Rectangle.left) + ", " + (click_Event.clientY - client_Bounding_Rectangle.top) + ");";
+						}
+						else
+						{
+							draw.bezierCurveTo(bezier_X_Control_Point_1, bezier_Y_Control_Point_1, bezier_X_Control_Point_2, bezier_Y_Control_Point_2, (click_Event.clientX - client_Bounding_Rectangle.left), (click_Event.clientY - client_Bounding_Rectangle.top));
+							current_Instruction = current_Instruction + "draw.bezierCurveTo(" + bezier_X_Control_Point_1 + ", " + bezier_Y_Control_Point_1 + ", " + bezier_X_Control_Point_2 + ", " + bezier_Y_Control_Point_2 + ", " + (click_Event.clientX - client_Bounding_Rectangle.left) + ", " + (click_Event.clientY - client_Bounding_Rectangle.top) + ");";
+						}
+						draw_To_Canvas();
+						if(document.getElementById("continuous_Path").checked === true)
+						{
+							bezier_X_Start = (click_Event.clientX - client_Bounding_Rectangle.left);
+							bezier_Y_Start = (click_Event.clientY - client_Bounding_Rectangle.top);
+							bezier_Curve_Step = 1;
+							line_Mode = 1;
+						}
+						else
+						{
+							bezier_Curve_Step = 0;
+							line_Mode = 0;
+						}
+					}
+				}
+				else if(document.getElementById("radio_Button_Circle").checked === true || document.getElementById("radio_Button_Rectangle").checked === true)
+				{
+					if(shape_Began === false)
+					{
+						shape_X_Start = click_Event.clientX - client_Bounding_Rectangle.left;
+						shape_Y_Start = click_Event.clientY - client_Bounding_Rectangle.top;
+						shape_Began = true;
+					}
+					else
+					{
+						draw.beginPath();
+						current_Instruction = current_Instruction + "draw.beginPath();";
+						if(document.getElementById("radio_Button_Circle").checked === true)
+						{
+							draw.arc(shape_X_Start, shape_Y_Start, Math.sqrt(Math.pow((shape_X_Start - (click_Event.clientX - client_Bounding_Rectangle.left)), 2) + Math.pow((shape_Y_Start - (click_Event.clientY - client_Bounding_Rectangle.top)), 2)), 0, (2 * Math.PI));
+							current_Instruction = current_Instruction + "draw.arc(" + shape_X_Start + ", " + shape_Y_Start + ", " + Math.sqrt(Math.pow((shape_X_Start - (click_Event.clientX - client_Bounding_Rectangle.left)), 2) + Math.pow((shape_Y_Start - (click_Event.clientY - client_Bounding_Rectangle.top)), 2)) + ", 0, " + (2 * Math.PI) + ");";
+						}
+						else// if(document.getElementById("radio_Button_Rectangle").checked === true)
+						{
+							draw.rect(shape_X_Start, shape_Y_Start, ((click_Event.clientX - client_Bounding_Rectangle.left) - shape_X_Start), ((click_Event.clientY - client_Bounding_Rectangle.top) - shape_Y_Start));
+							current_Instruction = current_Instruction + "draw.rect(" + shape_X_Start + ", " + shape_Y_Start + ", " + ((click_Event.clientX - client_Bounding_Rectangle.left) - shape_X_Start) + ", " + ((click_Event.clientY - client_Bounding_Rectangle.top) - shape_Y_Start) + ");";
+						}
+						draw_To_Canvas();
+						draw.beginPath();
+						current_Instruction = current_Instruction + "draw.beginPath();";
+						shape_Began = false;
+					}
+				}
+			}
+		}
+	}
+</script>
+
+</body>
+
+</html>
