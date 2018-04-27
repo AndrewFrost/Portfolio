@@ -108,7 +108,6 @@
 				text-decoration: none;
 				text-align: center;
 				color: black;
-				cursor: pointer;
 				background-color: #1860C0;
 			}
 
@@ -255,10 +254,10 @@
 	</head>
 	<body>
 		<div id = "title_Bar">
-			<span id = "About_Me_Title_Bar_Item" class = "title_Bar_Item" onmousedown = "display_Selected_Page_Content(0)">About Me</span><span id = "Projects_Title_Bar_Item" class = "title_Bar_Item" onmousedown = "display_Selected_Page_Content(1)">Projects</span><span id = "Résumé_Title_Bar_Item" class = "title_Bar_Item" onmousedown = "display_Selected_Page_Content(2)">Résumé</span>
+			<a id = "About_Me_Title_Bar_Item" class = "title_Bar_Item title_Bar_Item_Current_Selection" href = "#0" onmousedown = "quick_Display_Page_Mousedown(event, 0)" ontouchstart = "quick_Display_Page_Touchstart(event, 0)">About Me</a><a id = "Projects_Title_Bar_Item" class = "title_Bar_Item" href = "#1" onmousedown = "quick_Display_Page_Mousedown(event, 1)" ontouchstart = "quick_Display_Page_Touchstart(event, 1)">Projects</a><a id = "Résumé_Title_Bar_Item" class = "title_Bar_Item" href = "#2" onmousedown = "quick_Display_Page_Mousedown(event, 2)" ontouchstart = "quick_Display_Page_Touchstart(event, 2)">Résumé</a>
 		</div>
 
-		<div id = "About_Me_Page_Content" class = "page_Content hidden">
+		<div id = "About_Me_Page_Content" class = "page_Content">
 			<h1>About Me</h1>
 			<p>Welcome to my portfolio- I'm Andrew Frost and this website is a showcase of projects that I've worked on. Be sure to check the Projects page to see an overview, browse the source code, and play around with anything that catches your eye!</p>
 			<p>I've always had an interest in video games, but didn't decide to pursue it as a career until a little later in life. I first started programming in late 2012 by following some online JavaScript tutorials, and I liked it enough to pursue a degree in programming. I began my studies at Texas A&M University - Corpus Christi in Fall of 2013 where I was first introduced to C++ and got to delve deeper into programming. I gained a lot of experience at college and would recommend it for most people interested in programming, but it's far from the only way to learn. I graduated Cum Laude and received a Bachelor of Science Degree in Game Programming in May of 2016.</p>
@@ -274,24 +273,24 @@
 			<h1>Projects</h1>
 			<div class = "project_Section_Holder">
 				<div class = "project_Section">
-					<h2 onmousedown = "toggle_Collapse(this)" onkeydown = "collapsable_Element_Key_Pressed(event, this)" tabindex = "0">Video Games</h2>
+					<h2 onmousedown = "collapsible_Element_Clicked(event, this)" onkeydown = "collapsible_Element_Key_Pressed(event, this)" tabindex = "0">Video Games</h2>
 					<div>
 						<div class = "project_Holder">
-							<h3 onmousedown = "toggle_Collapse(this)" onkeydown = "collapsable_Element_Key_Pressed(event, this)" tabindex = "0">Endless</h3>
+							<h3 onmousedown = "collapsible_Element_Clicked(event, this)" onkeydown = "collapsible_Element_Key_Pressed(event, this)" tabindex = "0">Endless</h3>
 							<div>
 								<img class = "project_Image" onclick = "toggle_Image_Expand(event, this)" onkeydown = "toggle_Image_Expand(event, this)" tabindex = "0" src = "Endless/Endless_Example_Image.png">
 								<p>Unity project</p>
 							</div>
 						</div>
 						<div class = "project_Holder">
-							<h3 onmousedown = "toggle_Collapse(this)" onkeydown = "collapsable_Element_Key_Pressed(event, this)" tabindex = "0">Paladin</h3>
+							<h3 onmousedown = "collapsible_Element_Clicked(event, this)" onkeydown = "collapsible_Element_Key_Pressed(event, this)" tabindex = "0">Paladin</h3>
 							<div>
 								<img class = "project_Image" onclick = "toggle_Image_Expand(event, this)" onkeydown = "toggle_Image_Expand(event, this)" tabindex = "0" src = "Paladin/Paladin_Example_Image.png">
 								<p>Unity project</p>
 							</div>
 						</div>
 						<div class = "project_Holder">
-							<h3 onmousedown = "toggle_Collapse(this)" onkeydown = "collapsable_Element_Key_Pressed(event, this)" tabindex = "0">Adapt</h3>
+							<h3 onmousedown = "collapsible_Element_Clicked(event, this)" onkeydown = "collapsible_Element_Key_Pressed(event, this)" tabindex = "0">Adapt</h3>
 							<div>
 								<img class = "project_Image" onclick = "toggle_Image_Expand(event, this)" onkeydown = "toggle_Image_Expand(event, this)" tabindex = "0" src = "Adapt/Adapt_Example_Image.png">
 								<p>A video game that I designed alongside a small team in early 2014. While the focus of my work was on creating fun levels, gameplay, and creatures, I also dabbled in creating terrain tiles and helped the programming team implement them into the game.</p>
@@ -300,21 +299,21 @@
 							</div>
 						</div>
 						<div class = "project_Holder">
-							<h3 onmousedown = "toggle_Collapse(this)" onkeydown = "collapsable_Element_Key_Pressed(event, this)" tabindex = "0">The name escapes me at the moment</h3>
+							<h3 onmousedown = "collapsible_Element_Clicked(event, this)" onkeydown = "collapsible_Element_Key_Pressed(event, this)" tabindex = "0">The name escapes me at the moment</h3>
 							<div>
 								<img class = "project_Image" onclick = "toggle_Image_Expand(event, this)" onkeydown = "toggle_Image_Expand(event, this)" tabindex = "0" src = "Uncertain/Uncertain_Example_Image.png">
 								<p>A game that's played on a 5x5 grid.</p>
 							</div>
 						</div>
 						<div class = "project_Holder">
-							<h3 onmousedown = "toggle_Collapse(this)" onkeydown = "collapsable_Element_Key_Pressed(event, this)" tabindex = "0">Tic-tac-toe</h3>
+							<h3 onmousedown = "collapsible_Element_Clicked(event, this)" onkeydown = "collapsible_Element_Key_Pressed(event, this)" tabindex = "0">Tic-tac-toe</h3>
 							<div>
 								<img class = "project_Image" onclick = "toggle_Image_Expand(event, this)" onkeydown = "toggle_Image_Expand(event, this)" tabindex = "0" src = "Tic_Tac_Toe/Tic_Tac_Toe_Example_Image.png">
 								<p>Early C++ program</p>
 							</div>
 						</div>
 						<div class = "project_Holder">
-							<h3 onmousedown = "toggle_Collapse(this)" onkeydown = "collapsable_Element_Key_Pressed(event, this)" tabindex = "0">Blackjack</h3>
+							<h3 onmousedown = "collapsible_Element_Clicked(event, this)" onkeydown = "collapsible_Element_Key_Pressed(event, this)" tabindex = "0">Blackjack</h3>
 							<div>
 								<img class = "project_Image" onclick = "toggle_Image_Expand(event, this)" onkeydown = "toggle_Image_Expand(event, this)" tabindex = "0" src = "Blackjack/Blackjack_Example_Image.png">
 								<p>First program I made.</p>
@@ -324,10 +323,10 @@
 				</div>
 
 				<div class = "project_Section">
-					<h2 onmousedown = "toggle_Collapse(this)" onkeydown = "collapsable_Element_Key_Pressed(event, this)" tabindex = "0">JavaScript Tools</h2>
+					<h2 onmousedown = "collapsible_Element_Clicked(event, this)" onkeydown = "collapsible_Element_Key_Pressed(event, this)" tabindex = "0">JavaScript Tools</h2>
 					<div>
 						<div class = "project_Holder">
-							<h3 onmousedown = "toggle_Collapse(this)" onkeydown = "collapsable_Element_Key_Pressed(event, this)" tabindex = "0">Dungeons & Dragons 5th Edition Damage Calculator</h3>
+							<h3 onmousedown = "collapsible_Element_Clicked(event, this)" onkeydown = "collapsible_Element_Key_Pressed(event, this)" tabindex = "0">Dungeons & Dragons 5th Edition Damage Calculator</h3>
 							<div>
 								<img class = "project_Image" onclick = "toggle_Image_Expand(event, this)" onkeydown = "toggle_Image_Expand(event, this)" tabindex = "0" src = "Dungeons_And_Dragons_5th_Edition_Damage_Calculator/Dungeons_And_Dragons_5th_Edition_Damage_Calculator_Example_Image.png">
 								<p>A useful tool for calculating expected damage output in combat for 5th edition D&D across a variety of situations.</p>
@@ -335,7 +334,7 @@
 							</div>
 						</div>
 						<div class = "project_Holder">
-							<h3 onmousedown = "toggle_Collapse(this)" onkeydown = "collapsable_Element_Key_Pressed(event, this)" tabindex = "0">Dungeons & Dragons Online Quest Table</h3>
+							<h3 onmousedown = "collapsible_Element_Clicked(event, this)" onkeydown = "collapsible_Element_Key_Pressed(event, this)" tabindex = "0">Dungeons & Dragons Online Quest Table</h3>
 							<div>
 								<img class = "project_Image" onclick = "toggle_Image_Expand(event, this)" onkeydown = "toggle_Image_Expand(event, this)" tabindex = "0" src = "Dungeons_And_Dragons_Online_Quest_Table/Dungeons_And_Dragons_Online_Quest_Table_Example_Image.png">
 								<p>While more of a personal list that I use, players of Dungeons & Dragons Online (DDO) may find this sortable table to be convenient.</p>
@@ -343,7 +342,7 @@
 							</div>
 						</div>
 						<div class = "project_Holder">
-							<h3 onmousedown = "toggle_Collapse(this)" onkeydown = "collapsable_Element_Key_Pressed(event, this)" tabindex = "0">Dungeons & Dragons Online Damage Calculator</h3>
+							<h3 onmousedown = "collapsible_Element_Clicked(event, this)" onkeydown = "collapsible_Element_Key_Pressed(event, this)" tabindex = "0">Dungeons & Dragons Online Damage Calculator</h3>
 							<div>
 								<img class = "project_Image" onclick = "toggle_Image_Expand(event, this)" onkeydown = "toggle_Image_Expand(event, this)" tabindex = "0" src = "Dungeons_And_Dragons_Online_Damage_Calculator/Dungeons_And_Dragons_Online_Damage_Calculator_Example_Image.png">
 								<p>Another DDO tool that I've found to be helpful- this one is just some straightforward calculations to determine average damage output, great to help decide between many items and abilities.</p>
@@ -354,10 +353,10 @@
 				</div>
 
 				<div class = "project_Section">
-					<h2 onmousedown = "toggle_Collapse(this)" onkeydown = "collapsable_Element_Key_Pressed(event, this)" tabindex = "0">Other</h2>
+					<h2 onmousedown = "collapsible_Element_Clicked(event, this)" onkeydown = "collapsible_Element_Key_Pressed(event, this)" tabindex = "0">Other</h2>
 					<div>
 						<div class = "project_Holder">
-							<h3 onmousedown = "toggle_Collapse(this)" onkeydown = "collapsable_Element_Key_Pressed(event, this)" tabindex = "0">Weather On Wheels</h3>
+							<h3 onmousedown = "collapsible_Element_Clicked(event, this)" onkeydown = "collapsible_Element_Key_Pressed(event, this)" tabindex = "0">Weather On Wheels</h3>
 							<div>
 								<img class = "project_Image" onclick = "toggle_Image_Expand(event, this)" onkeydown = "toggle_Image_Expand(event, this)" tabindex = "0" src = "Weather_On_Wheels/Weather_On_Wheels_Example_Image.png">
 								<p>A project I contributed to at the Conrad Blucher Institute (CBI) that would give forecasted weather and severe weather events along a travel route. I worked with an existing codebase to improve speed, reliability, and implement additional features such as optional overlays for temperatures, precipitation levels, and windspeeds along a route. Weather On Wheels was available on a website and in the Android and Apple stores, but unfortunately, CBI no longer maintains the project and handed it off to another company that has left it nonfunctioning for a long time.</p>
@@ -365,14 +364,14 @@
 							</div>
 						</div>
 						<div class = "project_Holder">
-							<h3 onmousedown = "toggle_Collapse(this)" onkeydown = "collapsable_Element_Key_Pressed(event, this)" tabindex = "0">HTML Canvas Painter</h3>
+							<h3 onmousedown = "collapsible_Element_Clicked(event, this)" onkeydown = "collapsible_Element_Key_Pressed(event, this)" tabindex = "0">HTML Canvas Painter</h3>
 							<div>
 								<img class = "project_Image" onclick = "toggle_Image_Expand(event, this)" onkeydown = "toggle_Image_Expand(event, this)" tabindex = "0" src = "HTML_Canvas_Painter/HTML_Canvas_Painter_Example_Image.png">
 								<p>A primitive paint program I made to assist with an early Graphics Programming project. You can play around with it <a href = "HTML_Canvas_Painter/HTML_Canvas_Painter.html">here</a>.</p>
 							</div>
 						</div>
 						<div class = "project_Holder">
-							<h3 onmousedown = "toggle_Collapse(this)" onkeydown = "collapsable_Element_Key_Pressed(event, this)" tabindex = "0">Miscellaneous</h3>
+							<h3 onmousedown = "collapsible_Element_Clicked(event, this)" onkeydown = "collapsible_Element_Key_Pressed(event, this)" tabindex = "0">Miscellaneous</h3>
 							<div>
 								<p>In addition, I've worked on a large number of small projects, mostly for college. I'll add a link and more information about them in the future.</p>
 							</div>
@@ -398,12 +397,8 @@
 			page_Layout_Elements_Array.push({page_Content_Element: document.getElementById("Projects_Page_Content"), title_Bar_Selection_Element: document.getElementById("Projects_Title_Bar_Item")});
 			page_Layout_Elements_Array.push({page_Content_Element: document.getElementById("Résumé_Page_Content"), title_Bar_Selection_Element: document.getElementById("Résumé_Title_Bar_Item")});
 
-			function display_Selected_Page_Content(new_Page_Layout_Element_Index)	//Sets the visible page content and selected menu bar item based on the index passed in, along with manipulating the history to allow navigation in that manner
+			function display_Selected_Page_Content(new_Page_Layout_Element_Index)	//Sets the visible page content and selected menu bar item based on the index passed in
 			{
-				if(window.location.hash !== "#" + new_Page_Layout_Element_Index)
-				{
-					window.history.pushState(null, "", "#" + new_Page_Layout_Element_Index);
-				}
 				page_Layout_Elements_Array[currently_Displayed_Page_Layout_Element_Index].page_Content_Element.className = "page_Content hidden";
 				page_Layout_Elements_Array[currently_Displayed_Page_Layout_Element_Index].title_Bar_Selection_Element.className = "title_Bar_Item";
 				page_Layout_Elements_Array[new_Page_Layout_Element_Index].page_Content_Element.className = "page_Content";
@@ -411,28 +406,60 @@
 				currently_Displayed_Page_Layout_Element_Index = new_Page_Layout_Element_Index;
 			}
 
-			function initialize_Page()	//Allows opening new tabs or windows from the title bar into a specific section
+			function quick_Display_Page_Mousedown(event, new_Page_Layout_Element_Index)	//Used with mousedown to start displaying page_Content a little sooner- a default link click event can follow soon after and trigger redirect_Page_Content()
+			{
+				if(event.button === 0)
+				{
+					if(currently_Displayed_Page_Layout_Element_Index !== new_Page_Layout_Element_Index)
+					{
+						window.history.pushState(null, "", "#" + new_Page_Layout_Element_Index);
+						display_Selected_Page_Content(new_Page_Layout_Element_Index);
+					}
+				}
+			}
+
+			function quick_Display_Page_Touchstart(event, new_Page_Layout_Element_Index)	//Used with touchstart to start displaying page_Content a little sooner- a default link click event can follow soon after and trigger redirect_Page_Content()
+			{
+				if(currently_Displayed_Page_Layout_Element_Index !== new_Page_Layout_Element_Index)
+				{
+					window.history.pushState(null, "", "#" + new_Page_Layout_Element_Index);
+					display_Selected_Page_Content(new_Page_Layout_Element_Index);
+				}
+			}
+
+			function redirect_Page_Content()	//Allows opening new tabs or windows from the title bar into a specific section
 			{
 				var initial_Page_Content_String_Array = window.location.hash.split("#");
 				if(initial_Page_Content_String_Array.length === 2 && Number(initial_Page_Content_String_Array[1]) >= 0 && Number(initial_Page_Content_String_Array[1]) <= 2)
 				{
-					display_Selected_Page_Content(Number(initial_Page_Content_String_Array[1]));
+					if(Number(initial_Page_Content_String_Array[1]) !== currently_Displayed_Page_Layout_Element_Index)
+					{
+						display_Selected_Page_Content(Number(initial_Page_Content_String_Array[1]));
+					}
 				}
 				else
 				{
-					window.history.replaceState(null, "", "#0");	//Defaults any invalid URL to the About Me page and loads it
+					window.history.replaceState(null, "", "#0");	//Defaults any invalid URL to be the About Me section
 					display_Selected_Page_Content(0);
 				}
 			}
-			window.onpopstate = initialize_Page;	//Will trigger initialize_Page() when the a user navigates their browser history
-			initialize_Page();
+			window.onpopstate = redirect_Page_Content;	//Will trigger redirect_Page_Content() when the a user navigates their browser history, along with when they click a link such as a title_Bar_Item- could be improved by getting rid of link redirects
+			redirect_Page_Content();	//Redirects when the page is first loaded, defaulting to the About Me section
 
 			function toggle_Collapse(element_To_Toggle)
 			{
 				element_To_Toggle.classList.toggle("collapsed_Header");
 			}
 
-			function collapsable_Element_Key_Pressed(event, element_To_Toggle)	//Project's list key event handler- requires proper HTML layout, see project_Section_Holder for current implementation
+			function collapsible_Element_Clicked(event, element_To_Toggle)	//Project's list mouse click event handler
+			{
+				if(event.button === 0)
+				{
+					toggle_Collapse(element_To_Toggle);
+				}
+			}
+
+			function collapsible_Element_Key_Pressed(event, element_To_Toggle)	//Project's list key event handler- requires proper HTML layout, see project_Section_Holder for current implementation
 			{
 				switch(event.key)
 				{
