@@ -579,7 +579,7 @@
 					expanded_Project_Image_Holder_Element.style.display = "none";
 					expanded_Project_Image_Element.src = "a";	//Empty src can cause issues, "a" is the filename for a very small gif
 					original_Expanded_Project_Image_Element.focus();
-					if(event.type === "mousedown")	//Prevents focus from leaving the small image
+					if(event.type === "mousedown" || event.type === "touchstart")	//Prevents focus from leaving the small image and touch events from sending a click that falls past the overlay
 					{
 						event.preventDefault();
 					}
