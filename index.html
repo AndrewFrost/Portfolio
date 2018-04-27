@@ -6,7 +6,12 @@
 		<style>
 			html
 			{
+				transition: all 600ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+				background-attachment: fixed;
+				background-size: cover;
+				background-repeat: no-repeat;
 				background-color: black;
+				background-image: url("background0.jpg");
 			}
 
 			body
@@ -411,6 +416,7 @@
 				page_Layout_Elements_Array[currently_Displayed_Page_Layout_Element_Index].title_Bar_Selection_Element.className = "title_Bar_Item";
 				page_Layout_Elements_Array[new_Page_Layout_Element_Index].page_Content_Element.className = "page_Content";
 				page_Layout_Elements_Array[new_Page_Layout_Element_Index].title_Bar_Selection_Element.className = "title_Bar_Item title_Bar_Item_Current_Selection";
+				document.documentElement.style.backgroundImage = "url('background" + new_Page_Layout_Element_Index + ".jpg')";
 				currently_Displayed_Page_Layout_Element_Index = new_Page_Layout_Element_Index;
 			}
 
