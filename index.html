@@ -194,7 +194,7 @@
 			{
 				content: "";
 				display: block;
-				padding-top: 133%;
+				padding-top: 138%;
 			}
 
 			.pdf_Viewer
@@ -257,12 +257,6 @@
 				height: 100%;
 				max-width: 100%;
 			}
-
-			#start_Additional_Background_Image_Loading
-			{
-				display: none;
-				background-image: url("background1.jpg"), url("background2.jpg");
-			}
 		</style>
 	</head>
 	<body>
@@ -279,7 +273,7 @@
 			<p>If you're a recruiter in the Austin area looking for a strong C++ programmer, you can contact me by email at <a href = "mailto:andrewdylanfrost@gmail.com">andrewdylanfrost@gmail.com</a>.</p>
 		</div>
 
-		<div id = "start_Additional_Background_Image_Loading"></div>
+		<div class = "hidden"><img src = "background0.jpg"><img src = "background1.jpg"></div><!--Starts to load the About Me and Projects page background images-->
 
 		<div id = "Projects_Page_Content" class = "page_Content hidden">
 			<div id = "expanded_Project_Image_Holder" onmousedown = "toggle_Image_Expand(event, this.firstElementChild)" ontouchstart = "toggle_Image_Expand(event, this.firstElementChild)" onkeydown = "toggle_Image_Expand(event, this.firstElementChild)" onwheel = "toggle_Image_Expand(event, this.firstElementChild)">
@@ -411,6 +405,8 @@
 				<object class = "pdf_Viewer" type = "application/pdf" data = "Résumé/Andrew_Frost_Résumé.pdf#zoom=Fit&view=Fit">The PDF Viewer couldn't display the résumé- you can try viewing it <a href = "Résumé/Andrew_Frost_Résumé.pdf#zoom=Fit&view=Fit">here</a> or  <a href = "Résumé/Andrew_Frost_Résumé.pdf" download>downloading it</a>.<br></object>
 			</div>
 		</div>
+
+		<div class = "hidden"><img src = "background2.jpg"></div>	<!--Begins to load the last background image-->
 
 		<script type = "text/javascript">
 			var currently_Displayed_Page_Layout_Element_Index = 0;
