@@ -30,30 +30,30 @@
 				line-height: 1;
 				text-align: center;
 				cursor: pointer;
-				background-color: rgba(0, 112, 112, 0.9);
+				background-color: rgba(0, 112, 112, 1.0);
 			}
 
 			h2.collapsed_Header
 			{
-				background-color: rgba(0, 144, 144, 0.9);
+				background-color: rgba(0, 144, 144, 1.0);
 				border-radius: 0px 0px 5px 5px;
 			}
 
 			h2:hover, h2:focus
 			{
 				outline: none;
-				background-color: rgba(0, 96, 96, 0.9);
+				background-color: rgba(0, 96, 96, 1.0);
 			}
 
 			h2.collapsed_Header:hover, h2.collapsed_Header:focus
 			{
 				outline: none;
-				background-color: rgba(0, 128, 128, 0.9);
+				background-color: rgba(0, 128, 128, 1.0);
 			}
 
 			h2:active, h2.collapsed_Header:active
 			{
-				background-color: rgba(0, 80, 80, 0.9);
+				background-color: rgba(0, 80, 80, 1.0);
 			}
 
 			h3
@@ -65,31 +65,31 @@
 				line-height: 1;
 				text-align: center;
 				cursor: pointer;
-				background-color: rgba(0, 128, 64, 0.9);
+				background-color: rgba(0, 128, 64, 1.0);
 			}
 
 			h3.collapsed_Header
 			{
 				border-bottom: none;
 				border-radius: 0px 0px 4px 4px;
-				background-color: rgba(0, 160, 80, 0.9);
+				background-color: rgba(0, 160, 80, 1.0);
 			}
 
 			h3:hover, h3:focus
 			{
 				outline: none;
-				background-color: rgba(0, 112, 56, 0.9);
+				background-color: rgba(0, 112, 56, 1.0);
 			}
 
 			h3.collapsed_Header:hover, h3.collapsed_Header:focus
 			{
 				outline: none;
-				background-color: rgba(0, 144, 72, 0.9);
+				background-color: rgba(0, 144, 72, 1.0);
 			}
 
 			h3:active, h3.collapsed_Header:active
 			{
-				background-color: rgba(0, 96, 48, 0.9);
+				background-color: rgba(0, 96, 48, 1.0);
 			}
 
 			.background_Image
@@ -107,6 +107,7 @@
 				background-attachment: fixed;
 				background-size: cover;
 				background-repeat: no-repeat;
+				background-position: center;
 			}
 
 			.title_Bar_Item
@@ -149,11 +150,10 @@
 
 			.page_Content
 			{
-				border: 1px solid rgba(0, 0, 0, 0.9);
 				border-radius: 0px 0px 5px 5px;
 				padding: 0px 16px 16px 16px;
 				background-clip: padding-box;
-				background-color: rgba(176, 176, 176, 0.9);
+				background-color: rgba(255, 255, 255, 0.5);
 			}
 
 			.collapsed_Header + div
@@ -298,12 +298,10 @@
 			<p>If you're a recruiter in the Austin area looking for a strong C++ programmer, you can contact me by email at <a href = "mailto:andrewdylanfrost@gmail.com">andrewdylanfrost@gmail.com</a>.</p>
 		</div>
 
-		<div class = "hidden"><img src = "background0.jpg"><img src = "background1.jpg"></div><!--Starts to load the About Me and Projects page background images-->
-
 		<div id = "background_Image_Projects" class = "background_Image"></div>
 		<div id = "Projects_Page_Content" class = "page_Content hidden">
 			<div id = "expanded_Project_Image_Holder" onmousedown = "toggle_Image_Expand(event, this.firstElementChild)" ontouchstart = "toggle_Image_Expand(event, this.firstElementChild)" onkeydown = "toggle_Image_Expand(event, this.firstElementChild)" onwheel = "toggle_Image_Expand(event, this.firstElementChild)">
-				<img id = "expanded_Project_Image" src = "a">
+				<img id = "expanded_Project_Image" src = "a.gif">
 			</div>
 			<h1>Projects</h1>
 			<div class = "project_Section_Holder">
@@ -321,7 +319,8 @@
 							<h3 onmousedown = "collapsible_Element_Clicked(event, this)" onkeydown = "collapsible_Element_Key_Pressed(event, this)" tabindex = "0">Paladin</h3>
 							<div>
 								<img class = "project_Image" onclick = "toggle_Image_Expand(event, this)" onkeydown = "toggle_Image_Expand(event, this)" tabindex = "0" src = "Paladin/Paladin_Example_Image.png">
-								<p>Unity project</p>
+								<p>One level of a medieval fantasy combat game produced using Unity in my Advanced Game Programming class with one other programmer and a design team- many things are quite rough around the edges due to time constraints on the project. I worked on the enemy AI, menus, inventory, and laying out the levels, along with assisting on any other issues that arose.</p>
+								<p>You can play on Windows 64-bit systems by downloading from Dropbox <a href = "https://www.dropbox.com/sh/n34jgtnh67lykz3/AAD_Y4-6JaVpIxGTIrF_1IQqa?dl=0">here</a> (168 MB)- controls can be found inside.</p>
 							</div>
 						</div>
 						<div class = "project_Holder">
@@ -329,7 +328,7 @@
 							<div>
 								<img class = "project_Image" onclick = "toggle_Image_Expand(event, this)" onkeydown = "toggle_Image_Expand(event, this)" tabindex = "0" src = "Adapt/Adapt_Example_Image.png">
 								<p>A video game that I designed alongside a small team in early 2014. While the focus of my work was on creating fun levels, gameplay, and creatures, I also dabbled in creating terrain tiles and helped the programming team implement them into the game.</p>
-								<p>Source code of the project is unavailable, but the game design document can be found <a href = "Adapt/Adapt_Game_Design_Document.pdf">here</a>. If interested in the terrain tiles, feel free to have a look at them by downloading them <a href = "Adapt/Adapt_Terrain_Tiles.zip" download>here</a>.</p>
+								<p>Source code of the project is unavailable, but the game design document can be found <a href = "Adapt/Adapt_Game_Design_Document.pdf">here</a>. If interested in the terrain tiles, feel free to have a look at them by downloading them <a href = "Adapt/Adapt_Terrain_Tiles.zip" download>here</a> (448 KB).</p>
 							</div>
 						</div>
 						<div class = "project_Holder">
@@ -429,11 +428,9 @@
 			<a href = "Résumé/Andrew_Frost_Résumé.pdf" download>Download</a><br>
 			<br>
 			<div class = "pdf_Container">
-				<object class = "pdf_Viewer" type = "application/pdf" data = "Résumé/Andrew_Frost_Résumé.pdf#zoom=Fit&view=Fit">The PDF Viewer couldn't display the résumé- you can try viewing it <a href = "Résumé/Andrew_Frost_Résumé.pdf#zoom=Fit&view=Fit">here</a> or  <a href = "Résumé/Andrew_Frost_Résumé.pdf" download>downloading it</a>.<br></object>
+				<object class = "pdf_Viewer" type = "application/pdf" data = "Résumé/Andrew_Frost_Résumé.pdf#zoom=Fit&view=Fit">The PDF Viewer couldn't display the résumé- you can try viewing it <a href = "Résumé/Andrew_Frost_Résumé.pdf#zoom=Fit&view=Fit">here</a> or  <a href = "Résumé/Andrew_Frost_Résumé.pdf" download>downloading it here</a>.<br></object>
 			</div>
 		</div>
-
-		<div class = "hidden"><img src = "background2.jpg"></div>	<!--Begins to load the last background image-->
 
 		<script type = "text/javascript">
 			var currently_Displayed_Page_Layout_Element_Index = 0;
@@ -624,7 +621,7 @@
 				else
 				{
 					expanded_Project_Image_Holder_Element.style.display = "none";
-					expanded_Project_Image_Element.src = "a";	//Empty src can cause issues, "a" is the filename for a very small gif
+					expanded_Project_Image_Element.src = "a.gif";	//Empty src can cause issues, a.gif is the filename for a very small gif
 					original_Expanded_Project_Image_Element.focus();
 					if(event.type === "mousedown" || event.type === "touchstart")	//Prevents focus from leaving the small image and touch events from sending a click that falls past the overlay
 					{
