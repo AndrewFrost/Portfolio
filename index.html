@@ -188,6 +188,21 @@
 				user-select: none;
 			}
 
+			.link_Button
+			{
+				-moz-appearance: button;
+				-webkit-appearance: button;
+				appearance: button;
+
+				display: inline-block;
+				padding: 5px;
+				margin: 3px 5px 3px 5px;
+				font-size: 16px;
+				line-height: 1;
+				text-decoration: none;
+				color: buttontext;
+			}
+
 			.pdf_Container
 			{
 				position: relative;
@@ -283,7 +298,7 @@
 			<a id = "About_Me_Title_Bar_Item" class = "title_Bar_Item title_Bar_Item_Current_Selection" href = "#0" onmousedown = "quick_Display_Page_Mousedown(event, 0)" ontouchstart = "quick_Display_Page_Touchstart(event, 0)">About Me</a><a id = "Projects_Title_Bar_Item" class = "title_Bar_Item" href = "#1" onmousedown = "quick_Display_Page_Mousedown(event, 1)" ontouchstart = "quick_Display_Page_Touchstart(event, 1)">Projects</a><a id = "Résumé_Title_Bar_Item" class = "title_Bar_Item" href = "#2" onmousedown = "quick_Display_Page_Mousedown(event, 2)" ontouchstart = "quick_Display_Page_Touchstart(event, 2)">Résumé</a>
 		</div>
 
-		<img id = "background_Image_About_Me" class = "background_Image" src = "About_Me_Background.jpg">
+		<img id = "background_Image_About_Me" class = "background_Image" src = "About_Me_Background.jpg" alt = "">
 		<div id = "About_Me_Page_Content" class = "page_Content">
 			<h1>About Me</h1>
 			<p>Welcome to my portfolio- I'm Andrew Frost and this website is a showcase of projects that I've worked on. Be sure to check the Projects page to see an overview, browse the source code, and play around with anything that catches your eye!</p>
@@ -293,10 +308,10 @@
 			<p>If you're a recruiter in the Austin area looking for a strong C++ programmer, you can contact me by email at <a href = "mailto:andrewdylanfrost@gmail.com">andrewdylanfrost@gmail.com</a>.</p>
 		</div>
 
-		<img id = "background_Image_Projects" class = "background_Image" src = "Projects_Background.jpg">
+		<img id = "background_Image_Projects" class = "background_Image" src = "Projects_Background.jpg" alt = "">
 		<div id = "Projects_Page_Content" class = "page_Content hidden">
 			<div id = "expanded_Project_Image_Holder" onmousedown = "toggle_Image_Expand(event, this.firstElementChild)" ontouchstart = "toggle_Image_Expand(event, this.firstElementChild)" onkeydown = "toggle_Image_Expand(event, this.firstElementChild)" onwheel = "toggle_Image_Expand(event, this.firstElementChild)">
-				<img id = "expanded_Project_Image" src = "hidden.gif">
+				<img id = "expanded_Project_Image" src = "hidden.gif" alt = "">
 			</div>
 			<h1>Projects</h1>
 			<div class = "project_Section_Holder">
@@ -306,33 +321,37 @@
 						<div class = "project_Holder">
 							<h3 onmousedown = "collapsible_Element_Clicked(event, this)" onkeydown = "collapsible_Element_Key_Pressed(event, this)" tabindex = "0">Endless</h3>
 							<div>
-								<img class = "project_Image" onclick = "toggle_Image_Expand(event, this)" onkeydown = "toggle_Image_Expand(event, this)" tabindex = "0" src = "Endless/Endless_Example_Image.jpg">
+								<img class = "project_Image" onclick = "toggle_Image_Expand(event, this)" onkeydown = "toggle_Image_Expand(event, this)" tabindex = "0" src = "Endless/Endless_Example_Image.jpg" alt = "">
 								<p>My Senior Capstone project- I worked with a team of 4 other programmers and an artist to design and implement a video game. We decided to create a multiplayer space ship battle game that turned out quite fun, but would need a lot of polish to succeed in the market.</p>
 								<p>A playable version will be available here soon, but in the meantime the Game Design Document can be found <a href = "Endless/Endless_Game_Design_Document.pdf">here</a>, and the source code is available for download on Bitbucket <a href = "https://bitbucket.org/gamecapstonetamucc/endless-game/downloads/">here</a>.</p>
+								<a class = "link_Button" href = "Endless/Endless_Game_Design_Document.pdf">Game Design Document</a><a class = "link_Button" href = "https://bitbucket.org/gamecapstonetamucc/endless-game/downloads/">Source Code (Bitbucket)</a>
 							</div>
 						</div>
 						<div class = "project_Holder">
 							<h3 onmousedown = "collapsible_Element_Clicked(event, this)" onkeydown = "collapsible_Element_Key_Pressed(event, this)" tabindex = "0">Paladin</h3>
 							<div>
-								<img class = "project_Image" onclick = "toggle_Image_Expand(event, this)" onkeydown = "toggle_Image_Expand(event, this)" tabindex = "0" src = "Paladin/Paladin_Example_Image.jpg">
+								<img class = "project_Image" onclick = "toggle_Image_Expand(event, this)" onkeydown = "toggle_Image_Expand(event, this)" tabindex = "0" src = "Paladin/Paladin_Example_Image.jpg" alt = "">
 								<p>One level of a medieval fantasy combat game produced using Unity in my Advanced Game Programming class with one other programmer and a design team- many things are quite rough around the edges due to time constraints on the project. I worked on the enemy AI, menus, inventory, and laying out the levels, along with assisting on any other issues that arose.</p>
-								<p>You can play on Windows 64-bit systems by downloading from Dropbox <a href = "https://www.dropbox.com/sh/n34jgtnh67lykz3/AAD_Y4-6JaVpIxGTIrF_1IQqa?dl=0">here</a>- controls can be found inside. The source code is available on Github <a href = "https://github.com/NoahPena/Paladin-Team-5">here</a>.</p>
+								<p>You can play on Windows 64-bit systems by downloading from Dropbox <a href = "https://www.dropbox.com/sh/n34jgtnh67lykz3/AAD_Y4-6JaVpIxGTIrF_1IQqa?dl=0">here</a>- controls can be found inside. The source code is available on GitHub <a href = "https://github.com/NoahPena/Paladin-Team-5">here</a>.</p>
+								<a class = "link_Button" href = "https://www.dropbox.com/sh/n34jgtnh67lykz3/AAD_Y4-6JaVpIxGTIrF_1IQqa?dl=0">Play on Windows 64-bit (Dropbox)</a><a class = "link_Button" href = "https://github.com/NoahPena/Paladin-Team-5">Source Code (GitHub)</a>
 							</div>
 						</div>
 						<div class = "project_Holder">
 							<h3 onmousedown = "collapsible_Element_Clicked(event, this)" onkeydown = "collapsible_Element_Key_Pressed(event, this)" tabindex = "0">Adapt</h3>
 							<div>
-								<img class = "project_Image" onclick = "toggle_Image_Expand(event, this)" onkeydown = "toggle_Image_Expand(event, this)" tabindex = "0" src = "Adapt/Adapt_Example_Image.png">
+								<img class = "project_Image" onclick = "toggle_Image_Expand(event, this)" onkeydown = "toggle_Image_Expand(event, this)" tabindex = "0" src = "Adapt/Adapt_Example_Image.png" alt = "">
 								<p>A video game that I designed alongside a small team in early 2014. While the focus of my work was on creating fun levels, gameplay, and creatures, I also dabbled in creating terrain tiles and helped the programming team implement them into the game.</p>
 								<p>Source code of the project is unavailable, but the game design document can be found <a href = "Adapt/Adapt_Game_Design_Document.pdf">here</a>. If interested in the terrain tiles, feel free to have a look at them by downloading them <a href = "Adapt/Adapt_Terrain_Tiles.zip" download>here</a> (448 KB).</p>
+								<a class = "link_Button" href = "Adapt/Adapt_Game_Design_Document.pdf">Game Design Document</a><a class = "link_Button" href = "Adapt/Adapt_Terrain_Tiles.zip" download>Terrain Tiles (448 KB)</a>
 							</div>
 						</div>
 						<div class = "project_Holder">
 							<h3 onmousedown = "collapsible_Element_Clicked(event, this)" onkeydown = "collapsible_Element_Key_Pressed(event, this)" tabindex = "0">Blackjack</h3>
 							<div>
-								<img class = "project_Image" onclick = "toggle_Image_Expand(event, this)" onkeydown = "toggle_Image_Expand(event, this)" tabindex = "0" src = "Blackjack/Blackjack_Example_Image.png">
+								<img class = "project_Image" onclick = "toggle_Image_Expand(event, this)" onkeydown = "toggle_Image_Expand(event, this)" tabindex = "0" src = "Blackjack/Blackjack_Example_Image.png" alt = "">
 								<p>One of the first programs that I made back in 2012- this is a pure JavaScript version of Blackjack that uses the console log and alert prompts to display and get input from the user in a two-player game. It's nice to see how far I've come!</p>
 								<p>You can play it <a href = "Blackjack/Blackjack.html">here</a>, or download the JavaScript <a href = "Blackjack/Blackjack.js" download>here</a> (5 KB).</p>
+								<a class = "link_Button" href = "Blackjack/Blackjack.html">Play Now</a><a class = "link_Button" href = "Blackjack/Blackjack.js" download>JavaScript (5 KB)</a>
 							</div>
 						</div>
 					</div>
@@ -344,25 +363,28 @@
 						<div class = "project_Holder">
 							<h3 onmousedown = "collapsible_Element_Clicked(event, this)" onkeydown = "collapsible_Element_Key_Pressed(event, this)" tabindex = "0">Dungeons & Dragons 5th Edition Damage Calculator</h3>
 							<div>
-								<img class = "project_Image" onclick = "toggle_Image_Expand(event, this)" onkeydown = "toggle_Image_Expand(event, this)" tabindex = "0" src = "Dungeons_And_Dragons_5th_Edition_Damage_Calculator/Dungeons_And_Dragons_5th_Edition_Damage_Calculator_Example_Image.jpg">
+								<img class = "project_Image" onclick = "toggle_Image_Expand(event, this)" onkeydown = "toggle_Image_Expand(event, this)" tabindex = "0" src = "Dungeons_And_Dragons_5th_Edition_Damage_Calculator/Dungeons_And_Dragons_5th_Edition_Damage_Calculator_Example_Image.jpg" alt = "">
 								<p>A tool for calculating expected damage output in combat for the 5th edition of the tabletop role-playing game Dungeons & Dragons (D&D). Great for analyzing character builds and planning combat encounters.</p>
-								<p>Take a look at it <a href = "https://andrewfrost.github.io/Dungeons-and-Dragons-5e-Average-Damage-Calculator/">here</a>, or view the source code on Github <a href = "https://github.com/AndrewFrost/Dungeons-and-Dragons-5e-Average-Damage-Calculator">here</a>.</p>
+								<p>Take a look at it <a href = "https://andrewfrost.github.io/Dungeons-and-Dragons-5e-Average-Damage-Calculator/">here</a>, or view the source code on GitHub <a href = "https://github.com/AndrewFrost/Dungeons-and-Dragons-5e-Average-Damage-Calculator">here</a>.</p>
+								<a class = "link_Button" href = "https://andrewfrost.github.io/Dungeons-and-Dragons-5e-Average-Damage-Calculator/">Use Now</a><a class = "link_Button" href = "https://github.com/AndrewFrost/Dungeons-and-Dragons-5e-Average-Damage-Calculator">Source Code (GitHub)</a>
 							</div>
 						</div>
 						<div class = "project_Holder">
 							<h3 onmousedown = "collapsible_Element_Clicked(event, this)" onkeydown = "collapsible_Element_Key_Pressed(event, this)" tabindex = "0">Dungeons & Dragons Online Quest Table</h3>
 							<div>
-								<img class = "project_Image" onclick = "toggle_Image_Expand(event, this)" onkeydown = "toggle_Image_Expand(event, this)" tabindex = "0" src = "Dungeons_And_Dragons_Online_Quest_Table/Dungeons_And_Dragons_Online_Quest_Table_Example_Image.png">
+								<img class = "project_Image" onclick = "toggle_Image_Expand(event, this)" onkeydown = "toggle_Image_Expand(event, this)" tabindex = "0" src = "Dungeons_And_Dragons_Online_Quest_Table/Dungeons_And_Dragons_Online_Quest_Table_Example_Image.png" alt = "">
 								<p>While more of a personal list that I use and very tailored to that end, players of the MMO version of D&D- Dungeons & Dragons Online (DDO)- may find this sortable table of quests to be convenient.</p>
 								<p>Check it out <a href = "Dungeons_And_Dragons_Online_Quest_Table/Quest_Table.html">here</a> or download the source code <a href = "Dungeons_And_Dragons_Online_Quest_Table/Quest_Table.zip" download>here</a> (13 KB).</p>
+								<a class = "link_Button" href = "Dungeons_And_Dragons_Online_Quest_Table/Quest_Table.html">Use Now</a><a class = "link_Button" href = "Dungeons_And_Dragons_Online_Quest_Table/Quest_Table.zip" download>Source Code (13 KB)</a>
 							</div>
 						</div>
 						<div class = "project_Holder">
 							<h3 onmousedown = "collapsible_Element_Clicked(event, this)" onkeydown = "collapsible_Element_Key_Pressed(event, this)" tabindex = "0">Dungeons & Dragons Online Damage Calculator</h3>
 							<div>
-								<img class = "project_Image" onclick = "toggle_Image_Expand(event, this)" onkeydown = "toggle_Image_Expand(event, this)" tabindex = "0" src = "Dungeons_And_Dragons_Online_Damage_Calculator/Dungeons_And_Dragons_Online_Damage_Calculator_Example_Image.png">
+								<img class = "project_Image" onclick = "toggle_Image_Expand(event, this)" onkeydown = "toggle_Image_Expand(event, this)" tabindex = "0" src = "Dungeons_And_Dragons_Online_Damage_Calculator/Dungeons_And_Dragons_Online_Damage_Calculator_Example_Image.png" alt = "">
 								<p>Another DDO tool that I've found to be helpful- this one is just some straightforward calculations to determine average damage output, great to help decide between many items and abilities.</p>
 								<p>Available for use <a href = "Dungeons_And_Dragons_Online_Damage_Calculator/Damage_Calculator.html">here</a>, and download <a href = "Dungeons_And_Dragons_Online_Damage_Calculator/Damage_Calculator.html" download>here</a> (13 KB).</p>
+								<a class = "link_Button" href = "Dungeons_And_Dragons_Online_Damage_Calculator/Damage_Calculator.html">Use Now</a><a class = "link_Button" href = "Dungeons_And_Dragons_Online_Damage_Calculator/Damage_Calculator.html" download>Source Code (13 KB)</a>
 							</div>
 						</div>
 					</div>
@@ -374,24 +396,27 @@
 						<div class = "project_Holder">
 							<h3 onmousedown = "collapsible_Element_Clicked(event, this)" onkeydown = "collapsible_Element_Key_Pressed(event, this)" tabindex = "0">Weather On Wheels</h3>
 							<div>
-								<img class = "project_Image" onclick = "toggle_Image_Expand(event, this)" onkeydown = "toggle_Image_Expand(event, this)" tabindex = "0" src = "Weather_On_Wheels/Weather_On_Wheels_Example_Image.jpg">
+								<img class = "project_Image" onclick = "toggle_Image_Expand(event, this)" onkeydown = "toggle_Image_Expand(event, this)" tabindex = "0" src = "Weather_On_Wheels/Weather_On_Wheels_Example_Image.jpg" alt = "">
 								<p>A project I contributed to at the Conrad Blucher Institute (CBI) that would give forecasted weather and severe weather events along a travel route. I worked with an existing codebase to improve speed, reliability, and implement additional features such as optional overlays for temperatures, precipitation levels, and windspeeds along a route. Weather On Wheels was available on a website and in the Android and Apple stores, but unfortunately, CBI no longer maintains the project and handed it off to another company that has left it nonfunctioning for a long time.</p>
 								<p>A poster I used for a presentation on Weather On Wheels that contains some additional information and screenshots of it in a late stage of development can be found <a href = "Weather_On_Wheels/Weather_On_Wheels_Poster.png">here</a>.</p>
+								<a class = "link_Button" href = "Weather_On_Wheels/Weather_On_Wheels_Poster.png">View Poster</a>
 							</div>
 						</div>
 						<div class = "project_Holder">
 							<h3 onmousedown = "collapsible_Element_Clicked(event, this)" onkeydown = "collapsible_Element_Key_Pressed(event, this)" tabindex = "0">HTML Canvas Painter</h3>
 							<div>
-								<img class = "project_Image" onclick = "toggle_Image_Expand(event, this)" onkeydown = "toggle_Image_Expand(event, this)" tabindex = "0" src = "HTML_Canvas_Painter/HTML_Canvas_Painter_Example_Image.png">
+								<img class = "project_Image" onclick = "toggle_Image_Expand(event, this)" onkeydown = "toggle_Image_Expand(event, this)" tabindex = "0" src = "HTML_Canvas_Painter/HTML_Canvas_Painter_Example_Image.png" alt = "">
 								<p>A primitive paint program I made to assist with an early Graphics Programming project. You can play around with it <a href = "HTML_Canvas_Painter/HTML_Canvas_Painter.html">here</a>, or download the source code <a href = "HTML_Canvas_Painter/HTML_Canvas_Painter.html" download>here</a> (17 KB).</p>
+								<a class = "link_Button" href = "HTML_Canvas_Painter/HTML_Canvas_Painter.html">Use Now</a><a class = "link_Button" href = "HTML_Canvas_Painter/HTML_Canvas_Painter.html" download>Source Code (17 KB)</a>
 							</div>
 						</div>
 						<div class = "project_Holder">
 							<h3 onmousedown = "collapsible_Element_Clicked(event, this)" onkeydown = "collapsible_Element_Key_Pressed(event, this)" tabindex = "0">Portfolio</h3>
 							<div>
-								<img class = "project_Image" onclick = "toggle_Image_Expand(event, this)" onkeydown = "toggle_Image_Expand(event, this)" tabindex = "0" src = "Portfolio/Portfolio_Example_Image.jpg">
+								<img class = "project_Image" onclick = "toggle_Image_Expand(event, this)" onkeydown = "toggle_Image_Expand(event, this)" tabindex = "0" src = "Portfolio/Portfolio_Example_Image.jpg" alt = "">
 								<p>This website! Hopefully you've found that it runs quickly and is organized well. If you've noticed any problems, let me know about them at <a href = "mailto:andrewdylanfrost@gmail.com">andrewdylanfrost@gmail.com</a>.</p>
-								<p>The background images are available for free at the following external locations: <a href = "https://pixabay.com/en/nature-wood-tree-light-sun-fog-3151869/">About Me</a>, <a href = "https://pixabay.com/en/railway-seemed-track-train-2439189/">Projects</a>, <a href = "https://pixabay.com/en/away-bridge-web-wood-nature-3024773/">Résumé</a>. Source code for the website can be found on Github <a href = "https://github.com/AndrewFrost/Portfolio">here</a>.</p>
+								<p>The background images are available for free at the following external locations: <a href = "https://pixabay.com/en/nature-wood-tree-light-sun-fog-3151869/">About Me</a>, <a href = "https://pixabay.com/en/railway-seemed-track-train-2439189/">Projects</a>, <a href = "https://pixabay.com/en/away-bridge-web-wood-nature-3024773/">Résumé</a>. Source code for the website can be found on GitHub <a href = "https://github.com/AndrewFrost/Portfolio">here</a>.</p>
+								<a class = "link_Button" href = "https://github.com/AndrewFrost/Portfolio">Source Code (GitHub)</a>
 							</div>
 						</div>
 						<div class = "project_Holder">
@@ -405,7 +430,7 @@
 			</div>
 		</div>
 
-		<img id = "background_Image_Résumé" class = "background_Image" src = "Résumé_Background.jpg">
+		<img id = "background_Image_Résumé" class = "background_Image" src = "Résumé_Background.jpg" alt = "">
 		<div id = "Résumé_Page_Content" class = "page_Content hidden">
 			<h1>Résumé</h1>
 			<a href = "Résumé/Andrew_Frost_Résumé.pdf" download>Download</a> (90 KB)<br>
