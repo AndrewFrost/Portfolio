@@ -12,10 +12,16 @@
 				background-color: black;
 			}
 
+			p
+			{
+				margin: 16px 8px;
+				font-size: 16px;
+			}
+
 			h1
 			{
 				margin: 0px;
-				padding: 30px 0px 30px 0px;
+				padding: 30px 0px;
 				font-size: 32px;
 				line-height: 1;
 				text-align: center;
@@ -25,7 +31,7 @@
 			{
 				margin: 0px;
 				border: 1px solid black;
-				padding: 10px 0px 10px 0px;
+				padding: 10px 0px;
 				font-size: 24px;
 				line-height: 1;
 				text-align: center;
@@ -60,7 +66,7 @@
 			{
 				margin: 0px;
 				border-bottom: 1px solid black;
-				padding: 8px 0px 8px 0px;
+				padding: 8px 0px;
 				font-size: 18px;
 				line-height: 1;
 				text-align: center;
@@ -168,14 +174,14 @@
 			.project_Section
 			{
 				border: 1px solid black;
-				border-radius: 0px 0px 10px 5px;
+				border-radius: 0px 0px 5px 5px;
 			}
 
 			.project_Holder
 			{
 				border: 1px solid black;
 				border-radius: 0px 0px 5px 5px;
-				background-color: #C0C0C0;
+				background-color: rgba(192, 192, 192, 1);
 			}
 
 			.project_Image
@@ -196,10 +202,12 @@
 
 				display: inline-block;
 				padding: 5px;
-				margin: 3px 5px 3px 5px;
+				margin: 3px 5px;
+				min-width: 125px;
 				font-size: 16px;
 				line-height: 1;
 				text-decoration: none;
+				text-align: center;
 				color: buttontext;
 			}
 
@@ -350,8 +358,8 @@
 							<div>
 								<img class = "project_Image" onclick = "toggle_Image_Expand(event, this)" onkeydown = "toggle_Image_Expand(event, this)" tabindex = "0" src = "Blackjack/Blackjack_Example_Image.png" alt = "">
 								<p>One of the first programs that I made back in 2012- this is a pure JavaScript version of Blackjack that uses the console log and alert prompts to display and get input from the user in a two-player game. It's nice to see how far I've come!</p>
-								<p>You can play it <a href = "Blackjack/Blackjack.html">here</a>, or download the JavaScript <a href = "Blackjack/Blackjack.js" download>here</a> (5 KB).</p>
-								<a class = "link_Button" href = "Blackjack/Blackjack.html">Play Now</a><a class = "link_Button" href = "Blackjack/Blackjack.js" download>JavaScript (5 KB)</a>
+								<p>You can play it <a href = "Blackjack/Blackjack.html">here</a>, or download the source code <a href = "Blackjack/Blackjack.zip" download>here</a> (2 KB).</p>
+								<a class = "link_Button" href = "Blackjack/Blackjack.html">Play Now</a><a class = "link_Button" href = "Blackjack/Blackjack.zip" download>Source Code (2 KB)</a>
 							</div>
 						</div>
 					</div>
@@ -383,8 +391,8 @@
 							<div>
 								<img class = "project_Image" onclick = "toggle_Image_Expand(event, this)" onkeydown = "toggle_Image_Expand(event, this)" tabindex = "0" src = "Dungeons_And_Dragons_Online_Damage_Calculator/Dungeons_And_Dragons_Online_Damage_Calculator_Example_Image.png" alt = "">
 								<p>Another DDO tool that I've found to be helpful- this one is just some straightforward calculations to determine average damage output, great to help decide between many items and abilities.</p>
-								<p>Available for use <a href = "Dungeons_And_Dragons_Online_Damage_Calculator/Damage_Calculator.html">here</a>, and download <a href = "Dungeons_And_Dragons_Online_Damage_Calculator/Damage_Calculator.html" download>here</a> (13 KB).</p>
-								<a class = "link_Button" href = "Dungeons_And_Dragons_Online_Damage_Calculator/Damage_Calculator.html">Use Now</a><a class = "link_Button" href = "Dungeons_And_Dragons_Online_Damage_Calculator/Damage_Calculator.html" download>Source Code (13 KB)</a>
+								<p>Available for use <a href = "Dungeons_And_Dragons_Online_Damage_Calculator/Damage_Calculator.html">here</a>, and download <a href = "Dungeons_And_Dragons_Online_Damage_Calculator/Damage_Calculator.zip" download>here</a> (3 KB).</p>
+								<a class = "link_Button" href = "Dungeons_And_Dragons_Online_Damage_Calculator/Damage_Calculator.html">Use Now</a><a class = "link_Button" href = "Dungeons_And_Dragons_Online_Damage_Calculator/Damage_Calculator.zip" download>Source Code (3 KB)</a>
 							</div>
 						</div>
 					</div>
@@ -406,8 +414,8 @@
 							<h3 onmousedown = "collapsible_Element_Clicked(event, this)" onkeydown = "collapsible_Element_Key_Pressed(event, this)" tabindex = "0">HTML Canvas Painter</h3>
 							<div>
 								<img class = "project_Image" onclick = "toggle_Image_Expand(event, this)" onkeydown = "toggle_Image_Expand(event, this)" tabindex = "0" src = "HTML_Canvas_Painter/HTML_Canvas_Painter_Example_Image.png" alt = "">
-								<p>A primitive paint program I made to assist with an early Graphics Programming project. You can play around with it <a href = "HTML_Canvas_Painter/HTML_Canvas_Painter.html">here</a>, or download the source code <a href = "HTML_Canvas_Painter/HTML_Canvas_Painter.html" download>here</a> (17 KB).</p>
-								<a class = "link_Button" href = "HTML_Canvas_Painter/HTML_Canvas_Painter.html">Use Now</a><a class = "link_Button" href = "HTML_Canvas_Painter/HTML_Canvas_Painter.html" download>Source Code (17 KB)</a>
+								<p>A primitive paint program I made to assist with an early Graphics Programming project. You can play around with it <a href = "HTML_Canvas_Painter/HTML_Canvas_Painter.html">here</a>, or download the source code <a href = "HTML_Canvas_Painter/HTML_Canvas_Painter.zip" download>here</a> (3 KB).</p>
+								<a class = "link_Button" href = "HTML_Canvas_Painter/HTML_Canvas_Painter.html">Use Now</a><a class = "link_Button" href = "HTML_Canvas_Painter/HTML_Canvas_Painter.zip" download>Source Code (3 KB)</a>
 							</div>
 						</div>
 						<div class = "project_Holder">
@@ -433,11 +441,10 @@
 		<img id = "background_Image_Résumé" class = "background_Image" src = "Résumé_Background.jpg" alt = "">
 		<div id = "Résumé_Page_Content" class = "page_Content hidden">
 			<h1>Résumé</h1>
-			<a href = "Résumé/Andrew_Frost_Résumé.pdf" download>Download</a> (90 KB)<br>
-			<a href = "Résumé/Andrew_Frost_Résumé.pdf">View</a><br>
+			<a class = "link_Button" href = "Résumé/Andrew_Frost_Résumé.pdf">View</a><a class = "link_Button" href = "Résumé/Andrew_Frost_Résumé.zip" download>Download (89 KB)</a><br>
 			<br>
 			<div class = "pdf_Container">
-				<object class = "pdf_Viewer" type = "application/pdf" data = "Résumé/Andrew_Frost_Résumé.pdf#zoom=Fit&view=Fit">The PDF Viewer couldn't display the résumé- you can try downloading it <a href = "Résumé/Andrew_Frost_Résumé.pdf" download>here</a> (90 KB) or viewing it <a href = "Résumé/Andrew_Frost_Résumé.pdf#zoom=Fit&view=Fit">here</a>.<br></object>
+				<object class = "pdf_Viewer" type = "application/pdf" data = "Résumé/Andrew_Frost_Résumé.pdf#zoom=Fit&view=Fit">The PDF Viewer couldn't display the résumé- you can try downloading it <a href = "Résumé/Andrew_Frost_Résumé.zip" download>here</a> (89 KB) or viewing it <a href = "Résumé/Andrew_Frost_Résumé.pdf#zoom=Fit&view=Fit">here</a>.<br></object>
 			</div>
 		</div>
 
