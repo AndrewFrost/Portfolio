@@ -282,7 +282,7 @@
 
 			#expanded_Project_Image_Holder
 			{
-				display: none;	/*Is toggled to and from flex to display the overlayed image*/
+				display: none;	/*Is toggled to and from block in JavaScript to display the overlayed image*/
 				position: fixed;
 				top: 0;
 				right: 0;
@@ -631,7 +631,7 @@
 				{
 					if(event.type !== "keydown" || event.key === "Enter")
 					{
-						expanded_Project_Image_Holder_Element.style.display = "flex";
+						expanded_Project_Image_Holder_Element.style.display = "block";
 						expanded_Project_Image_Element.src = element_To_Toggle.src;
 						original_Expanded_Project_Image_Element = element_To_Toggle;
 						expanded_Project_Image_Holder_Element.focus();
