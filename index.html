@@ -102,8 +102,6 @@
 			{
 				position: fixed;
 				top: 0;
-				right: 0;
-				bottom: 0;
 				left: 0;
 				z-index: -1;
 				height: 100%;
@@ -214,37 +212,11 @@
 				color: buttontext;
 			}
 
-			.pdf_Container
-			{
-				position: relative;
-				width: 100%;
-			}
-
-			.pdf_Container::before	/*Allows the PDF to maintain the same aspect ratio (8.5:11 page plus some extra vertical space for the PDF Reader's UI)- there may be a better way to implement this*/
-			{
-				content: "";
-				display: block;
-				padding-top: 140%;
-			}
-
-			.pdf_Viewer
-			{
-				position: absolute;
-				top: 0;
-				right: 0;
-				bottom: 0;
-				left: 0;
-				height: 100%;
-				width: 100%;
-			}
-
 			.hidden	/*Imitates "display: none" due to Chrome's PDF viewer reloading each time display is toggled, but not when visibility is toggled*/
 			{
 				visibility: hidden;
 				position: absolute;
 				top: 0;
-				right: 0;
-				bottom: 0;
 				left: 0;
 				margin: 0px;
 				border: none;
@@ -252,7 +224,7 @@
 				height: 0px;
 			}
 
-			.hidden *, .hidden *::before
+			.hidden *
 			{
 				margin: 0px;
 				border: 0px;
@@ -285,9 +257,9 @@
 				display: none;	/*Is toggled to and from block in JavaScript to display the overlayed image*/
 				position: fixed;
 				top: 0;
-				right: 0;
-				bottom: 0;
 				left: 0;
+				height: 100%;
+				width: 100%;
 				cursor: pointer;
 				outline: none;
 				user-select: none;
@@ -301,6 +273,23 @@
 				object-fit: contain;
 				height: 100%;
 				max-width: 100%;
+			}
+
+			#résumé_Container	/*Allows the résumé PDF to maintain the same aspect ratio (8.5:11 page plus some extra vertical space for the PDF Reader's UI)- keep an eye out for better ways to implement this*/
+			{
+				display: block;
+				position: relative;	/*Anchor the contained viewer to this element*/
+				padding-top: 140%;	/*Padding percentages are based on the element's width, so element will be width:padding ratio*/
+				width: 100%;
+			}
+
+			#résumé_Viewer
+			{
+				position: absolute;
+				top: 0;	/*Place the PDF Reader into the container's position*/
+				left: 0;
+				height: 100%;
+				width: 100%;
 			}
 		</style>
 	</head>
@@ -446,8 +435,8 @@
 			<h1>Résumé</h1>
 			<a class = "link_Button" href = "Résumé/Andrew_Frost_Résumé.pdf">View</a><a class = "link_Button" href = "Résumé/Andrew_Frost_Résumé.zip" download>Download (89 KB)</a><br>
 			<br>
-			<div class = "pdf_Container">
-				<object class = "pdf_Viewer" type = "application/pdf" data = "Résumé/Andrew_Frost_Résumé.pdf#zoom=Fit&view=Fit">The PDF Viewer couldn't display the résumé- you can try downloading it <a href = "Résumé/Andrew_Frost_Résumé.zip" download>here</a> (89 KB) or viewing it <a href = "Résumé/Andrew_Frost_Résumé.pdf#zoom=Fit&view=Fit">here</a>.<br></object>
+			<div id = "résumé_Container">
+				<object id = "résumé_Viewer" type = "application/pdf" data = "Résumé/Andrew_Frost_Résumé.pdf#zoom=Fit&view=Fit">The PDF Viewer couldn't display the résumé- you can try downloading it <a href = "Résumé/Andrew_Frost_Résumé.zip" download>here</a> (89 KB) or viewing it <a href = "Résumé/Andrew_Frost_Résumé.pdf#zoom=Fit&view=Fit">here</a>.<br></object>
 			</div>
 		</div>
 
