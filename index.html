@@ -2,426 +2,287 @@
 <html lang = "en">
 	<head>
 		<meta charset = "utf-8">
-		<title>Andrew Frost - Game Programming Portfolio</title>
-		<style>
-			body
-			{
-				margin: 0px auto 100px auto;
-				width: 75%;
-				min-width: 450px;
-				background-color: black;
-			}
-
-			p
-			{
-				margin: 16px 8px;
-				font-size: 1.5rem;	/*Default of 24px in most browsers that scales with user options*/
-			}
-
-			h1
-			{
-				margin: 0px;
-				padding: 30px 0px;
-				font-size: 3rem;
-				line-height: 1;
-				text-align: center;
-			}
-
-			h2
-			{
-				margin: 0px;
-				border: 1px solid black;
-				padding: 10px 0px;
-				font-size: 2.25rem;
-				line-height: 1;
-				text-align: center;
-				cursor: pointer;
-				background-color: rgba(0, 112, 112, 1.0);
-			}
-
-			h2.collapsed_Header
-			{
-				background-color: rgba(0, 144, 144, 1.0);
-				border-radius: 0px 0px 5px 5px;
-			}
-
-			h2:hover, h2:focus
-			{
-				outline: none;
-				background-color: rgba(0, 96, 96, 1.0);
-			}
-
-			h2.collapsed_Header:hover, h2.collapsed_Header:focus
-			{
-				outline: none;
-				background-color: rgba(0, 128, 128, 1.0);
-			}
-
-			h2:active, h2.collapsed_Header:active
-			{
-				background-color: rgba(0, 80, 80, 1.0);
-			}
-
-			h3
-			{
-				margin: 0px;
-				border-bottom: 1px solid black;
-				padding: 8px 0px;
-				font-size: 1.6875rem;
-				line-height: 1;
-				text-align: center;
-				cursor: pointer;
-				background-color: rgba(0, 128, 64, 1.0);
-			}
-
-			h3.collapsed_Header
-			{
-				border-bottom: none;
-				border-radius: 0px 0px 4px 4px;
-				background-color: rgba(0, 160, 80, 1.0);
-			}
-
-			h3:hover, h3:focus
-			{
-				outline: none;
-				background-color: rgba(0, 112, 56, 1.0);
-			}
-
-			h3.collapsed_Header:hover, h3.collapsed_Header:focus
-			{
-				outline: none;
-				background-color: rgba(0, 144, 72, 1.0);
-			}
-
-			h3:active, h3.collapsed_Header:active
-			{
-				background-color: rgba(0, 96, 48, 1.0);
-			}
-
-			.background_Image
-			{
-				position: fixed;
-				top: 0;
-				left: 0;
-				z-index: -1;
-				height: 100%;
-				width: 100%;
-				object-fit: cover;
-				opacity: 0;
-				transition: opacity 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-			}
-
-			.title_Bar_Item
-			{
-				display: inline-block;
-				box-sizing: border-box;
-				padding: 6px;
-				border: 1px solid rgba(0, 0, 0, 0.9);
-				width: 33.33333%;
-				font-size: 3rem;
-				line-height: 1;
-				text-decoration: none;
-				text-align: center;
-				white-space: nowrap;
-				overflow: hidden;
-				vertical-align: bottom;
-				color: black;
-				background-clip: padding-box;
-				background-color: rgba(24, 96, 192, 0.9);
-			}
-
-			.title_Bar_Item:hover, .title_Bar_Item:focus
-			{
-				outline: none;
-				background-color: rgba(22, 88, 176, 0.9);
-			}
-
-			.title_Bar_Item_Current_Selection
-			{
-				background-color: rgba(20, 80, 160, 0.9);
-			}
-
-			.title_Bar_Item_Current_Selection:hover, .title_Bar_Item_Current_Selection:focus
-			{
-				outline: none;
-				background-color: rgba(18, 72, 144, 0.9);
-			}
-
-			.title_Bar_Item:active
-			{
-				background-color: rgba(16, 64, 128, 0.9);
-			}
-
-			.page_Content
-			{
-				border-radius: 0px 0px 5px 5px;
-				padding: 0px 16px 16px 16px;
-				background-color: rgba(255, 255, 255, 0.5);
-			}
-
-			.collapsed_Header + div
-			{
-				display: none;
-			}
-
-			.project_Section_Holder
-			{
-				border-left: 1px solid black;
-				border-right: 1px solid black;
-				border-radius: 0px 0px 5px 5px;
-				background-color: black;
-			}
-
-			.project_Section
-			{
-				border: 1px solid black;
-				border-radius: 0px 0px 5px 5px;
-			}
-
-			.project_Holder
-			{
-				border: 1px solid black;
-				border-radius: 0px 0px 5px 5px;
-				background-color: rgba(192, 192, 192, 1);
-			}
-
-			.project_Image
-			{
-				display: block;
-				margin: auto;
-				max-height: 300px;
-				max-width: 100%;
-				cursor: pointer;
-				user-select: none;
-			}
-
-			.link_Button
-			{
-				-moz-appearance: button;
-				-webkit-appearance: button;
-				appearance: button;
-
-				display: inline-block;
-				padding: 5px 10px;
-				margin: 3px 5px;
-				min-width: 125px;
-				font-size: 1.5rem;
-				line-height: 1;
-				text-decoration: none;
-				text-align: center;
-				color: buttontext;
-			}
-
-			.hidden	/*Imitates "display: none" due to Chrome's PDF viewer reloading each time display is toggled, but not when visibility is toggled*/
-			{
-				visibility: hidden;
-				position: absolute;
-				top: 0;
-				left: 0;
-				margin: 0px;
-				border: none;
-				padding: 0px;
-				height: 0px;
-			}
-
-			.hidden *
-			{
-				margin: 0px;
-				border: 0px;
-				padding: 0px;
-				height: 0px;
-			}
-
-			#background_Image_About_Me
-			{
-				opacity: 1;
-			}
-
-			#background_Image_Projects
-			{
-				opacity: 0;
-			}
-
-			#background_Image_Résumé
-			{
-				opacity: 0;
-			}
-
-			#title_Bar
-			{
-				border: 1px solid rgba(0, 0, 0, 0.9);
-			}
-
-			#expanded_Project_Image_Holder
-			{
-				display: none;	/*Is toggled to and from block in JavaScript to display the overlayed image*/
-				position: fixed;
-				top: 0;
-				left: 0;
-				height: 100%;
-				width: 100%;
-				cursor: pointer;
-				outline: none;
-				user-select: none;
-				background-color: rgba(0, 0, 0, 0.75);
-			}
-
-			#expanded_Project_Image
-			{
-				display: block;
-				margin: auto;
-				object-fit: contain;
-				height: 100%;
-				max-width: 100%;
-			}
-
-			#résumé_Container	/*Allows the résumé PDF to maintain the same aspect ratio (8.5:11 page plus some extra vertical space for the PDF Reader's UI)- keep an eye out for better ways to implement this*/
-			{
-				display: block;
-				position: relative;	/*Anchor the contained viewer to this element*/
-				padding-top: 140%;	/*Padding percentages are based on the element's width, so element will be width:padding ratio*/
-				width: 100%;
-			}
-
-			#résumé_Viewer
-			{
-				position: absolute;
-				top: 0;	/*Place the PDF Reader into the container's position*/
-				left: 0;
-				height: 100%;
-				width: 100%;
-			}
-		</style>
+		<meta name="viewport" content="width=device-width">
+		<title>Andrew Frost - Programming Portfolio</title>
+		<link rel = "icon" type = "image/png" href = "favicon.png">
+		<link rel = "stylesheet" charset = "utf-8" href = "Libraries/Prism/prism.css">
+		<link rel = "stylesheet" charset = "utf-8" href = "CSS/main.css">
+		<script>//This empty script helps mitigate the visual impact of a content restyling bug in Firefox</script>
 	</head>
 	<body>
 		<div id = "title_Bar">
-			<a id = "About_Me_Title_Bar_Item" class = "title_Bar_Item title_Bar_Item_Current_Selection" href = "#0" onmousedown = "quick_Display_Page_Mousedown(event, 0)" ontouchstart = "quick_Display_Page_Touchstart(event, 0)">About Me</a><a id = "Projects_Title_Bar_Item" class = "title_Bar_Item" href = "#1" onmousedown = "quick_Display_Page_Mousedown(event, 1)" ontouchstart = "quick_Display_Page_Touchstart(event, 1)">Projects</a><a id = "Résumé_Title_Bar_Item" class = "title_Bar_Item" href = "#2" onmousedown = "quick_Display_Page_Mousedown(event, 2)" ontouchstart = "quick_Display_Page_Touchstart(event, 2)">Résumé</a>
+			<a id = "About_Me_Title_Bar_Item" class = "title_Bar_Item" href = "#0" onclick = "display_Selected_Page_Content(0)">About Me</a><a id = "Projects_Title_Bar_Item" class = "title_Bar_Item" href = "#1" onclick = "display_Selected_Page_Content(1)">Projects</a><a id = "Résumé_Title_Bar_Item" class = "title_Bar_Item" href = "#2" onclick = "display_Selected_Page_Content(2)">Résumé</a>
 		</div>
 
-		<img id = "background_Image_About_Me" class = "background_Image" src = "About_Me_Background.jpg" alt = "">
-		<div id = "About_Me_Page_Content" class = "page_Content">
+		<img id = "background_Image_About_Me" class = "background_Image invisible" src = "About_Me_Background.jpg" alt = "">
+		<div id = "About_Me_Page_Content" class = "page_Content hidden">
 			<h1>About Me</h1>
 			<p>Welcome to my portfolio- I'm Andrew Frost and this website is a showcase of projects that I've worked on. Be sure to check the Projects page to see an overview, browse the source code, and play around with anything that catches your eye!</p>
 			<p>I've always had an interest in video games, but I didn't decide to pursue them as a career path until a few years after high school. I first started programming in late 2012 by following some online JavaScript tutorials, and I liked it enough to pursue a degree in video game development. I began my studies at Texas A&M University - Corpus Christi in Fall of 2013 where I was first introduced to C++ and had the opportunity to delve deeper into Computer Science. I acquired substantial experience in programming at college and would recommend it for most people interested in looking to expand their technological skills, but it's far from the only way to learn. I graduated Cum Laude and received a Bachelor of Science Degree in Game Programming in May of 2016.</p>
-			<p>After graduation, I've been pursuing real estate investment opportunities, and in my free time I've been working on a game engine as well as a variety of small programming projects.</p>
 			<p>I love making programs that surprise people at how fast they work- there's something very satisfying about a tool that does its job spectacularly with no useless bloat.</p>
-			<p>If you're a recruiter in the Austin area looking for a strong C++ or general programmer, you can contact me by email at <a href = "mailto:andrewdylanfrost@gmail.com">andrewdylanfrost@gmail.com</a>.</p>
+			<p>I'm currently aiming to move to Tokyo in the near future- if you're a hiring manager in the  area looking for a strong C++ or general programmer, I'd love to hear from you by email at <a href = "mailto:andrewdylanfrost@gmail.com">andrewdylanfrost@gmail.com</a>.</p>
 		</div>
 
-		<img id = "background_Image_Projects" class = "background_Image" src = "Projects_Background.jpg" alt = "">
+		<img id = "background_Image_Projects" class = "background_Image invisible" src = "Projects_Background.jpg" alt = "">
 		<div id = "Projects_Page_Content" class = "page_Content hidden">
-			<div id = "expanded_Project_Image_Holder" onmousedown = "toggle_Image_Expand(event, this.firstElementChild)" ontouchstart = "toggle_Image_Expand(event, this.firstElementChild)" onkeydown = "toggle_Image_Expand(event, this.firstElementChild)" onwheel = "toggle_Image_Expand(event, this.firstElementChild)">
+			<div id = "expanded_Project_Image_Holder" onmousedown = "toggle_Image_Expand(event, this.firstElementChild)" onkeydown = "toggle_Image_Expand(event, this.firstElementChild)" onwheel = "toggle_Image_Expand(event, this.firstElementChild)">
 				<img id = "expanded_Project_Image" src = "hidden.gif" alt = "">
 			</div>
 			<h1>Projects</h1>
 			<div class = "project_Section_Holder">
 				<div class = "project_Section">
-					<h2 onmousedown = "collapsible_Element_Clicked(event, this)" onkeydown = "collapsible_Element_Key_Pressed(event, this)" tabindex = "0">Video Games</h2>
-					<div>
+					<h2 class = "header" onclick = "toggle_Header_Collapse(this)" onkeydown = "collapsible_Element_Key_Pressed(event, this)" tabindex = "0">Video Games</h2>
+					<div class = "collapsible_Element">
 						<div class = "project_Holder">
-							<h3 onmousedown = "collapsible_Element_Clicked(event, this)" onkeydown = "collapsible_Element_Key_Pressed(event, this)" tabindex = "0">Endless</h3>
-							<div>
-								<img class = "project_Image" onclick = "toggle_Image_Expand(event, this)" onkeydown = "toggle_Image_Expand(event, this)" tabindex = "0" src = "Endless/Endless_Example_Image.jpg" alt = "">
+							<h3 class = "header" onclick = "toggle_Header_Collapse(this)" onkeydown = "collapsible_Element_Key_Pressed(event, this)" tabindex = "0">Endless</h3>
+							<div class = "collapsible_Element">
+								<img class = "project_Image" onclick = "toggle_Image_Expand(event, this)" onkeydown = "toggle_Image_Expand(event, this)" tabindex = "0" src = "Projects/Endless/Endless_Example_Image.jpg" alt = "">
 								<p>My Senior Capstone project- I worked with a team of 4 other programmers and an artist to design and implement a video game. We decided to create a multiplayer space ship battle game that turned out quite fun, but would need a lot of polish to succeed in the market.</p>
-								<p>A playable version will be available here soon, but in the meantime the Game Design Document can be found <a href = "Endless/Endless_Game_Design_Document.pdf">here</a>, and the source code is available for download on Bitbucket <a href = "https://bitbucket.org/gamecapstonetamucc/endless-game/downloads/">here</a>.</p>
-								<a class = "link_Button" href = "Endless/Endless_Game_Design_Document.pdf">Game Design Document</a><a class = "link_Button" href = "https://bitbucket.org/gamecapstonetamucc/endless-game/downloads/">Source Code (Bitbucket)</a>
+								<p>A playable version will be available here soon, but in the meantime the <a href = "Projects/Endless/Endless_Game_Design_Document.pdf">Game Design Document can be found here,</a> and the source code is available for <a href = "https://bitbucket.org/gamecapstonetamucc/endless-game/downloads/">download on Bitbucket here.</a></p>
+								<a class = "link_Button" href = "Projects/Endless/Endless_Game_Design_Document.pdf">Game Design Document</a><a class = "link_Button" href = "https://bitbucket.org/gamecapstonetamucc/endless-game/get/c7b37980f8b6.zip" download = "Endless.zip">Source Code (Bitbucket ZIP, 314 MB)</a>
 							</div>
 						</div>
 						<div class = "project_Holder">
-							<h3 onmousedown = "collapsible_Element_Clicked(event, this)" onkeydown = "collapsible_Element_Key_Pressed(event, this)" tabindex = "0">Paladin</h3>
-							<div>
-								<img class = "project_Image" onclick = "toggle_Image_Expand(event, this)" onkeydown = "toggle_Image_Expand(event, this)" tabindex = "0" src = "Paladin/Paladin_Example_Image.jpg" alt = "">
+							<h3 class = "header" onclick = "toggle_Header_Collapse(this)" onkeydown = "collapsible_Element_Key_Pressed(event, this)" tabindex = "0">Paladin</h3>
+							<div class = "collapsible_Element">
+								<img class = "project_Image" onclick = "toggle_Image_Expand(event, this)" onkeydown = "toggle_Image_Expand(event, this)" tabindex = "0" src = "Projects/Paladin/Paladin_Example_Image.jpg" alt = "">
 								<p>One level of a medieval fantasy combat game produced using Unity in my Advanced Game Programming class with one other programmer and a design team- many things are quite rough around the edges due to time constraints on the project. I worked on the enemy AI, menus, inventory, and laying out the levels, along with assisting on any other issues that arose.</p>
 								<p>You can play on Windows 64-bit systems by downloading from Dropbox <a href = "https://www.dropbox.com/sh/n34jgtnh67lykz3/AAD_Y4-6JaVpIxGTIrF_1IQqa?dl=0">here</a>- controls can be found inside. The source code is available on GitHub <a href = "https://github.com/NoahPena/Paladin-Team-5">here</a>.</p>
 								<a class = "link_Button" href = "https://www.dropbox.com/sh/n34jgtnh67lykz3/AAD_Y4-6JaVpIxGTIrF_1IQqa?dl=0">Play on Windows 64-bit (Dropbox)</a><a class = "link_Button" href = "https://github.com/NoahPena/Paladin-Team-5">Source Code (GitHub)</a>
 							</div>
 						</div>
 						<div class = "project_Holder">
-							<h3 onmousedown = "collapsible_Element_Clicked(event, this)" onkeydown = "collapsible_Element_Key_Pressed(event, this)" tabindex = "0">Adapt</h3>
-							<div>
-								<img class = "project_Image" onclick = "toggle_Image_Expand(event, this)" onkeydown = "toggle_Image_Expand(event, this)" tabindex = "0" src = "Adapt/Adapt_Example_Image.png" alt = "">
+							<h3 class = "header" onclick = "toggle_Header_Collapse(this)" onkeydown = "collapsible_Element_Key_Pressed(event, this)" tabindex = "0">Adapt</h3>
+							<div class = "collapsible_Element">
+								<img class = "project_Image" onclick = "toggle_Image_Expand(event, this)" onkeydown = "toggle_Image_Expand(event, this)" tabindex = "0" src = "Projects/Adapt/Adapt_Example_Image.png" alt = "">
 								<p>A video game that I designed alongside a small team in early 2014. While the focus of my work was on creating fun levels, gameplay, and creatures, I also dabbled in creating terrain tiles and helped the programming team implement them into the game.</p>
-								<p>Source code of the project is unavailable, but the game design document can be found <a href = "Adapt/Adapt_Game_Design_Document.pdf">here</a>. If interested in the terrain tiles, feel free to have a look at them by downloading them <a href = "Adapt/Adapt_Terrain_Tiles.zip" download>here</a> (448 KB).</p>
-								<a class = "link_Button" href = "Adapt/Adapt_Game_Design_Document.pdf">Game Design Document</a><a class = "link_Button" href = "Adapt/Adapt_Terrain_Tiles.zip" download>Terrain Tiles (448 KB)</a>
+								<p>Source code of the project is unavailable, but the game design document can be found <a href = "Projects/Adapt/Adapt_Game_Design_Document.pdf">here</a>. If interested in the terrain tiles, feel free to have a look at them by downloading them <a href = "Projects/Adapt/Adapt_Terrain_Tiles.zip" download>here</a> (448 KB).</p>
+								<a class = "link_Button" href = "Projects/Adapt/Adapt_Game_Design_Document.pdf">Game Design Document</a><a class = "link_Button" href = "Projects/Adapt/Adapt_Terrain_Tiles.zip" download>Terrain Tiles (448 KB)</a>
 							</div>
 						</div>
 						<div class = "project_Holder">
-							<h3 onmousedown = "collapsible_Element_Clicked(event, this)" onkeydown = "collapsible_Element_Key_Pressed(event, this)" tabindex = "0">Blackjack</h3>
-							<div>
-								<img class = "project_Image" onclick = "toggle_Image_Expand(event, this)" onkeydown = "toggle_Image_Expand(event, this)" tabindex = "0" src = "Blackjack/Blackjack_Example_Image.png" alt = "">
+							<h3 class = "header" onclick = "toggle_Header_Collapse(this)" onkeydown = "collapsible_Element_Key_Pressed(event, this)" tabindex = "0">Blackjack</h3>
+							<div class = "collapsible_Element">
+								<img class = "project_Image" onclick = "toggle_Image_Expand(event, this)" onkeydown = "toggle_Image_Expand(event, this)" tabindex = "0" src = "Projects/Blackjack/Blackjack_Example_Image.png" alt = "">
 								<p>One of the first programs that I made back in 2012- this is a pure JavaScript version of Blackjack that uses the console log and alert prompts to display and get input from the user in a two-player game. It's nice to see how far I've come!</p>
-								<p>You can play it <a href = "Blackjack/Blackjack.html">here</a>, or download the source code <a href = "Blackjack/Blackjack.zip" download>here</a> (2 KB).</p>
-								<a class = "link_Button" href = "Blackjack/Blackjack.html">Play Now</a><a class = "link_Button" href = "Blackjack/Blackjack.zip" download>Source Code (2 KB)</a>
+								<p>You can play it <a href = "Projects/Blackjack/Blackjack.html">here</a>, or download the source code <a href = "Projects/Blackjack/Blackjack.zip" download>here</a> (2 KB).</p>
+								<a class = "link_Button" href = "Projects/Blackjack/Blackjack.html">Play Now</a><a class = "link_Button" href = "Projects/Blackjack/Blackjack.zip" download>Source Code (2 KB)</a>
+							</div>
+						</div>
+					</div>
+				</div>
+				
+				<div class = "project_Section">
+					<h2 class = "header" onclick = "toggle_Header_Collapse(this)" onkeydown = "collapsible_Element_Key_Pressed(event, this)" tabindex = "0">C++ Code Examples</h2>
+					<div class = "collapsible_Element">
+						<div class = "project_Holder">
+							<h3 class = "header" onclick = "toggle_Header_Collapse(this)" onkeydown = "collapsible_Element_Key_Pressed(event, this)" tabindex = "0">Minimum Path Sum</h3>
+							<div class = "collapsible_Element">
+								<img class = "project_Image" onclick = "toggle_Image_Expand(event, this)" onkeydown = "toggle_Image_Expand(event, this)" tabindex = "0" src = "Projects/LeetCode/Minimum_Path_Sum.png" alt = "">
+								<p>A LeetCode problem where you are tasked with finding the shortest path through a grid starting at the top-left and working your way to the bottom-right with each movement costing varying amounts to complete. The full problem can be found <a href = "https://leetcode.com/problems/minimum-path-sum/description/">here</a>.</p>
+								<p>My first solution was to always search the lowest available path until the bottom-right was reached, but the overhead in finding the lowest path was actually causing it to be slower than my final implementation that just broke it down into a few computationally easy steps:</p>
+								<p>Conceptually, when the grid is finished, it will represent the shortest path to each individual square on the grid, which is obtained for each square by taking the lower of the potential adjacent origin grid squares plus the square's current value.</p>
+								<p>We calculate the values for the first row and column, adding the current value of the square we are determining to the total value determined in the previous square, completing the shortest path to the outer top and left areas of the grid.</p>
+								<p>Finally, we iteratively work through the remaining elements of the grid row by row, until we finally have the bottom-right square which is what we're after and return it.</p>
+								<p>I love how clever this solution feels once you realize it can be done so simply.</p>
+								<button type = "button" class = "link_Button" onclick = "toggle_Element_Collapse('minimum_Path_Sum_Pre')">Toggle Code Display</button><button type = "button" class = "link_Button" onclick = "copy_To_Clipboard('minimum_Path_Sum_Pre')">Copy Code To Clipboard</button>
+<pre id = "minimum_Path_Sum_Pre" class = "language-cpp collapsible_Element"><code class = "language-cpp"><textarea readonly>class Solution {
+public:
+	int minPathSum(vector<vector<int>>& grid)
+	{
+		for(int i = 1; i < grid[0].size(); i++) //Calculate the total distance to each square in the first row
+		{
+			grid[0][i] = grid[0][i] + grid[0][i - 1];
+		}
+		for(int i = 1; i < grid.size(); i++)    //Calculate the total distance to each square in the first column
+		{
+			grid[i][0] = grid[i][0] + grid[i - 1][0];
+		}
+		for(int i = 1; i < grid.size(); i++)    //Calculate the total distance to each square in the rest of the grid
+		{
+			for(int j = 1; j < grid[0].size(); j++)
+			{
+				grid[i][j] = grid[i][j] + min(grid[i - 1][j], grid[i][j - 1]);
+			}
+		}
+
+		return grid[grid.size() - 1][grid[0].size() - 1];   //Return the total distance to the bottom-right square
+	}
+};</textarea></code></pre>
+							</div>
+						</div>
+						<div class = "project_Holder">
+							<h3 class = "header" onclick = "toggle_Header_Collapse(this)" onkeydown = "collapsible_Element_Key_Pressed(event, this)" tabindex = "0">Rotate List</h3>
+							<div class = "collapsible_Element">
+								<img class = "project_Image" onclick = "toggle_Image_Expand(event, this)" onkeydown = "toggle_Image_Expand(event, this)" tabindex = "0" src = "Projects/LeetCode/Rotate_List.png" alt = "">
+								<p>A LeetCode problem with the goal of rotating a linked list backward K times, with K potentially being fairly large. The full problem can be found <a href = "https://leetcode.com/problems/rotate-list/description/">here</a>.</p>
+								<p>First we establish the length of the linked list by iterating through it and keep a reference to the head and tail of the list, then check if we have at least two nodes and connect the head and tail to make the linked list into a circular linked list.</p>
+								<p>Next, we want to determine what the new head and tail of the linked list will be. A surprisingly simple calculation can be done- subtract k modulus the total number of nodes from the total number of nodes (Nodes - (k % Nodes)) to get how many nodes forward from the original head we should traverse.</p>
+								<p>We simple iterate through the list once again, stopping at the node just prior to what will be the new head. Set the next node to the head, and then set the current_Node's next connection to a null pointer and finally return the new head.</p>
+								<p>I like how elegantly the solution came together, with only up to 2 loops through the list when a naïve approach could be a full k loops.</p>
+								<button type = "button" class = "link_Button" onclick = "toggle_Element_Collapse('rotate_List_Sum_Pre')">Toggle Code Display</button><button type = "button" class = "link_Button" onclick = "copy_To_Clipboard('rotate_List_Sum_Pre')">Copy Code To Clipboard</button>
+<pre id = "rotate_List_Sum_Pre" class = "language-cpp collapsible_Element"><code class = "language-cpp"><textarea readonly>/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution
+{
+    public:
+        ListNode* rotateRight(ListNode* head, int k)
+        {
+            ListNode* current_Node = head;
+            int number_Of_Nodes = 1;    //If 0 are actually present the head will be nullptr and be returned later
+
+            if(head != nullptr)
+            {
+                //Count the number of nodes in the linked list and move current_Node to the end
+                while(current_Node->next != nullptr)
+                {
+                    current_Node = current_Node->next;
+                    number_Of_Nodes = number_Of_Nodes + 1;
+                }
+            }
+
+            if(number_Of_Nodes > 1) //0 and 1 both return the current head without adjustment (Nullptr or a single entry)
+            {
+                current_Node->next = head;  //Make the linked list into a circular linked list
+                current_Node = head;    //Reset current_Node from the old end to the original head
+
+                //Move current_Node to the end of what will be the new linked list. 
+                for(int i = 0; i < number_Of_Nodes - (k % number_Of_Nodes) - 1; i++)
+                {
+                    current_Node = current_Node->next;
+                }
+                head = current_Node->next;  //The new head is the next in the circular linked list
+                current_Node->next = nullptr;   //Cut the circular linked list to make it a normal linked list
+            }
+
+            return head;
+        }
+};</textarea></code></pre>
+							</div>
+						</div>
+						<div class = "project_Holder">
+							<h3 class = "header" onclick = "toggle_Header_Collapse(this)" onkeydown = "collapsible_Element_Key_Pressed(event, this)" tabindex = "0">Jump Game</h3>
+							<div class = "collapsible_Element">
+								<img class = "project_Image" onclick = "toggle_Image_Expand(event, this)" onkeydown = "toggle_Image_Expand(event, this)" tabindex = "0" src = "Projects/LeetCode/Jump_Game.png" alt = "">
+								<p>A LeetCode problem in which we are tasked with finding whether a vector in which each value represents the max number of indexes forward you can traverse through the vector and must determine if the final entry is reachable. The full problem can be found <a href = "https://leetcode.com/problems/jump-game/description/">here</a>.</p>
+								<p>First, we will reconceptualize the vector from being the number of jumps available at that space to be the furthest space that index is able to reach. To do so, we simple add the index to the value for each entry in the vector.</p>
+								<p>Next, we will loop over the vector going to the available space that is able to travel the furthest each time we jump until we either reach the end or aren't able to make any progress on that jump and return true or false accordingly.</p>
+								<p>This is another problem that I enjoyed due to how simple it can be reduced to in contrast to how complex it sounds to accomplish.</p>
+								<button type = "button" class = "link_Button" onclick = "toggle_Element_Collapse('jump_Game_Sum_Pre')">Toggle Code Display</button><button type = "button" class = "link_Button" onclick = "copy_To_Clipboard('jump_Game_Sum_Pre')">Copy Code To Clipboard</button>
+<pre id = "jump_Game_Sum_Pre" class = "language-cpp collapsible_Element"><code class = "language-cpp"><textarea readonly>class Solution
+{
+    public:
+        bool canJump(vector<int>& nums)
+        {
+            int lower_Index_Bound = 0;
+            int higher_Index_Bound = nums[0];
+            int previous_Higher_Index_Bound = 0;
+
+            //Change the array to represent the furthest space the jump can reach
+            for(int i = 0; i < nums.size() - 1; i++)
+            {
+                nums[i] = nums[i] + i;
+            }
+
+            //Check from newly available positions for the highest available space. Break out if we make no progress or reach the last index
+            while(higher_Index_Bound != lower_Index_Bound && higher_Index_Bound < nums.size() - 1)
+            {
+                previous_Higher_Index_Bound = higher_Index_Bound;
+                higher_Index_Bound = max(higher_Index_Bound,
+					*max_element(nums.begin() + lower_Index_Bound + 1,min(nums.begin() + higher_Index_Bound + 1, nums.end() - 1)));
+                lower_Index_Bound = previous_Higher_Index_Bound;
+            }
+
+            //Check if some series of jumps successfully reached the last index
+            if(higher_Index_Bound >= nums.size() - 1)
+            {
+                return true;
+            }
+            else    //If none did, then a jump made no progress which means the last index is unreachable
+            {
+                return false;
+            }
+        }
+};</textarea></code></pre>
 							</div>
 						</div>
 					</div>
 				</div>
 
 				<div class = "project_Section">
-					<h2 onmousedown = "collapsible_Element_Clicked(event, this)" onkeydown = "collapsible_Element_Key_Pressed(event, this)" tabindex = "0">JavaScript Tools</h2>
-					<div>
+					<h2 class = "header" onclick = "toggle_Header_Collapse(this)" onkeydown = "collapsible_Element_Key_Pressed(event, this)" tabindex = "0">JavaScript Tools</h2>
+					<div class = "collapsible_Element">
 						<div class = "project_Holder">
-							<h3 onmousedown = "collapsible_Element_Clicked(event, this)" onkeydown = "collapsible_Element_Key_Pressed(event, this)" tabindex = "0">Dungeons & Dragons 5th Edition Damage Calculator</h3>
-							<div>
-								<img class = "project_Image" onclick = "toggle_Image_Expand(event, this)" onkeydown = "toggle_Image_Expand(event, this)" tabindex = "0" src = "Dungeons_And_Dragons_5th_Edition_Damage_Calculator/Dungeons_And_Dragons_5th_Edition_Damage_Calculator_Example_Image.jpg" alt = "">
+							<h3 class = "header" onclick = "toggle_Header_Collapse(this)" onkeydown = "collapsible_Element_Key_Pressed(event, this)" tabindex = "0">Dungeons & Dragons 5th Edition Damage Calculator</h3>
+							<div class = "collapsible_Element">
+								<img class = "project_Image" onclick = "toggle_Image_Expand(event, this)" onkeydown = "toggle_Image_Expand(event, this)" tabindex = "0" src = "Projects/Dungeons_And_Dragons_5th_Edition_Damage_Calculator/Dungeons_And_Dragons_5th_Edition_Damage_Calculator_Example_Image.jpg" alt = "">
 								<p>A tool for calculating expected damage output in combat for the 5th edition of the tabletop role-playing game Dungeons & Dragons (D&D). Great for analyzing character builds and planning combat encounters.</p>
 								<p>Take a look at it <a href = "https://andrewfrost.github.io/Dungeons-and-Dragons-5e-Average-Damage-Calculator/">here</a>, or view the source code on GitHub <a href = "https://github.com/AndrewFrost/Dungeons-and-Dragons-5e-Average-Damage-Calculator">here</a>.</p>
 								<a class = "link_Button" href = "https://andrewfrost.github.io/Dungeons-and-Dragons-5e-Average-Damage-Calculator/">Use Now</a><a class = "link_Button" href = "https://github.com/AndrewFrost/Dungeons-and-Dragons-5e-Average-Damage-Calculator">Source Code (GitHub)</a>
 							</div>
 						</div>
 						<div class = "project_Holder">
-							<h3 onmousedown = "collapsible_Element_Clicked(event, this)" onkeydown = "collapsible_Element_Key_Pressed(event, this)" tabindex = "0">Dungeons & Dragons Online Quest Table</h3>
-							<div>
-								<img class = "project_Image" onclick = "toggle_Image_Expand(event, this)" onkeydown = "toggle_Image_Expand(event, this)" tabindex = "0" src = "Dungeons_And_Dragons_Online_Quest_Table/Dungeons_And_Dragons_Online_Quest_Table_Example_Image.png" alt = "">
+							<h3 class = "header" onclick = "toggle_Header_Collapse(this)" onkeydown = "collapsible_Element_Key_Pressed(event, this)" tabindex = "0">Dungeons & Dragons Online Quest Table</h3>
+							<div class = "collapsible_Element">
+								<img class = "project_Image" onclick = "toggle_Image_Expand(event, this)" onkeydown = "toggle_Image_Expand(event, this)" tabindex = "0" src = "Projects/Dungeons_And_Dragons_Online_Quest_Table/Dungeons_And_Dragons_Online_Quest_Table_Example_Image.png" alt = "">
 								<p>While more of a personal list that I use and very tailored to that end, players of the MMO version of D&D- Dungeons & Dragons Online (DDO)- may find this sortable table of quests to be convenient.</p>
-								<p>Check it out <a href = "Dungeons_And_Dragons_Online_Quest_Table/Quest_Table.html">here</a> or download the source code <a href = "Dungeons_And_Dragons_Online_Quest_Table/Quest_Table.zip" download>here</a> (13 KB).</p>
-								<a class = "link_Button" href = "Dungeons_And_Dragons_Online_Quest_Table/Quest_Table.html">Use Now</a><a class = "link_Button" href = "Dungeons_And_Dragons_Online_Quest_Table/Quest_Table.zip" download>Source Code (13 KB)</a>
+								<p>Check it out <a href = "Projects/Dungeons_And_Dragons_Online_Quest_Table/Quest_Table.html">here</a> or download the source code <a href = "Projects/Dungeons_And_Dragons_Online_Quest_Table/Quest_Table.zip" download>here</a> (13 KB).</p>
+								<a class = "link_Button" href = "Projects/Dungeons_And_Dragons_Online_Quest_Table/Quest_Table.html">Use Now</a><a class = "link_Button" href = "Projects/Dungeons_And_Dragons_Online_Quest_Table/Quest_Table.zip" download>Source Code (13 KB)</a>
 							</div>
 						</div>
 						<div class = "project_Holder">
-							<h3 onmousedown = "collapsible_Element_Clicked(event, this)" onkeydown = "collapsible_Element_Key_Pressed(event, this)" tabindex = "0">Dungeons & Dragons Online Damage Calculator</h3>
-							<div>
-								<img class = "project_Image" onclick = "toggle_Image_Expand(event, this)" onkeydown = "toggle_Image_Expand(event, this)" tabindex = "0" src = "Dungeons_And_Dragons_Online_Damage_Calculator/Dungeons_And_Dragons_Online_Damage_Calculator_Example_Image.png" alt = "">
+							<h3 class = "header" onclick = "toggle_Header_Collapse(this)" onkeydown = "collapsible_Element_Key_Pressed(event, this)" tabindex = "0">Dungeons & Dragons Online Damage Calculator</h3>
+							<div class = "collapsible_Element">
+								<img class = "project_Image" onclick = "toggle_Image_Expand(event, this)" onkeydown = "toggle_Image_Expand(event, this)" tabindex = "0" src = "Projects/Dungeons_And_Dragons_Online_Damage_Calculator/Dungeons_And_Dragons_Online_Damage_Calculator_Example_Image.png" alt = "">
 								<p>Another DDO tool that I've found to be helpful- this one is just some straightforward calculations to determine average damage output, great to help decide between many items and abilities.</p>
-								<p>Available for use <a href = "Dungeons_And_Dragons_Online_Damage_Calculator/Damage_Calculator.html">here</a>, and download <a href = "Dungeons_And_Dragons_Online_Damage_Calculator/Damage_Calculator.zip" download>here</a> (3 KB).</p>
-								<a class = "link_Button" href = "Dungeons_And_Dragons_Online_Damage_Calculator/Damage_Calculator.html">Use Now</a><a class = "link_Button" href = "Dungeons_And_Dragons_Online_Damage_Calculator/Damage_Calculator.zip" download>Source Code (3 KB)</a>
+								<p>Available for use <a href = "Projects/Dungeons_And_Dragons_Online_Damage_Calculator/Damage_Calculator.html">here</a>, and download <a href = "Projects/Dungeons_And_Dragons_Online_Damage_Calculator/Damage_Calculator.zip" download>here</a> (3 KB).</p>
+								<a class = "link_Button" href = "Projects/Dungeons_And_Dragons_Online_Damage_Calculator/Damage_Calculator.html">Use Now</a><a class = "link_Button" href = "Projects/Dungeons_And_Dragons_Online_Damage_Calculator/Damage_Calculator.zip" download>Source Code (3 KB)</a>
 							</div>
 						</div>
 					</div>
 				</div>
 
 				<div class = "project_Section">
-					<h2 onmousedown = "collapsible_Element_Clicked(event, this)" onkeydown = "collapsible_Element_Key_Pressed(event, this)" tabindex = "0">Other</h2>
-					<div>
+					<h2 class = "header" onclick = "toggle_Header_Collapse(this)" onkeydown = "collapsible_Element_Key_Pressed(event, this)" tabindex = "0">Other</h2>
+					<div class = "collapsible_Element">
 						<div class = "project_Holder">
-							<h3 onmousedown = "collapsible_Element_Clicked(event, this)" onkeydown = "collapsible_Element_Key_Pressed(event, this)" tabindex = "0">Weather On Wheels</h3>
-							<div>
-								<img class = "project_Image" onclick = "toggle_Image_Expand(event, this)" onkeydown = "toggle_Image_Expand(event, this)" tabindex = "0" src = "Weather_On_Wheels/Weather_On_Wheels_Example_Image.jpg" alt = "">
+							<h3 class = "header" onclick = "toggle_Header_Collapse(this)" onkeydown = "collapsible_Element_Key_Pressed(event, this)" tabindex = "0">Weather On Wheels</h3>
+							<div class = "collapsible_Element">
+								<img class = "project_Image" onclick = "toggle_Image_Expand(event, this)" onkeydown = "toggle_Image_Expand(event, this)" tabindex = "0" src = "Projects/Weather_On_Wheels/Weather_On_Wheels_Example_Image.jpg" alt = "">
 								<p>A project I contributed to at the Conrad Blucher Institute (CBI) that would give forecasted weather and severe weather events along a travel route. I worked with an existing codebase to improve speed, reliability, and implement additional features such as optional overlays for temperatures, precipitation levels, and windspeeds along a route. Weather On Wheels was available on a website and in the Android and Apple stores, but unfortunately, CBI no longer maintains the project and handed it off to another company that has left it nonfunctioning for a long time.</p>
-								<p>A poster I used for a presentation on Weather On Wheels that contains some additional information and screenshots of it in a late stage of development can be found <a href = "Weather_On_Wheels/Weather_On_Wheels_Poster.png">here</a>.</p>
-								<a class = "link_Button" href = "Weather_On_Wheels/Weather_On_Wheels_Poster.png">View Poster</a>
+								<p>A poster I used for a presentation on Weather On Wheels that contains some additional information and screenshots of it in a late stage of development can be found <a href = "Projects/Weather_On_Wheels/Weather_On_Wheels_Poster.png">here</a>.</p>
+								<a class = "link_Button" href = "Projects/Weather_On_Wheels/Weather_On_Wheels_Poster.png">View Poster</a>
 							</div>
 						</div>
 						<div class = "project_Holder">
-							<h3 onmousedown = "collapsible_Element_Clicked(event, this)" onkeydown = "collapsible_Element_Key_Pressed(event, this)" tabindex = "0">HTML Canvas Painter</h3>
-							<div>
-								<img class = "project_Image" onclick = "toggle_Image_Expand(event, this)" onkeydown = "toggle_Image_Expand(event, this)" tabindex = "0" src = "HTML_Canvas_Painter/HTML_Canvas_Painter_Example_Image.png" alt = "">
-								<p>A primitive paint program I made to assist with an early Graphics Programming project. You can play around with it <a href = "HTML_Canvas_Painter/HTML_Canvas_Painter.html">here</a>, or download the source code <a href = "HTML_Canvas_Painter/HTML_Canvas_Painter.zip" download>here</a> (3 KB).</p>
-								<a class = "link_Button" href = "HTML_Canvas_Painter/HTML_Canvas_Painter.html">Use Now</a><a class = "link_Button" href = "HTML_Canvas_Painter/HTML_Canvas_Painter.zip" download>Source Code (3 KB)</a>
+							<h3 class = "header" onclick = "toggle_Header_Collapse(this)" onkeydown = "collapsible_Element_Key_Pressed(event, this)" tabindex = "0">HTML Canvas Painter</h3>
+							<div class = "collapsible_Element">
+								<img class = "project_Image" onclick = "toggle_Image_Expand(event, this)" onkeydown = "toggle_Image_Expand(event, this)" tabindex = "0" src = "Projects/HTML_Canvas_Painter/HTML_Canvas_Painter_Example_Image.png" alt = "">
+								<p>A primitive paint program I made to assist with an early Graphics Programming project that was used to demonstrate just how intensive making simple graphics can be. You can play around with it <a href = "Projects/HTML_Canvas_Painter/HTML_Canvas_Painter.html">here</a>, or download the source code <a href = "Projects/HTML_Canvas_Painter/HTML_Canvas_Painter.zip" download>here</a> (3 KB).</p>
+								<a class = "link_Button" href = "Projects/HTML_Canvas_Painter/HTML_Canvas_Painter.html">Use Now</a><a class = "link_Button" href = "Projects/HTML_Canvas_Painter/HTML_Canvas_Painter.zip" download>Source Code (3 KB)</a>
 							</div>
 						</div>
 						<div class = "project_Holder">
-							<h3 onmousedown = "collapsible_Element_Clicked(event, this)" onkeydown = "collapsible_Element_Key_Pressed(event, this)" tabindex = "0">Portfolio</h3>
-							<div>
-								<img class = "project_Image" onclick = "toggle_Image_Expand(event, this)" onkeydown = "toggle_Image_Expand(event, this)" tabindex = "0" src = "Portfolio/Portfolio_Example_Image.jpg" alt = "">
+							<h3 class = "header" onclick = "toggle_Header_Collapse(this)" onkeydown = "collapsible_Element_Key_Pressed(event, this)" tabindex = "0">Portfolio</h3>
+							<div class = "collapsible_Element">
+								<img class = "project_Image" onclick = "toggle_Image_Expand(event, this)" onkeydown = "toggle_Image_Expand(event, this)" tabindex = "0" src = "Projects/Portfolio/Portfolio_Example_Image.jpg" alt = "">
 								<p>This website! Hopefully you've found that it runs quickly and is organized well. If you've noticed any problems, let me know about them at <a href = "mailto:andrewdylanfrost@gmail.com">andrewdylanfrost@gmail.com</a>.</p>
 								<p>The background images are available for free at the following external locations: <a href = "https://pixabay.com/en/nature-wood-tree-light-sun-fog-3151869/">About Me</a>, <a href = "https://pixabay.com/en/railway-seemed-track-train-2439189/">Projects</a>, <a href = "https://pixabay.com/en/away-bridge-web-wood-nature-3024773/">Résumé</a>. Source code for the website can be found on GitHub <a href = "https://github.com/AndrewFrost/Portfolio">here</a>.</p>
+								<p>I used Prism for code section highlighting, but otherwise everything is made from scratch.</p>
 								<a class = "link_Button" href = "https://github.com/AndrewFrost/Portfolio">Source Code (GitHub)</a>
 							</div>
 						</div>
 						<div class = "project_Holder">
-							<h3 onmousedown = "collapsible_Element_Clicked(event, this)" onkeydown = "collapsible_Element_Key_Pressed(event, this)" tabindex = "0">Miscellaneous</h3>
-							<div>
+							<h3 class = "header" onclick = "toggle_Header_Collapse(this)" onkeydown = "collapsible_Element_Key_Pressed(event, this)" tabindex = "0">Miscellaneous</h3>
+							<div class = "collapsible_Element">
 								<p>In addition, I've worked on a large number of small projects to bolster my skills using a variety of languages including F#, Perl, and Java. Some of the projects include small games such as Tic-tac-toe, an optimal path-finding algorithm, and a command-line file navigator.</p>
 							</div>
 						</div>
@@ -430,213 +291,17 @@
 			</div>
 		</div>
 
-		<img id = "background_Image_Résumé" class = "background_Image" src = "Résumé_Background.jpg" alt = "">
+		<img id = "background_Image_Résumé" class = "background_Image invisible" src = "Résumé_Background.jpg" alt = "">
 		<div id = "Résumé_Page_Content" class = "page_Content hidden">
 			<h1>Résumé</h1>
-			<a class = "link_Button" href = "Résumé/Andrew_Frost_Résumé.pdf">View</a><a class = "link_Button" href = "Résumé/Andrew_Frost_Résumé.zip" download>Download (89 KB)</a><br>
+			<a class = "link_Button" href = "Résumé/Andrew_Frost_Résumé.pdf">View</a><a class = "link_Button" href = "Résumé/Andrew_Frost_Résumé.zip" download>Download ZIP (89 KB)</a><br>
 			<br>
 			<div id = "résumé_Container">
-				<object id = "résumé_Viewer" type = "application/pdf" data = "Résumé/Andrew_Frost_Résumé.pdf#zoom=Fit&view=Fit">The PDF Viewer couldn't display the résumé- you can try downloading it <a href = "Résumé/Andrew_Frost_Résumé.zip" download>here</a> (89 KB) or viewing it <a href = "Résumé/Andrew_Frost_Résumé.pdf#zoom=Fit&view=Fit">here</a>.<br></object>
+				<object id = "résumé_Viewer" type = "application/pdf" data = "Résumé/Andrew_Frost_Résumé.pdf#zoom=Fit&view=Fit" width = "100%" height = "100%" title = "Résumé Viewer" alt = "The browser's Résumé Viewer with a copy of Andrew Frost's résumé loaded into it.">The PDF Viewer couldn't display the résumé- you can try downloading a ZIP of it <a href = "Résumé/Andrew_Frost_Résumé.zip" download>here</a> (89 KB) or viewing it <a href = "Résumé/Andrew_Frost_Résumé.pdf#zoom=Fit&view=Fit">here</a>.<br></object>
 			</div>
 		</div>
 
-		<script type = "text/javascript">
-			var currently_Displayed_Page_Layout_Element_Index = 0;
-			var page_Layout_Elements_Array = [];
-			page_Layout_Elements_Array.push({page_Content_Element: document.getElementById("About_Me_Page_Content"), title_Bar_Selection_Element: document.getElementById("About_Me_Title_Bar_Item"), background_Image_Element: document.getElementById("background_Image_About_Me")});
-			page_Layout_Elements_Array.push({page_Content_Element: document.getElementById("Projects_Page_Content"), title_Bar_Selection_Element: document.getElementById("Projects_Title_Bar_Item"), background_Image_Element: document.getElementById("background_Image_Projects")});
-			page_Layout_Elements_Array.push({page_Content_Element: document.getElementById("Résumé_Page_Content"), title_Bar_Selection_Element: document.getElementById("Résumé_Title_Bar_Item"), background_Image_Element: document.getElementById("background_Image_Résumé")});
-
-			function display_Selected_Page_Content(new_Page_Layout_Element_Index)	//Sets the visible page content and selected menu bar item based on the index passed in
-			{
-				page_Layout_Elements_Array[currently_Displayed_Page_Layout_Element_Index].page_Content_Element.className = "page_Content hidden";
-				page_Layout_Elements_Array[currently_Displayed_Page_Layout_Element_Index].title_Bar_Selection_Element.className = "title_Bar_Item";
-				page_Layout_Elements_Array[currently_Displayed_Page_Layout_Element_Index].background_Image_Element.style.opacity = 0;
-				page_Layout_Elements_Array[new_Page_Layout_Element_Index].page_Content_Element.className = "page_Content";
-				page_Layout_Elements_Array[new_Page_Layout_Element_Index].title_Bar_Selection_Element.className = "title_Bar_Item title_Bar_Item_Current_Selection";
-				page_Layout_Elements_Array[new_Page_Layout_Element_Index].background_Image_Element.style.opacity = 1;
-				currently_Displayed_Page_Layout_Element_Index = new_Page_Layout_Element_Index;
-			}
-
-			function quick_Display_Page_Mousedown(event, new_Page_Layout_Element_Index)	//Used with mousedown to start displaying page_Content a little sooner- a default link click event can follow soon after and trigger redirect_Page_Content()
-			{
-				if(event.button === 0)
-				{
-					if(currently_Displayed_Page_Layout_Element_Index !== new_Page_Layout_Element_Index)
-					{
-						window.history.pushState(null, "", "#" + new_Page_Layout_Element_Index);
-						display_Selected_Page_Content(new_Page_Layout_Element_Index);
-					}
-				}
-			}
-
-			function quick_Display_Page_Touchstart(event, new_Page_Layout_Element_Index)	//Used with touchstart to start displaying page_Content a little sooner- a default link click event can follow soon after and trigger redirect_Page_Content()
-			{
-				if(currently_Displayed_Page_Layout_Element_Index !== new_Page_Layout_Element_Index)
-				{
-					window.history.pushState(null, "", "#" + new_Page_Layout_Element_Index);
-					display_Selected_Page_Content(new_Page_Layout_Element_Index);
-				}
-			}
-
-			function redirect_Page_Content()	//Allows opening new tabs or windows from the title bar into a specific section
-			{
-				var initial_Page_Content_String_Array = window.location.hash.split("#");
-				if(initial_Page_Content_String_Array.length === 2 && Number(initial_Page_Content_String_Array[1]) >= 0 && Number(initial_Page_Content_String_Array[1]) <= 2)
-				{
-					if(Number(initial_Page_Content_String_Array[1]) !== currently_Displayed_Page_Layout_Element_Index)
-					{
-						display_Selected_Page_Content(Number(initial_Page_Content_String_Array[1]));
-					}
-				}
-				else
-				{
-					window.history.replaceState(null, "", "#0");	//Defaults any invalid URL to be the About Me section
-					display_Selected_Page_Content(0);
-				}
-			}
-			window.onpopstate = redirect_Page_Content;	//Will trigger redirect_Page_Content() when the a user navigates their browser history, along with when they click a link such as a title_Bar_Item- could be improved by getting rid of link redirects
-			redirect_Page_Content();	//Redirects when the page is first loaded, defaulting to the About Me section
-
-			function toggle_Collapse(element_To_Toggle)
-			{
-				element_To_Toggle.classList.toggle("collapsed_Header");
-			}
-
-			function collapsible_Element_Clicked(event, element_To_Toggle)	//Project's list mouse click event handler
-			{
-				if(event.button === 0)
-				{
-					toggle_Collapse(element_To_Toggle);
-				}
-			}
-
-			function collapsible_Element_Key_Pressed(event, element_To_Toggle)	//Project's list key event handler- requires proper HTML layout, see project_Section_Holder for current implementation
-			{
-				switch(event.key)
-				{
-					case "Enter":	//Toggles a selection's collapse state
-						toggle_Collapse(element_To_Toggle);
-						event.preventDefault();
-						break;
-
-					case "ArrowUp":	//Moves the focus to the previous selection
-						if(element_To_Toggle.parentNode.className === "project_Section")
-						{
-							if(element_To_Toggle.parentNode.previousElementSibling !== null)
-							{
-								if(element_To_Toggle.parentNode.previousElementSibling.firstElementChild.className === "collapsed_Header")
-								{
-									element_To_Toggle.parentNode.previousElementSibling.firstElementChild.focus();	//Moves the focus to the previous project_Section if it is collapsed
-								}
-								else
-								{
-									element_To_Toggle.parentNode.previousElementSibling.children[1].lastElementChild.firstElementChild.focus();	//Moves the focus to the last project_Holder in the previous project_Section if it is not collapsed
-								}
-							}
-						}
-						else if(element_To_Toggle.parentNode.className === "project_Holder")
-						{
-							if(element_To_Toggle.parentNode.previousElementSibling !== null)
-							{
-								element_To_Toggle.parentNode.previousElementSibling.firstElementChild.focus();	//Moves the focus to the previous project_Holder unless it's the first project_Holder
-							}
-							else
-							{
-								element_To_Toggle.parentNode.parentNode.parentNode.firstElementChild.focus();	//Moves the focus to the containing project_Section if it's the first project_Holder
-							}
-						}
-						event.preventDefault();
-						break;
-
-					case "ArrowRight":	//Expands out a selection
-						if(element_To_Toggle.className === "collapsed_Header")
-						{
-							toggle_Collapse(element_To_Toggle);	//Expands a project_Section or project_Holder if it is not currently collapsed
-						}
-						else if(element_To_Toggle.parentNode.className === "project_Section")
-						{
-							element_To_Toggle.nextElementSibling.firstElementChild.firstElementChild.focus();	//Move the focus to the first project_Holder in a project_Section if the project_Section is not collapsed
-						}
-						event.preventDefault();
-						break;
-
-					case "ArrowDown":	//Moves the focus to the next selection
-						if(element_To_Toggle.parentNode.className === "project_Section")
-						{
-							if(element_To_Toggle.className === "collapsed_Header")
-							{
-								if(element_To_Toggle.parentNode.nextElementSibling !== null)
-								{
-									element_To_Toggle.parentNode.nextElementSibling.firstElementChild.focus();	//Moves the focus to the next project_Section for collapsed project_Sections unless it's the last project_Section
-								}
-							}
-							else
-							{
-								element_To_Toggle.nextElementSibling.firstElementChild.firstElementChild.focus();	//Moves the focus to the first project_Holder of a non-collapsed project_Section
-							}
-						}
-						else if(element_To_Toggle.parentNode.className === "project_Holder")
-						{
-							if(element_To_Toggle.parentNode.nextElementSibling !== null)
-							{
-								element_To_Toggle.parentNode.nextElementSibling.firstElementChild.focus();	//Moves the focus to the next project_Holder unless it's the last project_Holder in a project_Section
-							}
-							else if(element_To_Toggle.parentNode.parentNode.parentNode.nextElementSibling !== null)
-							{
-								element_To_Toggle.parentNode.parentNode.parentNode.nextElementSibling.firstElementChild.focus();	//Moves the focus from the last project_Holder to the next project_Section unless it's the last project_Section
-							}
-						}
-						event.preventDefault();
-						break;
-
-					case "ArrowLeft":	//Collapses a selection
-						if(element_To_Toggle.className !== "collapsed_Header")
-						{
-							toggle_Collapse(element_To_Toggle);	//Collapses a project_Section or project_Holder if it is not currently collapsed
-						}
-						else
-						{
-							if(element_To_Toggle.parentNode.className === "project_Section")
-							{
-								element_To_Toggle.parentNode.parentNode.firstElementChild.firstElementChild.focus();	//Moves the focus to the first project_Section (Video Games) when current project_Section is collapsed
-							}
-							else if(element_To_Toggle.parentNode.className === "project_Holder")
-							{
-								element_To_Toggle.parentNode.parentNode.parentNode.firstElementChild.focus();	//Moves the focus to the containing project_Section when the project_Holder is collapsed
-							}
-						}
-						event.preventDefault();
-						break;
-				}
-			}
-
-			var expanded_Project_Image_Holder_Element = document.getElementById("expanded_Project_Image_Holder");
-			var expanded_Project_Image_Element = document.getElementById("expanded_Project_Image");
-			var original_Expanded_Project_Image_Element = expanded_Project_Image_Element;
-			function toggle_Image_Expand(event, element_To_Toggle)
-			{
-				if(expanded_Project_Image_Element.src !== element_To_Toggle.src)
-				{
-					if(event.type !== "keydown" || event.key === "Enter")
-					{
-						expanded_Project_Image_Holder_Element.style.display = "block";
-						expanded_Project_Image_Element.src = element_To_Toggle.src;
-						original_Expanded_Project_Image_Element = element_To_Toggle;
-						expanded_Project_Image_Holder_Element.focus();
-					}
-				}
-				else
-				{
-					expanded_Project_Image_Holder_Element.style.display = "none";
-					expanded_Project_Image_Element.src = "hidden.gif";	//Empty src can cause issues, hidden.gif is the filename for a very small gif
-					original_Expanded_Project_Image_Element.focus();
-					if(event.type === "mousedown" || event.type === "touchstart")	//Prevents focus from leaving the small image and touch events from sending a click that falls past the overlay
-					{
-						event.preventDefault();
-					}
-				}
-			}
-		</script>
+		<script type = "text/javascript" charset = "utf-8" src = "JavaScript/main.js"></script>
+		<script type = "text/javascript" charset = "utf-8" src = "Libraries/Prism/prism.js"></script>
 	</body>
 </html>
