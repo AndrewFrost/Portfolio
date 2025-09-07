@@ -1,0 +1,346 @@
+*
+{
+	box-sizing: border-box;
+}
+
+body
+{
+	margin: 0px auto 100px auto;
+	width: 75%;
+	min-width: 450px;
+	background-color: black;
+}
+
+p
+{
+	margin: 16px 8px;
+	font-size: 1.5rem;	/*Default of 24px in most browsers that scales with user options*/
+}
+
+pre.language-cpp
+{
+	overflow-y: visible;
+	overflow-x: auto;
+}
+
+h1
+{
+	margin: 0px;
+	padding: 30px 0px;
+	font-size: 3rem;
+	line-height: 1;
+	text-align: center;
+}
+
+h2
+{
+	margin: 0px;
+	border: 1px solid black;
+	padding: 10px 0px;
+	font-size: 2.25rem;
+	line-height: 1;
+	text-align: center;
+	cursor: pointer;
+	background-color: rgba(0, 112, 112, 1.0);
+}
+
+h2.collapsed_Header
+{
+	background-color: rgba(0, 144, 144, 1.0);
+	border-radius: 0px 0px 5px 5px;
+}
+
+h2:hover, h2:focus
+{
+	outline: none;
+	background-color: rgba(0, 96, 96, 1.0);
+}
+
+h2.collapsed_Header:hover, h2.collapsed_Header:focus
+{
+	outline: none;
+	background-color: rgba(0, 128, 128, 1.0);
+}
+
+h2:focus:hover
+{
+	outline: none;
+	background-color: rgba(0, 88, 88, 1.0);
+}
+
+h2.collapsed_Header:focus:hover
+{
+	outline: none;
+	background-color: rgba(0, 104, 104, 1.0);
+}
+
+h2:active, h2.collapsed_Header:active, h2:focus:hover:active, h2.collapsed_Header:focus:hover:active
+{
+	background-color: rgba(0, 80, 80, 1.0);
+}
+
+h3
+{
+	margin: 0px;
+	border-bottom: 1px solid black;
+	padding: 8px 0px;
+	font-size: 1.6875rem;
+	line-height: 1;
+	text-align: center;
+	cursor: pointer;
+	background-color: rgba(0, 128, 64, 1.0);
+}
+
+h3.collapsed_Header
+{
+	border-bottom: none;
+	border-radius: 0px 0px 4px 4px;
+	background-color: rgba(0, 160, 80, 1.0);
+}
+
+h3:hover, h3:focus
+{
+	outline: none;
+	background-color: rgba(0, 112, 56, 1.0);
+}
+
+h3.collapsed_Header:hover, h3.collapsed_Header:focus
+{
+	outline: none;
+	background-color: rgba(0, 144, 72, 1.0);
+}
+
+h3:focus:hover
+{
+	outline: none;
+	background-color: rgba(0, 104, 52, 1.0);
+}
+
+h3.collapsed_Header:focus:hover
+{
+	outline: none;
+	background-color: rgba(0, 120, 60, 1.0);
+}
+
+h3:active, h3.collapsed_Header:active, h3:focus:hover:active, h3.collapsed_Header:focus:hover:active
+{
+	background-color: rgba(0, 96, 48, 1.0);
+}
+
+pre.language-cpp
+{
+	margin: 0px;
+	padding: 16px 8px;
+	border-radius: 0px 0px 3px 3px;
+	background-color: rgba(20, 20, 20, 1.0);
+}
+
+.token.comment
+{
+	color: green;
+}
+
+.background_Image
+{
+	position: fixed;
+	top: 0;
+	left: 0;
+	z-index: -1;
+	height: 100%;
+	width: 100%;
+	object-fit: cover;
+	opacity: 1;
+	transition: opacity 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.title_Bar_Item
+{
+	display: inline-block;
+	padding: 6px;
+	border: 1px solid rgba(0, 0, 0, 0.9);
+	width: 33.33333%;
+	font-size: 3rem;
+	line-height: 1;
+	text-decoration: none;
+	text-align: center;
+	white-space: nowrap;
+	overflow: hidden;
+	vertical-align: bottom;
+	color: black;
+	background-clip: padding-box;
+	background-color: rgba(24, 96, 192, 0.9);
+}
+
+.title_Bar_Item:hover, .title_Bar_Item:focus
+{
+	outline: none;
+	background-color: rgba(22, 88, 176, 0.9);
+}
+
+.title_Bar_Item_Current_Selection
+{
+	background-color: rgba(20, 80, 160, 0.9);
+}
+
+.title_Bar_Item_Current_Selection:hover, .title_Bar_Item_Current_Selection:focus
+{
+	outline: none;
+	background-color: rgba(18, 72, 144, 0.9);
+}
+
+.title_Bar_Item:active
+{
+	background-color: rgba(16, 64, 128, 0.9);
+}
+
+.page_Content
+{
+	border-radius: 0px 0px 5px 5px;
+	padding: 0px 16px 16px 16px;
+	background-color: rgba(255, 255, 255, 0.5);
+}
+
+.collapsible_Element
+{
+	interpolate-size: allow-keywords;	/*Not currently supported in Firefox, but the animation is very optional*/
+	height: auto;
+	transition: height .1s linear;
+}
+
+.collapsed_Element, pre.collapsed_Element
+{
+	height: 0px;
+	visibility: hidden;
+	overflow: hidden;
+	margin: 0px;
+	padding: 0px;
+}
+
+.project_Section_Holder
+{
+	border-left: 1px solid black;
+	border-right: 1px solid black;
+	border-radius: 0px 0px 5px 5px;
+	background-color: black;
+}
+
+.project_Section
+{
+	border: 1px solid black;
+	border-radius: 0px 0px 5px 5px;
+}
+
+.project_Holder
+{
+	border: 1px solid black;
+	border-radius: 0px 0px 5px 5px;
+	background-color: rgba(192, 192, 192, 1);
+}
+
+.project_Image
+{
+	display: block;
+	margin: auto;
+	max-height: 300px;
+	max-width: 100%;
+	cursor: pointer;
+}
+
+.link_Button
+{
+	display: inline-block;
+	padding: 5px 10px;
+	margin: 3px 5px;
+	border: 1px solid black;
+	border-radius: 5px;
+	min-width: 125px;
+	font-family: inherit;
+	font-size: 1.5rem;
+	font-weight: normal;
+	line-height: 1;
+	text-decoration: none;
+	text-align: center;
+	color: buttontext;
+	background-color: rgba(160, 160, 160, 1);
+	cursor: pointer;
+}
+
+.link_Button:hover, .link_Button:focus
+{
+	outline: none;
+	background-color: rgba(144, 144, 144, 0.9);
+}
+
+.link_Button:active
+{
+	background-color: rgba(128, 128, 128, 0.9);
+}
+
+.hidden	/*Imitates "display: none" due to Chrome's PDF viewer reloading each time display is toggled, but not when visibility is toggled*/
+{
+	visibility: hidden;
+	position: absolute;
+	top: 0;
+	left: 0;
+	margin: 0px;
+	border: none;
+	padding: 0px;
+	height: 0px;
+}
+
+.hidden *
+{
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	height: 0px;
+}
+
+.invisible
+{
+	opacity: 0;
+}
+
+#title_Bar
+{
+	border: 1px solid rgba(0, 0, 0, 0.9);
+}
+
+#expanded_Project_Image_Holder
+{
+	display: none;	/*Is toggled to and from block in JavaScript to display the overlayed image*/
+	position: fixed;
+	top: 0;
+	left: 0;
+	height: 100%;
+	width: 100%;
+	cursor: pointer;
+	outline: none;
+	background-color: rgba(0, 0, 0, 0.75);
+}
+
+#expanded_Project_Image
+{
+	display: block;
+	margin: auto;
+	object-fit: contain;
+	height: 100%;
+	max-width: 100%;
+}
+
+#résumé_Container	/*Allows the résumé PDF to maintain the same aspect ratio (8.5:11 page plus some extra vertical space for the PDF Reader's UI)- keep an eye out for better ways to implement this*/
+{
+	display: block;
+	position: relative;	/*Anchor the contained viewer to this element*/
+	padding-top: 132%;	/*Padding percentages are based on the element's width, so element will be width:padding ratio*/
+	width: 100%;
+}
+
+#résumé_Viewer
+{
+	position: absolute;
+	top: 0;	/*Place the PDF Reader into the container's position*/
+	left: 0;
+	height: 100%;
+	width: 100%;
+}
