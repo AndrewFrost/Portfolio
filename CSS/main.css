@@ -1,13 +1,13 @@
 *
 {
 	box-sizing: border-box;
+	overflow-wrap: anywhere;
 }
 
 body
 {
 	margin: 0px auto 100px auto;
 	width: 75%;
-	/*min-width: 450px;*/
 	background-color: black;
 }
 
@@ -165,7 +165,6 @@ pre.language-cpp
 	text-decoration: none;
 	text-align: center;
 	align-items: center;
-	overflow-wrap: anywhere;
 	justify-content: center;
 	color: black;
 	background-clip: padding-box;
@@ -255,7 +254,6 @@ pre.language-cpp
 	margin: 3px 5px;
 	border: 1px solid black;
 	border-radius: 5px;
-	/*min-width: 125px;*/
 	font-family: inherit;
 	font-size: 1.5rem;
 	font-weight: normal;
