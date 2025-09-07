@@ -155,7 +155,8 @@ pre.language-cpp
 
 .title_Bar_Item
 {
-	display: inline-block;
+	display: flex;
+	flex-grow: 1;
 	padding: 6px;
 	border: 1px solid rgba(0, 0, 0, 0.9);
 	width: 33.33333%;
@@ -163,9 +164,9 @@ pre.language-cpp
 	line-height: 1;
 	text-decoration: none;
 	text-align: center;
-	white-space: nowrap;
-	overflow: hidden;
-	vertical-align: bottom;
+	align-items: center;
+	overflow-wrap: anywhere;
+	justify-content: center;
 	color: black;
 	background-clip: padding-box;
 	background-color: rgba(24, 96, 192, 0.9);
@@ -304,6 +305,7 @@ pre.language-cpp
 
 #title_Bar
 {
+	display: flex;
 	width: 100%;
 	border: 1px solid rgba(0, 0, 0, 0.9);
 }
