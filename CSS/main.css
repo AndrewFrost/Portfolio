@@ -160,7 +160,7 @@ pre.language-cpp
 	padding: 6px;
 	border: 1px solid rgba(0, 0, 0, 0.9);
 	width: 33.33333%;
-	font-size: 3rem;
+	font-size: clamp(1.25rem, 7vw, 3rem); /*Scales the title bars appropriately for small devices*/
 	line-height: 1;
 	text-decoration: none;
 	text-align: center;
@@ -197,7 +197,7 @@ pre.language-cpp
 {
 	width: 100%;
 	border-radius: 0px 0px 5px 5px;
-	padding: 0px 16px 16px 16px;
+	padding: 0px clamp(0px, 2vw - 8.5px, 16px) clamp(0px, 2vw - 8.5px, 16px) clamp(0px, 2vw - 8.5px, 16px); /*Helps pages to be a better fit on small devices*/
 	background-color: rgba(255, 255, 255, 0.5);
 }
 
