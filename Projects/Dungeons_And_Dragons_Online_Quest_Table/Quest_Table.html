@@ -7,26 +7,87 @@
 			{
 				width: 160px;
 				margin-right: 10px;
+				cursor: pointer;
+			}
+
+			input[type="checkbox"]
+			{
+				cursor: pointer;
+			}
+
+			select, ::picker(select)	/*Utilizes customizable selects*/
+			{
+				appearance: base-select;
+				cursor: pointer;
 			}
 
 			table
 			{
 				border-collapse: collapse;
+				border-bottom: 1px solid black;
 			}
 
 			th
 			{
-				background-color: rgba(225, 225, 225, 1.0);
+				border: 1px solid black;
+				cursor: pointer;
+				background-color: rgba(200, 200, 200, 1.0);
+			}
+
+			.ascending_Column
+			{
+				background-color: rgba(100, 150, 255, .9);
+			}
+
+			.descending_Column
+			{
+				background-color: rgba(255, 140, 50, .9);
+			}
+
+			.last_Sorted_Header.ascending_Column
+			{
+				background-color: rgba(50, 100, 200, 1.0);
+			}
+
+			.last_Sorted_Header.descending_Column
+			{
+				background-color: rgba(200, 100, 20, 1.0);
+			}
+
+			tr
+			{
+				height: 38px;
+				border-left: 1px solid black;
+				border-right: 1px solid black;
 			}
 
 			td
 			{
 				text-align: center;
+				border-left: 1px solid rgba(0, 0, 0, 0.05);
+				border-right: 1px solid rgba(0, 0, 0, 0.05);
+			}
+
+			td:first-child
+			{
+				border-left: 1px solid black;
+			}
+
+			td:last-child
+			{
+				border-right: 1px solid black;
 			}
 
 			.filter_Title
 			{
 				width: 165px;
+				display: inline-block;
+				white-space: nowrap;
+			}
+
+			.adventure_Pack_Filter_Title
+			{
+				width: 260px;
 				display: inline-block;
 				white-space: nowrap;
 			}
@@ -53,10 +114,10 @@
 		</style>
 	</head>
 	<body>
-		<div style = "width: 800px"><button onclick = "save_To_Local_Storage()">Save to Local Storage</button><button onclick = "delete_Local_Storage()">Delete Local Storage</button><a id = "download_Raw_String_Link" download = "raw_Table_String.js" draggable = "false"><button onclick = "convert_Table_To_Raw_String()">Save to computer</button></a><button onclick = "toggle_Filters_Section_Visibility()" id = "filters_Section_Toggle_Button">Show Filters</button><span id = "number_Of_Items_Sorted"></span><br></div>
+		<div style = "width: 800px"><button onclick = "save_To_Local_Storage()">Save to Local Storage</button><button onclick = "delete_Local_Storage()">Delete Local Storage</button><a id = "download_Raw_String_Link" download = "JSON_Table.js" draggable = "false"><button onclick = "convert_Table_To_JSON()">Save to computer</button></a><button onclick = "toggle_Visibility(this, 'filters_Section', 'Filters')" id = "filters_Section_Toggle_Button">Show Filters</button><span id = "number_Of_Items_Sorted"></span><br></div>
 		<div id = "filters_Section" style = "display: none; width: 680px" onchange = "filter_Table()">
 			<br>
-			<span class = "filter_Title">Level: </span><input type = "number" class = "filter_Number_Input" id = "level_Lower_Limit_Input_Box" value = "1"></input> to <input type = "number" class = "filter_Number_Input" id = "level_Upper_Limit_Input_Box" value = "32"></input><br>
+			<span class = "filter_Title">Level: </span><input type = "number" class = "filter_Number_Input" id = "level_Lower_Limit_Input_Box" value = "1"></input> to <input type = "number" class = "filter_Number_Input" id = "level_Upper_Limit_Input_Box" value = "37"></input><br>
 			<span class = "filter_Title">Experience: </span><input type = "number" class = "filter_Number_Input" id = "experience_Lower_Limit_Input_Box" value = "0"></input> to <input type = "number" class = "filter_Number_Input" id = "experience_Upper_Limit_Input_Box" value = "1000000"></input><br>
 			<span class = "filter_Title">Time: </span><input type = "number" class = "filter_Number_Input" id = "estimated_Time_Lower_Limit_Input_Box" value = "0"></input> to <input type = "number" class = "filter_Number_Input" id = "estimated_Time_Upper_Limit_Input_Box" value = "120"></input><br>
 			<span class = "filter_Title">Favor: </span><input type = "number" class = "filter_Number_Input" id = "favor_Lower_Limit_Input_Box" value = "0"></input> to <input type = "number" class = "filter_Number_Input" id = "favor_Upper_Limit_Input_Box" value = "42"></input><br>
@@ -65,82 +126,231 @@
 			<span class = "filter_Title">Favor Weight: </span><input type = "number" class = "filter_Number_Input" id = "favor_Weight_Input_Box" value = 1000></input><br>
 			<span class = "filter_Title">Minimum Weight / Time: </span><input type = "number" class = "filter_Number_Input" id = "weighted_Experience_And_Favor_Per_Time_Lower_Limit_Input_Box" value = 0></input><br>
 			<br>
+			<span class = "filter_Title">Filter Completed: </span><input type = "checkbox" id = "filter_Completed_Checkbox"><br>
+			<br>
+			<span class = "filter_Title"><button onclick = "toggle_Visibility(this, 'adventure_Packs_Selection_Section', 'Adventure Packs')">Show Adventure Packs</button></span><br>
+			<div id = "adventure_Packs_Selection_Section" style = "display: none"><!--Ensure the value of each checkbox exactly matches the name of the Adventure Pack when a new adventure pack is added-->
+				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Against_the_Slave_Lords">Against the Slave Lords</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "Against the Slave Lords"><br>
+				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Attack_on_Stormreach">Attack on Stormreach</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "Attack on Stormreach"><br>
+				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Delera%27s_Tomb">Delera's Tomb</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "Delera's Tomb"><br>
+				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Zawabi%27s_Refuge">Demon Sands</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "Demon Sands"><br>
+				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Devil_Assault">Devil Assault</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "Devil Assault"><br>
+				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Disciples_of_Rage">Disciples of Rage</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "Disciples of Rage"><br>
+				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Dragonblood_Prophecy">Dragonblood Prophecy</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "Dragonblood Prophecy"><br>
+				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Eveningstar_Challenge_Pack">Eveningstar Challenge Pack</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "Eveningstar Challenge Pack"><br>
+				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Fables_of_the_Feywild">Fables of the Feywild</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "Fables of the Feywild"><br>
+				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Fall_of_the_Night_Brigade">Fall of the Night Brigade</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "Fall of the Night Brigade"><br>
+				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Grip_of_the_Hidden_Hand">Grip of the Hidden Hand</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "Grip of the Hidden Hand"><br>
+				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Harbinger_of_Madness">Harbinger of Madness</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "Harbinger of Madness"><br>
+				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Heart_of_Madness">Heart of Madness</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "Heart of Madness"><br>
+				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Hunter_and_Hunted">Hunter and Hunted</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "Hunter and Hunted"><br>
+				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Keep_on_the_Borderlands">Keep on the Borderlands</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "Keep on the Borderlands"><br>
+				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Magic_of_Myth_Drannor">Magic of Myth Drannor</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "Magic of Myth Drannor"><br>
+				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Masterminds_of_Sharn">Masterminds of Sharn</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "Masterminds of Sharn"><br>
+				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Menace_of_the_Underdark_(adventure_pack)">Menace of the Underdark</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "Menace of the Underdark"><br>
+				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Mists_of_Ravenloft">Mists of Ravenloft</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "Mists of Ravenloft"><br>
+				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Peril_of_the_Planar_Eyes">Peril of the Planar Eyes</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "Peril of the Planar Eyes"><br>
+				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Phiarlan_Carnival">Phiarlan Carnival</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "Phiarlan Carnival"><br>
+				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Reign_of_Madness">Reign of Madness</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "Reign of Madness"><br>
+				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Ruins_of_Gianthold_(heroic)">Ruins of Gianthold</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "Ruins of Gianthold"><br>
+				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Secrets_of_the_Artificers">Secrets of the Artificers</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "Secrets of the Artificers"><br>
+				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Sentinels_of_Stormreach">Sentinels of Stormreach</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "Sentinels of Stormreach"><br>
+				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Shadow_Under_Thunderholme">Shadow Under Thunderholme</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "Shadow Under Thunderholme"><br>
+				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Shadowfell_Conspiracy">Shadowfell Conspiracy</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "Shadowfell Conspiracy"><br>
+				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Sinister_Secret_of_Saltmarsh">Sinister Secret of Saltmarsh</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "Sinister Secret of Saltmarsh"><br>
+				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Slice_of_Life">Slice of Life</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "Slice of Life"><br>
+				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Sorrowdusk_Isle">Sorrowdusk Isle</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "Sorrowdusk Isle"><br>
+				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Tangleroot_Gorge">Tangleroot Gorge</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "Tangleroot Gorge"><br>
+				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Tavern_Tales">Tavern Tales</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "Tavern Tales"><br>
+				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/The_Catacombs">The Catacombs</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "The Catacombs"><br>
+				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/The_Chill_of_Ravenloft">The Chill of Ravenloft</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "The Chill of Ravenloft"><br>
+				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/The_Devil%27s_Gambit">The Devil's Gambit</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "The Devil's Gambit"><br>
+				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/The_Devils_of_Shavarath">The Devils of Shavarath</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "The Devils of Shavarath"><br>
+				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/The_Dragons%27_Hand">The Dragons' Hand</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "The Dragons' Hand"><br>
+				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/The_Dreaming_Dark">The Dreaming Dark</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "The Dreaming Dark"><br>
+				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/The_Druid%27s_Deep">The Druid's Deep</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "The Druid's Deep"><br>
+				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/The_Haunted_Halls_of_Eveningstar">The Haunted Halls of Eveningstar</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "The Haunted Halls of Eveningstar"><br>
+				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/The_High_Road_of_Shadows">The High Road of Shadows</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "The High Road of Shadows"><br>
+				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/The_Isle_of_Dread">The Isle of Dread</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "The Isle of Dread"><br>
+				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/The_Lost_Gatekeepers">The Lost Gatekeepers</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "The Lost Gatekeepers"><br>
+				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/The_Mines_of_Tethyamar">The Mines of Tethyamar</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "The Mines of Tethyamar"><br>
+				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Litany_of_the_Dead_Part_1">The Necropolis, Part 1</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "The Necropolis, Part 1"><br>
+				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Litany_of_the_Dead_Part_2">The Necropolis, Part 2</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "The Necropolis, Part 2"><br>
+				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Litany_of_the_Dead_Part_3">The Necropolis, Part 3</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "The Necropolis, Part 3"><br>
+				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Litany_of_the_Dead_Part_4">The Necropolis, Part 4</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "The Necropolis, Part 4"><br>
+				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/The_Path_of_Inspiration">The Path of Inspiration</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "The Path of Inspiration"><br>
+				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Reaver%27s_Refuge">The Reaver's Reach</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "The Reaver's Reach"><br>
+				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/The_Red_Fens">The Red Fens</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "The Red Fens"><br>
+				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/The_Restless_Isles">The Restless Isles</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "The Restless Isles"><br>
+				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Ruins_of_Threnal">The Ruins of Threnal</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "The Ruins of Threnal"><br>
+				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/The_Seal_of_Shan-To-Kor">The Seal of Shan-To-Kor</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "The Seal of Shan-To-Kor"><br>
+				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/The_Sharn_Syndicate">The Sharn Syndicate</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "The Sharn Syndicate"><br>
+				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/The_Soul_Splitter">The Soul Splitter</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "The Soul Splitter"><br>
+				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/The_Temple_of_Elemental_Evil">The Temple of Elemental Evil</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "The Temple of Elemental Evil"><br>
+				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/The_Vale_of_Twilight">The Vale of Twilight</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "The Vale of Twilight"><br>
+				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Vault_of_Night">The Vault of Night</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "The Vault of Night"><br>
+				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Three-Barrel_Cove">Three-Barrel Cove</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "Three-Barrel Cove"><br>
+				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Trials_of_the_Archons">Trials of the Archons</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "Trials of the Archons"><br>
+				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Vaults_of_the_Artificers">Vaults of the Artificers</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "Vaults of the Artificers"><br>
+				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Vecna_Unleashed">Vecna Unleashed</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "Vecna Unleashed"><br>
+				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/White_Plume_Mountain_and_Other_Tales">White Plume Mountain and Other Tales</a>: </span><input class = "adventure_Pack_Checkbox" type = "checkbox" value = "White Plume Mountain and Other Tales"><br>
+			</div>
+			<br>
 			<span class = "filter_Title">Contains phrases: </span><input type = "text" class = "filter_Text_Input" id = "contains_Phrases_Input_Box"><br>
 			<span class = "filter_Title">Does not contain phrases: </span><input type = "text" class = "filter_Text_Input" id = "does_Not_Contain_Phrases_Input_Box"><br>
 			<br>
 			<button onclick = "reset_Filters()">Reset Filters</button>
 		</div>
 		<br>
+		<div>
+			<br>
+			<span>Character Name: </span><input type = "text" id = "character_Name_Input_Box"><br>
+			<span>Character Server: </span><select id = "server_Dropdown_Menu">
+				<button><selectedcontent></selectedcontent></button>
+				<option value = "Cormyr">Cormyr</option>
+				<option value = "Moonsea">Moonsea</option>
+				<option value = "Shadowdale">Shadowdale</option>
+				<option value = "Thrane">Thrane</option>
+			</select><br>
+			<span>Autocomplete Quests On Exit: </span><input type = "checkbox" onclick = "toggle_Location_Retrieval()" id = "autocomplete_Quests_On_Exit_Checkbox"></input><span id = "autocomplete_Quests_Error_Message"></span><br>
+			<span>Current Quest: </span><span id = "current_Quest">None</span><br>
+			<span>Current Location: </span><span id = "current_Location">Unknown</span><br>
+			<br>
+			<span>Last Completed Quest: </span><span id = "last_Completed_Quest_Name">None</span><br>
+			<span>Minutes Taken: </span><span id = "last_Completed_Quest_Duration">None</span><br>
+		</div>
+		<br>
 		<table>
 			<caption></caption>
 			<thead>
-				<tr>
-					<th onclick = "sort_Table(0)" class = "numerical_Column">Level</th>
-					<th onclick = "sort_Table(1)" class = "alphabetical_Column">Quest Name</th>
-					<th onclick = "sort_Table(2)" class = "numerical_Column">Exp</th>
-					<th onclick = "sort_Table(3)" class = "numerical_Column">Time</th>
-					<th onclick = "sort_Table(4)" class = "numerical_Column">Favor</th>
-					<th onclick = "sort_Table(5)" class = "alphabetical_Column">Location</th>
-					<th onclick = "sort_Table(6)" class = "alphabetical_Column">Adventure Pack</th>
-					<th onclick = "sort_Table(7)" class = "alphabetical_Column">Damage Reduction Information</th>
-					<th onclick = "sort_Table(8)" class = "alphabetical_Column">Notes</th>
+				<tr  id = "table_Header_Row">
 				</tr>
 			</thead>
 			<tbody id = "table_Body">
 			</tbody>
 		</table>
-		<script type = "text/javascript" src = "raw_Table_String.js"><!--Just includes the variable raw_Table_String in the global scope which is the starting point for the table if no local changes have been saved-->
+		<script type = "text/javascript" src = "JSON_Table.js"><!--Creates a global variable table_Body_Array which is the starting point for the table if no local changes have been saved-->
+		</script>
+		<script type = "text/javascript" src = "DDO_Audit_Location_ID_To_Quest_Name_Map.js"><!--Creates a global variable DDO_Audit_Location_ID_To_Quest_Name_Map for converting DDO Audit's Location ID into properly tracked Quests-->
+		</script>
+		<script type = "text/javascript" src = "DDO_Audit_Location_ID_To_Area_Name_Map.js"><!--Creates a global variable DDO_Audit_Location_ID_To_Area_Name_Map for converting DDO Audit's Location ID into a location name-->
 		</script>
 		<script type = "text/javascript">
-			window.addEventListener	//Listens for navigation away from the page
-			(
-				"beforeunload", function(event)
+			let table_Body_Element = document.getElementById("table_Body");
+			let table_Header_Row_Element = document.getElementById("table_Header_Row");
+			let download_Raw_String_Link_Element = document.getElementById("download_Raw_String_Link");
+
+			let level_Lower_Limit_Input_Box_Element = document.getElementById("level_Lower_Limit_Input_Box");
+			let level_Upper_Limit_Input_Box_Element = document.getElementById("level_Upper_Limit_Input_Box");
+
+			let experience_Lower_Limit_Input_Box_Element = document.getElementById("experience_Lower_Limit_Input_Box");
+			let experience_Upper_Limit_Input_Box_Element = document.getElementById("experience_Upper_Limit_Input_Box");
+
+			let time_Lower_Limit_Input_Box_Element = document.getElementById("estimated_Time_Lower_Limit_Input_Box");
+			let time_Upper_Limit_Input_Box_Element = document.getElementById("estimated_Time_Upper_Limit_Input_Box");
+
+			let favor_Lower_Limit_Input_Box_Element = document.getElementById("favor_Lower_Limit_Input_Box");
+			let favor_Upper_Limit_Input_Box_Element = document.getElementById("favor_Upper_Limit_Input_Box");
+
+			let experience_Weight_Input_Box_Element = document.getElementById("experience_Weight_Input_Box");
+			let favor_Weight_Input_Box_Element = document.getElementById("favor_Weight_Input_Box");
+			let weighted_Experience_And_Favor_Per_Time_Lower_Limit_Input_Box_Element = document.getElementById("weighted_Experience_And_Favor_Per_Time_Lower_Limit_Input_Box");
+
+			let filter_Completed_Checkbox_Element = document.getElementById("filter_Completed_Checkbox");
+
+			let adventure_Pack_Name_To_Checkbox_Element_Map = new Map();
+			{
+				let adventure_Pack_Checkbox_Elements = document.getElementById("adventure_Packs_Selection_Section").getElementsByClassName("adventure_Pack_Checkbox");
+				for(let i = 0; i < adventure_Pack_Checkbox_Elements.length; i++)
 				{
-					event.preventDefault();
+					adventure_Pack_Name_To_Checkbox_Element_Map.set(adventure_Pack_Checkbox_Elements[i].value, adventure_Pack_Checkbox_Elements[i]);
 				}
-			);
+			}
 
-			var table_Body_Element = document.getElementById("table_Body");
-			var download_Raw_String_Link_Element = document.getElementById("download_Raw_String_Link");
+			let contains_Phrases_Input_Box_Element = document.getElementById("contains_Phrases_Input_Box");
+			let does_Not_Contain_Phrases_Input_Box_Element = document.getElementById("does_Not_Contain_Phrases_Input_Box");
+			let number_Of_Items_Sorted_Element = document.getElementById("number_Of_Items_Sorted");
 
-			var filters_Section_Toggle_Button_Element = document.getElementById("filters_Section_Toggle_Button");
-			var filters_Section_Element = document.getElementById("filters_Section");
-			var level_Lower_Limit_Input_Box_Element = document.getElementById("level_Lower_Limit_Input_Box");
-			var level_Upper_Limit_Input_Box_Element = document.getElementById("level_Upper_Limit_Input_Box");
-			var experience_Lower_Limit_Input_Box_Element = document.getElementById("experience_Lower_Limit_Input_Box");
-			var experience_Upper_Limit_Input_Box_Element = document.getElementById("experience_Upper_Limit_Input_Box");
-			var time_Lower_Limit_Input_Box_Element = document.getElementById("estimated_Time_Lower_Limit_Input_Box");
-			var time_Upper_Limit_Input_Box_Element = document.getElementById("estimated_Time_Upper_Limit_Input_Box");
-			var favor_Lower_Limit_Input_Box_Element = document.getElementById("favor_Lower_Limit_Input_Box");
-			var favor_Upper_Limit_Input_Box_Element = document.getElementById("favor_Upper_Limit_Input_Box");
-			var experience_Weight_Input_Box_Element = document.getElementById("experience_Weight_Input_Box");
-			var favor_Weight_Input_Box_Element = document.getElementById("favor_Weight_Input_Box");
-			var weighted_Experience_And_Favor_Per_Time_Lower_Limit_Input_Box_Element = document.getElementById("weighted_Experience_And_Favor_Per_Time_Lower_Limit_Input_Box");
-			var contains_Phrases_Input_Box_Element = document.getElementById("contains_Phrases_Input_Box");
-			var does_Not_Contain_Phrases_Input_Box_Element = document.getElementById("does_Not_Contain_Phrases_Input_Box");
-			var number_Of_Items_Sorted_Element = document.getElementById("number_Of_Items_Sorted");
+			let character_Name_Input_Box_Element = document.getElementById("character_Name_Input_Box");
+			let server_Dropdown_Menu_Element = document.getElementById("server_Dropdown_Menu");
+			let autocomplete_Quests_On_Exit_Checkbox_Element = document.getElementById("autocomplete_Quests_On_Exit_Checkbox");
+			let autocomplete_Quests_Error_Message_Element = document.getElementById("autocomplete_Quests_Error_Message");
+			let current_Quest_Element = document.getElementById("current_Quest");
+			let current_Location_Element = document.getElementById("current_Location");
+			let last_Completed_Quest_Name_Element = document.getElementById("last_Completed_Quest_Name");
+			let last_Completed_Quest_Duration_Element = document.getElementById("last_Completed_Quest_Duration");
 
-			var table_Body_Array = [];		//Stores the table rows, which are themselves arrays of strings
-			var table_Data_Array_Copy = [];	//A copy of the array used to stablize the sort in Chrome. Data order will often be intentionally one update behind
+			let quest_Name_To_Table_Index_Map = new Map();
+			let current_Sort_Selection = 1;
 
-			var sort_Selection_Type_Array = ["Numerical", "Quest Name", "Numerical", "Numerical", "Numerical", "Alphabetical", "Alphabetical", "Alphabetical", "Alphabetical"];	//The type of sort to use on each selection
-			var sort_Selection_Ascending_State_Array = [1, 1, 1, 1, 1, 1, 1, 1, 1];	//1 represents that the values for a selection type are increasing as the rows go down, -1 represents values lowering as the rows go down
-			var current_Sort_Selection = 0;
-			var number_Of_Items_Filtered = 0;
+			function generate_Table_Headers()
+			{
+				for(let i = 0; i < column_Properties.length; i++)
+				{
+					let new_Header = document.createElement("TH");
+					new_Header.textContent = column_Properties[i].displayName;
+					new_Header.onclick = function() { sort_Table(i); };
+
+					// Add column type class
+					if(column_Properties[i].type === "Alphabetical" || column_Properties[i].type === "Quest Name")
+					{
+						new_Header.classList.add("alphabetical_Column");
+					}
+					else if(column_Properties[i].type === "Numerical")
+					{
+						new_Header.classList.add("numerical_Column");
+					}
+
+					// Add ascending/descending class
+					if(sort_Selection_Ascending_State_Array[i] === 1)
+					{
+						new_Header.classList.add("ascending_Column");
+					}
+					else
+					{
+						new_Header.classList.add("descending_Column");
+					}
+
+					// Mark current sort selection
+					if(i === current_Sort_Selection)
+					{
+						new_Header.classList.add("last_Sorted_Header");
+					}
+
+					table_Header_Row_Element.appendChild(new_Header);
+				}
+			}
+
+			generate_Table_Headers();
+
+			let number_Of_Items_Filtered = 0;
 
 			function filter_Table()
 			{
-				table_Body_Element.style.display = "none";	//Avoid unnecessary redrawing of Table
+				table_Body_Element.style.display = "none";	//Avoids unnecessary redrawing of Table
 				number_Of_Items_Filtered = 0;
-				for(i = 0; i < table_Body_Element.children.length; i++)
+
+				let contains_Phrases_Array = contains_Phrases_Input_Box_Element.value.split("  ");	//Used in phrase filters
+				if(contains_Phrases_Array.length === 1 && contains_Phrases_Array[0] === "")
+				{
+					contains_Phrases_Array = [];
+				}
+
+				let does_Not_Contain_Phrases_Array = does_Not_Contain_Phrases_Input_Box_Element.value.split("  ");	//Used in phrase filters
+				if(does_Not_Contain_Phrases_Array.length === 1 && does_Not_Contain_Phrases_Array[0] === "")
+				{
+					does_Not_Contain_Phrases_Array = [];
+				}
+
+				for(let i = 0; i < table_Body_Element.children.length; i++)
 				{
 					table_Body_Element.children[i].style.display = "table-row";
 					if
 					(
-						Number(table_Body_Array[i][0]) < level_Lower_Limit_Input_Box_Element.value || Number(table_Body_Array[i][0]) > level_Upper_Limit_Input_Box_Element.value
-						|| Number(table_Body_Array[i][2]) < experience_Lower_Limit_Input_Box_Element.value || Number(table_Body_Array[i][2]) > experience_Upper_Limit_Input_Box_Element.value
-						|| Number(table_Body_Array[i][3]) < time_Lower_Limit_Input_Box_Element.value || Number(table_Body_Array[i][3]) > time_Upper_Limit_Input_Box_Element.value
-						|| Number(table_Body_Array[i][4]) < favor_Lower_Limit_Input_Box_Element.value || Number(table_Body_Array[i][4]) > favor_Upper_Limit_Input_Box_Element.value
+						Number(table_Body_Array[i][column_Name_To_Array_Index.level]) < level_Lower_Limit_Input_Box_Element.value || Number(table_Body_Array[i][column_Name_To_Array_Index.level]) > level_Upper_Limit_Input_Box_Element.value
+						|| Number(table_Body_Array[i][column_Name_To_Array_Index.experience]) < experience_Lower_Limit_Input_Box_Element.value || Number(table_Body_Array[i][column_Name_To_Array_Index.experience]) > experience_Upper_Limit_Input_Box_Element.value
+						|| Number(table_Body_Array[i][column_Name_To_Array_Index.time]) < time_Lower_Limit_Input_Box_Element.value || Number(table_Body_Array[i][column_Name_To_Array_Index.time]) > time_Upper_Limit_Input_Box_Element.value
+						|| Number(table_Body_Array[i][column_Name_To_Array_Index.favor]) < favor_Lower_Limit_Input_Box_Element.value || Number(table_Body_Array[i][column_Name_To_Array_Index.favor]) > favor_Upper_Limit_Input_Box_Element.value
 					)
 					{
 						table_Body_Element.children[i].style.display = "none";
@@ -148,27 +358,38 @@
 						continue;
 					}
 
-					if(((Number(table_Body_Array[i][2]) * experience_Weight_Input_Box_Element.value) + (Number(table_Body_Array[i][4]) * favor_Weight_Input_Box_Element.value) / Number(table_Body_Array[i][3])) < weighted_Experience_And_Favor_Per_Time_Lower_Limit_Input_Box_Element.value)
+					if(((Number(table_Body_Array[i][column_Name_To_Array_Index.experience]) * experience_Weight_Input_Box_Element.value) + (Number(table_Body_Array[i][column_Name_To_Array_Index.favor]) * favor_Weight_Input_Box_Element.value) / Number(table_Body_Array[i][column_Name_To_Array_Index.time])) < weighted_Experience_And_Favor_Per_Time_Lower_Limit_Input_Box_Element.value)
 					{
 						table_Body_Element.children[i].style.display = "none";
 						number_Of_Items_Filtered = number_Of_Items_Filtered + 1;
 						continue;
 					}
 
-					var contains_Phrases_Array = contains_Phrases_Input_Box_Element.value.split("  ");
-					if(contains_Phrases_Array.length === 1 && contains_Phrases_Array[0] === "")
+					if(filter_Completed_Checkbox_Element.checked === true)
 					{
-						contains_Phrases_Array = [];
+						if(table_Body_Array[i][column_Name_To_Array_Index.completed] === "<input type=\"checkbox\" checked=\"\">")
+						{
+							table_Body_Element.children[i].style.display = "none";
+							number_Of_Items_Filtered = number_Of_Items_Filtered + 1;
+							continue;
+						}
 					}
-					for(j = 0; j < contains_Phrases_Array.length; j++)
+
+					if(adventure_Pack_Name_To_Checkbox_Element_Map.has(table_Body_Array[i][column_Name_To_Array_Index.adventure_Pack]) && adventure_Pack_Name_To_Checkbox_Element_Map.get(table_Body_Array[i][column_Name_To_Array_Index.adventure_Pack]).checked === true)	//Check if the Adventure Pack entry matches a checked Adventure Pack filter checkbox
+					{
+						table_Body_Element.children[i].style.display = "none";
+						number_Of_Items_Filtered = number_Of_Items_Filtered + 1;
+					}
+
+					for(let j = 0; j < contains_Phrases_Array.length; j++)
 					{
 						if
 						(
-							table_Body_Element.children[i].children[1].textContent.toLowerCase().includes(contains_Phrases_Array[j].toLowerCase()) === false	//Uses the table itself rather than array to avoid matching hidden URLs
-							&& table_Body_Array[i][5].toLowerCase().includes(contains_Phrases_Array[j].toLowerCase()) === false
-							&& table_Body_Array[i][6].toLowerCase().includes(contains_Phrases_Array[j].toLowerCase()) === false
-							&& table_Body_Array[i][7].toLowerCase().includes(contains_Phrases_Array[j].toLowerCase()) === false
-							&& table_Body_Array[i][8].toLowerCase().includes(contains_Phrases_Array[j].toLowerCase()) === false
+							table_Body_Element.children[i].children[column_Name_To_Array_Index.quest_Name].textContent.toLowerCase().includes(contains_Phrases_Array[j].toLowerCase()) === false	//Uses the table itself rather than array to avoid matching hidden URLs
+							&& table_Body_Array[i][column_Name_To_Array_Index.location].toLowerCase().includes(contains_Phrases_Array[j].toLowerCase()) === false
+							&& table_Body_Array[i][column_Name_To_Array_Index.adventure_Pack].toLowerCase().includes(contains_Phrases_Array[j].toLowerCase()) === false
+							&& table_Body_Array[i][column_Name_To_Array_Index.damage_Reduction_Information].toLowerCase().includes(contains_Phrases_Array[j].toLowerCase()) === false
+							&& table_Body_Array[i][column_Name_To_Array_Index.notes].toLowerCase().includes(contains_Phrases_Array[j].toLowerCase()) === false
 						)
 						{
 							table_Body_Element.children[i].style.display = "none";
@@ -181,20 +402,15 @@
 						continue;
 					}
 
-					var does_Not_Contain_Phrases_Array = does_Not_Contain_Phrases_Input_Box_Element.value.split("  ");
-					if(does_Not_Contain_Phrases_Array.length === 1 && does_Not_Contain_Phrases_Array[0] === "")
-					{
-						does_Not_Contain_Phrases_Array = [];
-					}
-					for(j = 0; j < does_Not_Contain_Phrases_Array.length; j++)
+					for(let j = 0; j < does_Not_Contain_Phrases_Array.length; j++)
 					{
 						if
 						(
-							table_Body_Element.children[i].children[1].textContent.toLowerCase().includes(does_Not_Contain_Phrases_Array[j].toLowerCase()) === true	//Uses the table itself rather than array to avoid matching hidden URLs
-							|| table_Body_Array[i][5].toLowerCase().includes(does_Not_Contain_Phrases_Array[j].toLowerCase()) === true
-							|| table_Body_Array[i][6].toLowerCase().includes(does_Not_Contain_Phrases_Array[j].toLowerCase()) === true
-							|| table_Body_Array[i][7].toLowerCase().includes(does_Not_Contain_Phrases_Array[j].toLowerCase()) === true
-							|| table_Body_Array[i][8].toLowerCase().includes(does_Not_Contain_Phrases_Array[j].toLowerCase()) === true
+							table_Body_Element.children[i].children[column_Name_To_Array_Index.quest_Name].textContent.toLowerCase().includes(does_Not_Contain_Phrases_Array[j].toLowerCase()) === true	//Uses the table itself rather than array to avoid matching hidden URLs
+							|| table_Body_Array[i][column_Name_To_Array_Index.location].toLowerCase().includes(does_Not_Contain_Phrases_Array[j].toLowerCase()) === true
+							|| table_Body_Array[i][column_Name_To_Array_Index.adventure_Pack].toLowerCase().includes(does_Not_Contain_Phrases_Array[j].toLowerCase()) === true
+							|| table_Body_Array[i][column_Name_To_Array_Index.damage_Reduction_Information].toLowerCase().includes(does_Not_Contain_Phrases_Array[j].toLowerCase()) === true
+							|| table_Body_Array[i][column_Name_To_Array_Index.notes].toLowerCase().includes(does_Not_Contain_Phrases_Array[j].toLowerCase()) === true
 						)
 						{
 							table_Body_Element.children[i].style.display = "none";
@@ -209,7 +425,7 @@
 					}
 					else
 					{
-						table_Body_Element.children[i].style.backgroundColor = "rgba(235, 235, 235, 1.0)";
+						table_Body_Element.children[i].style.backgroundColor = "rgba(225, 225, 225, 1.0)";
 					}
 				}
 				number_Of_Items_Sorted_Element.textContent = number_Of_Items_Filtered + " Items Filtered";
@@ -223,18 +439,23 @@
 				{
 					table_Body_Element.removeChild(table_Body_Element.lastChild);
 				}
-				for(i = 0; i < table_Body_Array.length; i++)	//Fills the table with rows and data
+				for(let i = 0; i < table_Body_Array.length; i++)	//Fills the table with rows and data
 				{
-					var new_Table_Row = document.createElement("TR");
-					for(j = 0; j < sort_Selection_Type_Array.length; j++)
+					let new_Table_Row = document.createElement("TR");
+					for(const property in table_Body_Array[i])
 					{
-						var new_Table_Data = document.createElement("TD");
-						new_Table_Data.innerHTML = table_Body_Array[i][j];
-						if(j === 2 || j === 3 || j === 7 || j === 8)
+						let new_Table_Data = document.createElement("TD");
+						new_Table_Data.innerHTML = table_Body_Array[i][property];
+						if(property === "experience" || property === "time" || property === "damage_Reduction_Information" || property === "notes")
 						{
 							new_Table_Data.setAttribute("contenteditable", "true");
 						}
-						new_Table_Data.setAttribute("oninput", "table_Data_Changed(" + i + ", " + j + ")");
+						else if(property === "quest_Name")
+						{
+							let quest_Name_Without_Hyperlink = table_Body_Array[i][property][table_Body_Array[i][property].length - 1] === ">" ? table_Body_Array[i][property].split(">")[1].split("<")[0] : table_Body_Array[i][property];
+							quest_Name_To_Table_Index_Map.set(quest_Name_Without_Hyperlink, i);
+						}
+						new_Table_Data.setAttribute("oninput", "table_Data_Changed(" + i + ", " + column_Name_To_Array_Index[property] + ")");
 						new_Table_Row.appendChild(new_Table_Data);
 					}
 					table_Body_Element.appendChild(new_Table_Row);
@@ -244,20 +465,9 @@
 
 			function numerical_Sort(item_1, item_2)
 			{
-				if(Number(item_1[current_Sort_Selection]) < Number(item_2[current_Sort_Selection]))
+				if(Number(item_1[index_To_Column_Name_Array[current_Sort_Selection]]) < Number(item_2[index_To_Column_Name_Array[current_Sort_Selection]]))
 				{
 					return -1 * sort_Selection_Ascending_State_Array[current_Sort_Selection];
-				}
-				else if(Number(item_1[current_Sort_Selection]) === Number(item_2[current_Sort_Selection]))
-				{
-					if(table_Data_Array_Copy.indexOf(item_1) < table_Data_Array_Copy.indexOf(item_2))
-					{
-						return -1;
-					}
-					else
-					{
-						return 1;
-					}
 				}
 				else
 				{
@@ -265,24 +475,13 @@
 				}
 			}
 
-			function quest_Name_Sort(item_1, item_2)	//Quest names should not contain the > character side from the the ones present in <a>Name</a> and should always be closed properly if it has a hidden URL
+			function quest_Name_Sort(item_1, item_2)	//Quest names should not contain the > character aside from the the ones present in <a>Name</a> and should always be closed properly if it has a hidden URL
 			{
-				var item_1_Quest_Name = item_1[current_Sort_Selection][item_1[current_Sort_Selection].length - 1] === ">" ? item_1[current_Sort_Selection].split(">")[1].split("<")[0] : item_1[current_Sort_Selection];
-				var item_2_Quest_Name = item_2[current_Sort_Selection][item_2[current_Sort_Selection].length - 1] === ">" ? item_2[current_Sort_Selection].split(">")[1].split("<")[0] : item_2[current_Sort_Selection];
+				let item_1_Quest_Name = item_1.quest_Name[item_1.quest_Name.length - 1] === ">" ? item_1.quest_Name.split(">")[1].split("<")[0] : item_1.quest_Name;
+				let item_2_Quest_Name = item_2.quest_Name[item_2.quest_Name.length - 1] === ">" ? item_2.quest_Name.split(">")[1].split("<")[0] : item_2.quest_Name;
 				if(item_1_Quest_Name < item_2_Quest_Name)
 				{
 					return -1 * sort_Selection_Ascending_State_Array[current_Sort_Selection];
-				}
-				else if(item_1_Quest_Name === item_2_Quest_Name)	//Shouldn't occur, but left just in case someone messes up the list
-				{
-					if(table_Data_Array_Copy.indexOf(item_1) < table_Data_Array_Copy.indexOf(item_2))
-					{
-						return -1;
-					}
-					else
-					{
-						return 1;
-					}
 				}
 				else
 				{
@@ -292,24 +491,26 @@
 
 			function alphabetical_Sort(item_1, item_2)
 			{
-				if(item_1[current_Sort_Selection] < item_2[current_Sort_Selection])
+				if(item_1[index_To_Column_Name_Array[current_Sort_Selection]] < item_2[index_To_Column_Name_Array[current_Sort_Selection]])
 				{
 					return -1 * sort_Selection_Ascending_State_Array[current_Sort_Selection];
-				}
-				else if(item_1[current_Sort_Selection] === item_2[current_Sort_Selection])
-				{
-					if(table_Data_Array_Copy.indexOf(item_1) < table_Data_Array_Copy.indexOf(item_2))
-					{
-						return -1;
-					}
-					else
-					{
-						return 1;
-					}
 				}
 				else
 				{
 					return 1 * sort_Selection_Ascending_State_Array[current_Sort_Selection];
+				}
+			}
+
+			function update_Table_Header_View(header_Index)
+			{
+				table_Header_Row_Element.children[header_Index].classList.remove("ascending_Column", "descending_Column");
+				if(sort_Selection_Ascending_State_Array[header_Index] === 1)
+				{
+					table_Header_Row_Element.children[header_Index].classList.add("ascending_Column");
+				}
+				else
+				{
+					table_Header_Row_Element.children[header_Index].classList.add("descending_Column");
 				}
 			}
 
@@ -318,14 +519,11 @@
 				if(sort_Selection === current_Sort_Selection)	//Flip from ascending to/from descending if the user clicks on the already selected category to sort
 				{
 					sort_Selection_Ascending_State_Array[sort_Selection] = sort_Selection_Ascending_State_Array[sort_Selection] * -1;
+					update_Table_Header_View(sort_Selection);
 				}
+				table_Header_Row_Element.children[current_Sort_Selection].classList.remove("last_Sorted_Header");
 				current_Sort_Selection = sort_Selection;
-
-				table_Data_Array_Copy = [];
-				for(i = 0; i < table_Body_Array.length; i++)
-				{
-					table_Data_Array_Copy[i] = table_Body_Array[i];
-				}
+				table_Header_Row_Element.children[current_Sort_Selection].classList.add("last_Sorted_Header");
 
 				if(sort_Selection_Type_Array[current_Sort_Selection] === "Numerical")	//Numerical Sort
 				{
@@ -335,7 +533,7 @@
 				{
 					table_Body_Array.sort(quest_Name_Sort);
 				}
-				else	//Regular Alphabetical
+				else	//Regular Alphabetical, also used for Checkboxes
 				{
 					table_Body_Array.sort(alphabetical_Sort);
 				}
@@ -346,125 +544,146 @@
 			function save_To_Local_Storage()
 			{
 				window.localStorage.setItem("table_Body_Data", JSON.stringify(table_Body_Array));
+
 				window.localStorage.setItem("table_Filter_Level_Lower_Limit", level_Lower_Limit_Input_Box_Element.value);
 				window.localStorage.setItem("table_Filter_Level_Upper_Limit", level_Upper_Limit_Input_Box_Element.value);
+
 				window.localStorage.setItem("table_Filter_Experience_Lower_Limit", experience_Lower_Limit_Input_Box_Element.value);
 				window.localStorage.setItem("table_Filter_Experience_Upper_Limit", experience_Upper_Limit_Input_Box_Element.value);
+
 				window.localStorage.setItem("table_Filter_Time_Lower_Limit", time_Lower_Limit_Input_Box_Element.value);
 				window.localStorage.setItem("table_Filter_Time_Upper_Limit", time_Upper_Limit_Input_Box_Element.value);
+
 				window.localStorage.setItem("table_Filter_Favor_Lower_Limit", favor_Lower_Limit_Input_Box_Element.value);
 				window.localStorage.setItem("table_Filter_Favor_Upper_Limit", favor_Upper_Limit_Input_Box_Element.value);
+
 				window.localStorage.setItem("table_Filter_Experience_Weight", experience_Weight_Input_Box_Element.value);
 				window.localStorage.setItem("table_Filter_Favor_Weight", favor_Weight_Input_Box_Element.value);
 				window.localStorage.setItem("table_Filter_Weighted_Experience_And_Favor_Per_Time_Lower_Limit_Input_Box", weighted_Experience_And_Favor_Per_Time_Lower_Limit_Input_Box_Element.value);
+
+				window.localStorage.setItem("filter_Completed_Checkbox", filter_Completed_Checkbox_Element.checked);
+
+				for(let map_Entry of adventure_Pack_Name_To_Checkbox_Element_Map)
+				{
+					window.localStorage.setItem(map_Entry[0] + " Filter Checkbox", map_Entry[1].checked);
+				}
+
 				window.localStorage.setItem("table_Filter_Contains_Phrases_Input_Box", contains_Phrases_Input_Box_Element.value);
 				window.localStorage.setItem("table_Filter_Does_Not_Contain_Phrases_Input_Box", does_Not_Contain_Phrases_Input_Box_Element.value);
+
+				window.localStorage.setItem("last_Sort_Selection_Ascending_State_Array", JSON.stringify(sort_Selection_Ascending_State_Array));
+				window.localStorage.setItem("last_Sort_Selection", current_Sort_Selection);
+
+				window.localStorage.setItem("character_Name_Input_Box_Element", character_Name_Input_Box_Element.value);
+				window.localStorage.setItem("server_Dropdown_Menu_Element", server_Dropdown_Menu_Element.value);
+				window.localStorage.setItem("autocomplete_Quests_On_Exit_Checkbox_Element", autocomplete_Quests_On_Exit_Checkbox_Element.checked);
+
 				window.onbeforeunload = null;
 			}
 
 			function delete_Local_Storage()
 			{
-				if(window.confirm("Click 'OK' to delete local storage. It is recommended to do so after updates and to save the text file to your device periodically."))
+				if(window.confirm("If local storage is empty, the program will use raw_Table_String.js to build the table the next time the page is loaded, and may be necessary for updates. It is recommended to keep your own copy of raw_Table_String.js as a back-up. Click 'OK' to delete local storage."))
 				{
 					window.localStorage.clear();
+					window.onbeforeunload = null;
 				}
 			}
 
-			function convert_Table_To_Raw_String()
+			function convert_Table_To_JSON()
 			{
-				var raw_Text_Tab_Length = 4;
-				var raw_Text_Table_Column_Tab_Lengths_Array = [2, 35, 1, 4, 2, 9, 8, 46, 0];
-				var number_Of_Extra_Characters_In_Row = 0;
-				var table_String = "//Level,Name,																																		Experience,	Time,	Favor,	Location,							Adventure Pack,					Damage Reduction Types,																																									Notes\r\nvar raw_Table_String = \r\n\"";
-				for(i = 0; i < table_Body_Element.children.length; i++)
+				let JSON_Table_String = "let JSON_Table = [\n";
+				for(let i = 0; i < table_Body_Element.children.length; i++)
 				{
-					for(j = 0; j < sort_Selection_Type_Array.length; j++)
+					JSON_Table_String = JSON_Table_String + "{\n";
+					for(let j = 0; j < sort_Selection_Type_Array.length; j++)
 					{
-						number_Of_Extra_Characters_In_Row = 0;
-						for(k = 0; k < table_Body_Element.children[i].children[j].innerHTML.length; k++)
+						JSON_Table_String = JSON_Table_String + index_To_Column_Name_Array[j] + ": ";
+						if(sort_Selection_Type_Array[j] === "Alphabetical" || sort_Selection_Type_Array[j] === "Quest Name" || sort_Selection_Type_Array[j] === "Checkbox")
 						{
-							if(table_Body_Element.children[i].children[j].innerHTML[k] === '\'' || table_Body_Element.children[i].children[j].innerHTML[k] === '\"')
+							JSON_Table_String = JSON_Table_String + "\"";
+							for(k = 0; k < table_Body_Element.children[i].children[j].innerHTML.length; k++)
 							{
-								table_String = table_String + '\\';
-								number_Of_Extra_Characters_In_Row = number_Of_Extra_Characters_In_Row + 1;
+								if(table_Body_Element.children[i].children[j].innerHTML[k] === '\'' || table_Body_Element.children[i].children[j].innerHTML[k] === '\"')
+								{
+									JSON_Table_String = JSON_Table_String + '\\';
+								}
+								JSON_Table_String = JSON_Table_String + table_Body_Element.children[i].children[j].innerHTML[k];
 							}
-							table_String = table_String + table_Body_Element.children[i].children[j].innerHTML[k];
+							JSON_Table_String = JSON_Table_String + "\"";
 						}
-						for(k = 0; k < Math.max(raw_Text_Table_Column_Tab_Lengths_Array[j] - ((table_Body_Element.children[i].children[j].innerHTML.length + number_Of_Extra_Characters_In_Row) / raw_Text_Tab_Length), raw_Text_Table_Column_Tab_Lengths_Array[j] === 0 ? 0 : 1); k++)
+						else if(sort_Selection_Type_Array[j] === "Numerical")
 						{
-							table_String = table_String + "\t";
+							for(k = 0; k < table_Body_Element.children[i].children[j].innerHTML.length; k++)
+							{
+								JSON_Table_String = JSON_Table_String + table_Body_Element.children[i].children[j].innerHTML[k];
+							}
+						}
+						if(j !== sort_Selection_Type_Array.length - 1)
+						{
+							JSON_Table_String = JSON_Table_String + ",\n";
+						}
+						else
+						{
+							JSON_Table_String = JSON_Table_String + "\n";
 						}
 					}
-					table_String = table_String + "\\n\\\r\n";
+					if(i !== table_Body_Element.children.length - 1)
+					{
+						JSON_Table_String = JSON_Table_String + "},\n";
+					}
+					else
+					{
+						JSON_Table_String = JSON_Table_String + "}\n";
+					}
 				}
-				table_String = table_String + "\";\r\n"
+				JSON_Table_String = JSON_Table_String + "];";
 
 				window.URL.revokeObjectURL(download_Raw_String_Link_Element.href);
-				var table_Blob = new Blob
+				let table_Blob = new Blob
 				(
-					[table_String],
+					[JSON_Table_String],
 					{
-						type: 'text/plain'
+						type: 'text/javascript'
 					}
 				);
 				download_Raw_String_Link_Element.href = window.URL.createObjectURL(table_Blob);
 			}
 
-			function convert_Raw_String_To_Table()
+			function table_Data_Changed(table_Row, table_Column)
 			{
-				//raw_Table_String is a global string available from raw_String_Table.js
-				var temporary_Table_Data_String = "";
-				var temporary_Table_Row_Array = [];
-				for(i = 0; i < raw_Table_String.length; i++)
+				if(table_Column === column_Name_To_Array_Index.completed)	//The HTML of Checkboxes doesn't update when checked, so this will force them to do so with the new value for both the array and displayed table
 				{
-					if(raw_Table_String[i] !== "\t" && raw_Table_String[i] !== "\n")
+					if(table_Body_Array[table_Row].completed === "<input type=\"checkbox\" checked=\"\">")
 					{
-						temporary_Table_Data_String = temporary_Table_Data_String + raw_Table_String[i];
-					}
-					else if(raw_Table_String[i] === "\t")
-					{
-						if(temporary_Table_Data_String.length != 0)
-						{
-							temporary_Table_Row_Array.push(temporary_Table_Data_String);
-						}
-						temporary_Table_Data_String = "";
+						table_Body_Array[table_Row].completed = "<input type=\"checkbox\">";
+						table_Body_Element.children[table_Row].children[column_Name_To_Array_Index.completed].innerHTML = "<input type=\"checkbox\">";
 					}
 					else
 					{
-						if(temporary_Table_Data_String.length != 0)
-						{
-							temporary_Table_Row_Array.push(temporary_Table_Data_String);
-						}
-						while(temporary_Table_Row_Array.length < sort_Selection_Type_Array.length)
-						{
-							temporary_Table_Row_Array.push("");
-						}
-						table_Body_Array.push(temporary_Table_Row_Array);
-						temporary_Table_Row_Array = [];
-						temporary_Table_Data_String = "";
+						table_Body_Array[table_Row].completed = "<input type=\"checkbox\" checked=\"\">";
+						table_Body_Element.children[table_Row].children[column_Name_To_Array_Index.completed].innerHTML = "<input type=\"checkbox\" checked=\"\">";
 					}
-				}
-			}
-
-			var exit_Warning_Function = function() {return true;};	//Simple function to trigger the page navigation confirmation event
-			function table_Data_Changed(table_Row, table_Column)
-			{
-				table_Body_Array[table_Row][table_Column] = table_Body_Element.children[table_Row].children[table_Column].textContent;
-				filter_Table();
-				window.onbeforeunload = exit_Warning_Function;	//Sets a warning if the user navigates away after making changes, warning is removed when local storage is saved
-			}
-
-			function toggle_Filters_Section_Visibility()
-			{
-				if(filters_Section_Element.style.display === "block")
-				{
-					filters_Section_Toggle_Button_Element.textContent = "Show Filters";
-					filters_Section_Element.style.display = "none";
 				}
 				else
 				{
-					filters_Section_Toggle_Button_Element.textContent = "Hide Filters";
-					filters_Section_Element.style.display = "block";
+					table_Body_Array[table_Row][index_To_Column_Name_Array[table_Column]] = table_Body_Element.children[table_Row].children[table_Column].textContent;
+				}
+				filter_Table();
+				window.onbeforeunload = function(){return true};	//Sets a warning if the user navigates away after making changes, warning is removed when local storage is saved
+			}
+
+			function toggle_Visibility(triggering_Button, toggled_Element_ID_String, button_String)
+			{
+				if(document.getElementById(toggled_Element_ID_String).style.display === "block")
+				{
+					triggering_Button.textContent = "Show " + button_String;
+					document.getElementById(toggled_Element_ID_String).style.display = "none";
+				}
+				else
+				{
+					triggering_Button.textContent = "Hide " + button_String;
+					document.getElementById(toggled_Element_ID_String).style.display = "block";
 				}
 			}
 
@@ -481,34 +700,185 @@
 				experience_Weight_Input_Box_Element.value = experience_Weight_Input_Box_Element.getAttribute("value");
 				favor_Weight_Input_Box_Element.value = favor_Weight_Input_Box_Element.getAttribute("value");
 				weighted_Experience_And_Favor_Per_Time_Lower_Limit_Input_Box_Element.value = weighted_Experience_And_Favor_Per_Time_Lower_Limit_Input_Box_Element.getAttribute("value");
+				filter_Completed_Checkbox_Element.checked = false;
+
+				for(let map_Entry of adventure_Pack_Name_To_Checkbox_Element_Map)
+				{
+					map_Entry[1].checked = false;	//map_Entry[1] is the checkbox element that is being set to false
+				}
+
 				contains_Phrases_Input_Box_Element.value = contains_Phrases_Input_Box_Element.getAttribute("value");
 				does_Not_Contain_Phrases_Input_Box_Element.value = does_Not_Contain_Phrases_Input_Box_Element.getAttribute("value");
 				filter_Table();
 			}
 
+			let location_Retrieval_Interval_ID = "";
 
-			if(window.localStorage.getItem("table_Body_Data") === null)
+			function disable_Location_Retrieval(error_Message)
 			{
-				convert_Raw_String_To_Table();
+				autocomplete_Quests_On_Exit_Checkbox_Element.checked = false;
+				autocomplete_Quests_Error_Message_Element.innerHTML = error_Message;
+				clearInterval(location_Retrieval_Interval_ID);
+				location_Retrieval_Interval_ID = "";
 			}
-			else
+
+			function toggle_Location_Retrieval()
+			{
+				if(location_Retrieval_Interval_ID === "")
+				{
+					autocomplete_Quests_Error_Message_Element.innerHTML = "";
+					location_Retrieval_Interval_ID = setInterval(retrieve_Character_Location, 4000);
+					retrieve_Character_Location();
+				}
+				else
+				{
+					disable_Location_Retrieval("");
+				}
+			}
+
+			let last_Location_ID_Entered = "";
+			let last_Quest_Entered_String = "";
+			let last_Quest_Time_Entered_String = "";
+			let last_Quest_Time_In_Minutes = 0;
+			let current_Character_Level = 0;
+			let quest_Completion_Order = 1;
+			let retrieve_Character_Location_Error_Counter = 0;
+			async function retrieve_Character_Location()
+			{
+				if(character_Name_Input_Box_Element.value === "")
+				{
+					disable_Location_Retrieval("Character name must be at least one character, location retrieval aborted.");
+				}
+				else
+				{
+					const url = "https://api.ddoaudit.com/v1/characters/" + server_Dropdown_Menu_Element.value + "/" + character_Name_Input_Box_Element.value;
+					try
+					{
+						const response = await fetch(url);
+						if (!response.ok)
+						{
+							throw new Error(response.status);
+						}
+						const result = await response.json();
+						if(last_Location_ID_Entered !== result.data.location_id)
+						{
+							if(last_Quest_Time_Entered_String !== "" && last_Quest_Entered_String !== "")
+							{
+								last_Completed_Quest_Name_Element.innerHTML = last_Quest_Entered_String;
+								last_Quest_Time_In_Minutes = ((new Date(result.data.last_update) - new Date(last_Quest_Time_Entered_String)) / 60000).toFixed(3);
+								last_Completed_Quest_Duration_Element.innerHTML = last_Quest_Time_In_Minutes;
+								let row_Index = quest_Name_To_Table_Index_Map.get(last_Quest_Entered_String);
+								if(table_Body_Array[row_Index].completed === "<input type=\"checkbox\">")
+								{
+									table_Data_Changed(row_Index, column_Name_To_Array_Index.completed);
+								}
+								if(Number(table_Body_Array[row_Index].time) > last_Quest_Time_In_Minutes)
+								{
+									table_Body_Element.children[row_Index].children[column_Name_To_Array_Index.notes].textContent = table_Body_Element.children[row_Index].children[column_Name_To_Array_Index.notes].textContent + " Time changed from " + table_Body_Element.children[row_Index].children[column_Name_To_Array_Index.time].textContent + " to " + last_Quest_Time_In_Minutes + ".";
+									table_Data_Changed(row_Index, column_Name_To_Array_Index.notes);
+									table_Body_Element.children[row_Index].children[column_Name_To_Array_Index.time].textContent = last_Quest_Time_In_Minutes;
+									table_Data_Changed(row_Index, column_Name_To_Array_Index.time);
+								}
+								table_Body_Element.children[row_Index].children[column_Name_To_Array_Index.notes].textContent = table_Body_Element.children[row_Index].children[column_Name_To_Array_Index.notes].textContent + " Completed at level " + current_Character_Level + ". Session order: " + quest_Completion_Order + ".";
+								table_Data_Changed(row_Index, column_Name_To_Array_Index.notes);
+								quest_Completion_Order = quest_Completion_Order + 1;
+								last_Quest_Time_Entered_String = "";
+								last_Quest_Entered_String = "";
+							}
+							if(DDO_Audit_Location_ID_To_Quest_Name_Map.get(result.data.location_id) !== undefined)
+							{
+								last_Quest_Entered_String = DDO_Audit_Location_ID_To_Quest_Name_Map.get(result.data.location_id);
+								current_Quest_Element.innerHTML = last_Quest_Entered_String;
+								last_Quest_Time_Entered_String = result.data.last_update;
+							}
+							else
+							{
+								current_Quest_Element.innerHTML = "None";
+							}
+							current_Location_Element.innerHTML = DDO_Audit_Location_ID_To_Area_Name_Map.get(result.data.location_id);
+						}
+						last_Location_ID_Entered = result.data.location_id;
+						current_Character_Level = result.data.total_level;
+						autocomplete_Quests_Error_Message_Element.innerHTML = "";
+						retrieve_Character_Location_Error_Counter = 0;
+						if(result.data.is_online === false)
+						{
+							disable_Location_Retrieval("Character is currently offline, location retrieval stopped.");
+						}
+					}
+					catch(DDO_Audit_Error_Response)
+					{
+						retrieve_Character_Location_Error_Counter = retrieve_Character_Location_Error_Counter + 1;
+						if(DDO_Audit_Error_Response.message === "404")
+						{
+							disable_Location_Retrieval("Unable to find the character \"" + character_Name_Input_Box_Element.value + "\" on the " + server_Dropdown_Menu_Element.value + " server. Please ensure both are correct.");
+						}
+						else if(retrieve_Character_Location_Error_Counter >= 3)
+						{
+							retrieve_Character_Location_Error_Counter = 0;
+							disable_Location_Retrieval("An error was encountered repeatedly, location retrieval stopped. DDO Audit may be down and real-time character tracking may be offline.");
+						}
+					}
+				}
+			}
+
+			if(window.localStorage.getItem("table_Body_Data") !== null)
 			{
 				table_Body_Array = JSON.parse(window.localStorage.getItem("table_Body_Data"));
+
 				level_Lower_Limit_Input_Box_Element.value = window.localStorage.getItem("table_Filter_Level_Lower_Limit");
 				level_Upper_Limit_Input_Box_Element.value = window.localStorage.getItem("table_Filter_Level_Upper_Limit");
+
 				experience_Lower_Limit_Input_Box_Element.value = window.localStorage.getItem("table_Filter_Experience_Lower_Limit");
 				experience_Upper_Limit_Input_Box_Element.value = window.localStorage.getItem("table_Filter_Experience_Upper_Limit");
+
 				time_Lower_Limit_Input_Box_Element.value = window.localStorage.getItem("table_Filter_Time_Lower_Limit");
 				time_Upper_Limit_Input_Box_Element.value = window.localStorage.getItem("table_Filter_Time_Upper_Limit");
+
 				favor_Lower_Limit_Input_Box_Element.value = window.localStorage.getItem("table_Filter_Favor_Lower_Limit");
 				favor_Upper_Limit_Input_Box_Element.value = window.localStorage.getItem("table_Filter_Favor_Upper_Limit");
+
 				experience_Weight_Input_Box_Element.value = window.localStorage.getItem("table_Filter_Experience_Weight");
 				favor_Weight_Input_Box_Element.value = window.localStorage.getItem("table_Filter_Favor_Weight");
 				weighted_Experience_And_Favor_Per_Time_Lower_Limit_Input_Box_Element.value = window.localStorage.getItem("table_Filter_Weighted_Experience_And_Favor_Per_Time_Lower_Limit_Input_Box");
+
+				if(window.localStorage.getItem("filter_Completed_Checkbox") === "true")	//Booleans are stored as text- default for all is false
+				{
+					filter_Completed_Checkbox_Element.checked = true;
+				}
+
+				for(let map_Entry of adventure_Pack_Name_To_Checkbox_Element_Map)
+				{
+					if(window.localStorage.getItem(map_Entry[0] + " Filter Checkbox") === "true")
+					{
+						map_Entry[1].checked = true;
+					}
+				}
+
 				contains_Phrases_Input_Box_Element.value = window.localStorage.getItem("table_Filter_Contains_Phrases_Input_Box");
 				does_Not_Contain_Phrases_Input_Box_Element.value = window.localStorage.getItem("table_Filter_Does_Not_Contain_Phrases_Input_Box");
+
+				sort_Selection_Ascending_State_Array = JSON.parse(window.localStorage.getItem("last_Sort_Selection_Ascending_State_Array"));
+				for(let i = 0; i < table_Header_Row_Element.children.length && sort_Selection_Ascending_State_Array.length === table_Header_Row_Element.children.length; i++)
+				{
+					update_Table_Header_View(i);
+				}
+
+				table_Header_Row_Element.children[current_Sort_Selection].classList.remove("last_Sorted_Header");
+				current_Sort_Selection = Number(window.localStorage.getItem("last_Sort_Selection"));
+				table_Header_Row_Element.children[current_Sort_Selection].classList.add("last_Sorted_Header");
+
+				character_Name_Input_Box_Element.value = window.localStorage.getItem("character_Name_Input_Box_Element");
+				server_Dropdown_Menu_Element.value = window.localStorage.getItem("server_Dropdown_Menu_Element");
+				if(window.localStorage.getItem("autocomplete_Quests_On_Exit_Checkbox_Element") === "true")
+				{
+					autocomplete_Quests_On_Exit_Checkbox_Element.checked = true;
+					toggle_Location_Retrieval();
+				}
 			}
 			update_Table();
 		</script>
+		<!--<script type = "text/javascript" src = "quest_Name_To_DDO_Audit_Location_ID_Map.js">--><!--Use when updating DDO Audit's Location Mapping. Creates a global variable quest_Name_To_DDO_Audit_Location_ID_Map for converting quest names to DDO Audit's Location IDs and logs some information to the console-->
+		<!--</script>-->
 	</body>
 </html>
