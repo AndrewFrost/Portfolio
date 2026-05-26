@@ -1,4 +1,5 @@
-let quest_Name_To_DDO_Audit_Location_ID_Map = new Map([
+//DDO Audit's v1/quests list pared down to the name and area_id and formatted to a map. Update when new content is released
+let adventure_Name_To_DDO_Audit_Location_ID_Map = new Map([
 ["Time Flies", 1879300861],
 ["Sorrowdusk Isle", 1879061486],
 ["The Final Draw", 1879300843],
@@ -656,17 +657,74 @@ let quest_Name_To_DDO_Audit_Location_ID_Map = new Map([
 ["Grand Theft Aureon", 1879283304]
 ]);
 
-let map_Array_String = "";	//Use when updating quest name mapping
+let map_Array_String = "";	//Use when updating adventure name mapping in DDO_Audit_Location_Id_To_Adventure_Name_Map.js
 for(let i = 0; i < table_Body_Array.length; i++)
 {
-//	console.log(table_Body_Element.children[i].children[column_Name_To_Array_Index.quest_Name].textContent);
-	if(quest_Name_To_DDO_Audit_Location_ID_Map.get(table_Body_Element.children[i].children[column_Name_To_Array_Index.quest_Name].textContent) !== undefined)
+//	console.log(table_Body_Array[i].adventure_Name);
+	if(adventure_Name_To_DDO_Audit_Location_ID_Map.get(table_Body_Array[i].adventure_Name) !== undefined)
 	{
-		map_Array_String = map_Array_String + "[" + quest_Name_To_DDO_Audit_Location_ID_Map.get(table_Body_Element.children[i].children[column_Name_To_Array_Index.quest_Name].textContent) + ", \"" + table_Body_Element.children[i].children[column_Name_To_Array_Index.quest_Name].textContent + "\"],\n";
+		if
+		(
+			table_Body_Array[i].available_Adventure_Tiers === "Heroic"
+			|| table_Body_Array[i].available_Adventure_Tiers === "Epic"
+			|| table_Body_Array[i].available_Adventure_Tiers === "Legendary"
+			|| table_Body_Array[i].available_Adventure_Tiers === "Heroic, Epic, Legendary"	//Eveningstar Challenges are currently the only ones with all three tiers available and are only listed once as legendary, but update if that changes
+			|| (table_Body_Array[i].available_Adventure_Tiers === "Heroic, Epic" && table_Body_Array[i].adventure_Tier === "Heroic")
+			|| (table_Body_Array[i].available_Adventure_Tiers === "Heroic, Legendary" && table_Body_Array[i].adventure_Tier === "Heroic")
+		)
+		{
+			map_Array_String = map_Array_String + "[" + adventure_Name_To_DDO_Audit_Location_ID_Map.get(table_Body_Array[i].adventure_Name) + ", \"" + table_Body_Array[i].adventure_Name + "\"],\n";
+		}
+		else
+		{
+			console.log(table_Body_Array[i].adventure_Tier + " " + table_Body_Array[i].adventure_Name + " was not included as it should map on a different difficulty");
+		}
 	}
 	else
 	{
-		console.log(table_Body_Element.children[i].children[column_Name_To_Array_Index.quest_Name].textContent);	//Quests that couldn't be found
+		console.log(table_Body_Array[i].adventure_Name + " did not have a location associated with it");	//Adventures that couldn't be found
 	}
 }
 console.log(map_Array_String);
+
+for(const key of adventure_Name_To_DDO_Audit_Location_ID_Map.keys())
+{
+	let number_Of_Associated_Adventures = 0;
+	if(adventure_Name_To_Table_Index_Map.get("Heroic " + key) !== undefined)
+	{
+		number_Of_Associated_Adventures++;
+	}
+	if(adventure_Name_To_Table_Index_Map.get("Epic " + key) !== undefined)
+	{
+		number_Of_Associated_Adventures++;
+	}
+	if(adventure_Name_To_Table_Index_Map.get("Legendary " + key) !== undefined)
+	{
+		number_Of_Associated_Adventures++;
+	}
+	if(number_Of_Associated_Adventures === 0)
+	{
+		console.log(key + " does not have any adventures associated with it");
+	}
+}
+
+for(const value of DDO_Audit_Location_ID_To_Adventure_Name_Map.values())
+{
+	let number_Of_Associated_Adventures = 0;
+	if(adventure_Name_To_Table_Index_Map.get("Heroic " + value) !== undefined)
+	{
+		number_Of_Associated_Adventures++;
+	}
+	if(adventure_Name_To_Table_Index_Map.get("Epic " + value) !== undefined)
+	{
+		number_Of_Associated_Adventures++;
+	}
+	if(adventure_Name_To_Table_Index_Map.get("Legendary " + value) !== undefined)
+	{
+		number_Of_Associated_Adventures++;
+	}
+	if(number_Of_Associated_Adventures === 0)
+	{
+		console.error(+ value + " does not have any adventures associated with it and is currently implemented into the DDO_Audit_Location_ID_To_Adventure_Name_Map. Autocompletion errors may exist if it is not removed.");
+	}
+}

@@ -1,3 +1,4 @@
+//DDO Audit's v1/areas list pared down to the id and name and formatted to a map. Update when new content is released
 let DDO_Audit_Location_ID_To_Area_Name_Map = new Map([
 [1879059422, "The Harbor - Indoors"],
 [1879059423, "House Phiarlan Enclave"],

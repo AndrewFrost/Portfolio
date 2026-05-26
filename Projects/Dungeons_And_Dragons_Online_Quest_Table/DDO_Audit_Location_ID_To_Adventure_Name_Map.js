@@ -1,4 +1,5 @@
-let DDO_Audit_Location_ID_To_Quest_Name_Map = new Map([
+//A mapping of DDO Audit location IDs that have at least one adventure associated with them. Use the map_Array_String generated in adventure_Name_To_DDO_Audit_Location_ID_Map.js to build this list
+let DDO_Audit_Location_ID_To_Adventure_Name_Map = new Map([
 [1879058768, "The Collaborator"],
 [1879059853, "Redemption"],
 [1879058789, "Sacrifices"],
