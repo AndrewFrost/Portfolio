@@ -3,11 +3,60 @@
 	<head>
 		<meta charset = "utf-8">
 		<style>
+			:root
+			{
+				--hovered_Lightness_Multiplier: 0.90;
+				--focused_Lightness_Multiplier: 0.85;
+				--active_Lightness_Multiplier: 1.15;
+
+				--collapse_Button_Base_Hue: 60;
+				--collapse_Button_Base_Saturation: 100%;
+				--collapse_Button_Base_Lightness: 50%;
+
+				--ascending_Column_Base_Hue: 221;
+				--ascending_Column_Base_Saturation: 100%;
+				--ascending_Column_Base_Lightness: 65%;
+				--descending_Column_Base_Hue: 26;
+				--descending_Column_Base_Saturation: 100%;
+				--descending_Column_Base_Lightness: 55%;
+				--last_Sorted_Column_Lightness_Multiplier: 0.75;
+			}
+
 			button
 			{
-				width: 160px;
-				margin-right: 10px;
+				width: 190px;
 				cursor: pointer;
+			}
+
+			.collapse_Toggle_Button
+			{
+				background-color: hsl(var(--collapse_Button_Base_Hue), var(--collapse_Button_Base_Saturation), var(--collapse_Button_Base_Lightness));
+			}
+
+			.collapse_Toggle_Button:hover
+			{
+				background-color: hsl(var(--collapse_Button_Base_Hue), var(--collapse_Button_Base_Saturation), calc(var(--collapse_Button_Base_Lightness) * var(--hovered_Lightness_Multiplier)));
+			}
+
+			.collapse_Toggle_Button:focus
+			{
+				background-color: hsl(var(--collapse_Button_Base_Hue), var(--collapse_Button_Base_Saturation), calc(var(--collapse_Button_Base_Lightness) * var(--focused_Lightness_Multiplier)));
+			}
+
+			.collapse_Toggle_Button:hover:focus
+			{
+				background-color: hsl(var(--collapse_Button_Base_Hue), var(--collapse_Button_Base_Saturation), calc(var(--collapse_Button_Base_Lightness) * var(--hovered_Lightness_Multiplier) * var(--focused_Lightness_Multiplier)));
+			}
+
+			.collapse_Toggle_Button:is(:active, #specificity_Increaser)	/*:is(x, #y) is used to increase the specificity to prioritize it over :hover:focus elements*/
+			{
+				background-color: hsl(var(--collapse_Button_Base_Hue), var(--collapse_Button_Base_Saturation), calc(var(--collapse_Button_Base_Lightness) * var(--active_Lightness_Multiplier)));
+			}
+
+			.invert_Group_Button
+			{
+				background-color: purple;
+				color: rgba(255, 255, 64, 1);
 			}
 
 			input[type="checkbox"]
@@ -23,67 +72,225 @@
 
 			table
 			{
-				border-collapse: collapse;
+				box-sizing: border-box;
+				border-spacing: 0;
 				border-bottom: 1px solid black;
 			}
 
-			th
+			table thead tr
 			{
+				top: 0;
+				margin: 0;
+				padding: 0;
 				border: 1px solid black;
-				cursor: pointer;
-				background-color: rgba(200, 200, 200, 1.0);
 			}
 
+			table thead th
+			{
+				position: sticky;
+				top: 0;
+				cursor: pointer;
+				border: 1px solid black;
+				max-width: 0;
+				overflow: hidden;
+				text-overflow: ellipsis;
+			}
+
+			table thead th:hover, table thead th:focus
+			{
+				overflow: visible;
+				z-index: 2;
+				outline: none;
+			}
+
+			table thead th:hover::after, table thead th:focus::after
+			{
+				content: attr(data-text_content);
+				position: absolute;
+				color: rgba(0, 0, 0, 0);
+				top: 0;
+				left: 0;
+				bottom: 0;
+				width: calc-size(auto, size + 2px);
+				min-width: 100%;
+				border-right: 2px solid black;
+				z-index: -1;
+				pointer-events: none;
+			}
+
+			table thead th:focus::after
+			{
+				border: 1px solid white;
+			}
+
+			.expandable_Element
+			{
+				display: none;
+				opacity: 0;
+				height: auto;
+				margin: 1px;
+				padding: 0 0 5px 0;
+				border-bottom: 2px inset rgb(0, 100, 0);
+				border-top: 2px inset rgb(0, 144, 0);
+				border-left: 2px inset rgb(0, 144, 0);
+				border-right: 2px inset rgb(0, 100, 0);
+				box-shadow: -2px -2px 2px black;
+				overflow: hidden;
+				transition:
+					opacity .2s,
+					display .08s allow-discrete;
+			}
+
+			.expanded_Element
+			{
+				display: block;
+				opacity: 1;
+				overflow: hidden;
+			}
+
+			@starting-style
+			{
+				.expanded_Element
+				{
+					opacity: 0;
+					display: block;
+				}
+			}
+
+			/* Ascending column variations */
 			.ascending_Column
 			{
-				background-color: rgba(100, 150, 255, .9);
+				background-color: hsl(var(--ascending_Column_Base_Hue), var(--ascending_Column_Base_Saturation), var(--ascending_Column_Base_Lightness));
 			}
 
+			.ascending_Column:hover, .ascending_Column:hover::after
+			{
+				background-color: hsl(var(--ascending_Column_Base_Hue), var(--ascending_Column_Base_Saturation), calc(var(--ascending_Column_Base_Lightness) * var(--hovered_Lightness_Multiplier)));
+			}
+
+			.ascending_Column:focus, .ascending_Column:focus::after
+			{
+				background-color: hsl(var(--ascending_Column_Base_Hue), var(--ascending_Column_Base_Saturation), calc(var(--ascending_Column_Base_Lightness) * var(--focused_Lightness_Multiplier)));
+			}
+
+			table thead th.ascending_Column:hover:focus, table thead th.ascending_Column:hover:focus::after
+			{
+				background-color: hsl(var(--ascending_Column_Base_Hue), var(--ascending_Column_Base_Saturation), calc(var(--ascending_Column_Base_Lightness) * var(--hovered_Lightness_Multiplier) * var(--focused_Lightness_Multiplier)));
+			}
+
+			table thead th.ascending_Column:is(:active, #specificity_Increaser), table thead th.ascending_Column:is(:active, #specificity_Increaser)::after	/*:is(x, #y) is used to increase the specificity to prioritize it over :hover:focus elements*/
+			{
+				background-color: hsl(var(--ascending_Column_Base_Hue), var(--ascending_Column_Base_Saturation), calc(var(--ascending_Column_Base_Lightness) * var(--active_Lightness_Multiplier)));
+			}
+
+			/* Descending column variations */
 			.descending_Column
 			{
-				background-color: rgba(255, 140, 50, .9);
+				background-color: hsl(var(--descending_Column_Base_Hue), var(--descending_Column_Base_Saturation), var(--descending_Column_Base_Lightness));
 			}
 
-			.last_Sorted_Header.ascending_Column
+			.descending_Column:hover, .descending_Column:hover::after
 			{
-				background-color: rgba(50, 100, 200, 1.0);
+				background-color: hsl(var(--descending_Column_Base_Hue), var(--descending_Column_Base_Saturation), calc(var(--descending_Column_Base_Lightness) * var(--hovered_Lightness_Multiplier)));
 			}
 
-			.last_Sorted_Header.descending_Column
+			.descending_Column:focus, .descending_Column:focus::after
 			{
-				background-color: rgba(200, 100, 20, 1.0);
+				background-color: hsl(var(--descending_Column_Base_Hue), var(--descending_Column_Base_Saturation), calc(var(--descending_Column_Base_Lightness) * var(--focused_Lightness_Multiplier)));
 			}
 
-			tr
+			table thead th.descending_Column:hover:focus, table thead th.descending_Column:hover:focus::after
+			{
+				background-color: hsl(var(--descending_Column_Base_Hue), var(--descending_Column_Base_Saturation), calc(var(--descending_Column_Base_Lightness) * var(--hovered_Lightness_Multiplier) * var(--focused_Lightness_Multiplier)));
+			}
+
+			table thead th.descending_Column:is(:active, #specificity_Increaser), table thead th.descending_Column:is(:active, #specificity_Increaser)::after	/*:is(x, #y) is used to increase the specificity to prioritize it over :hover:focus elements*/
+			{
+				background-color: hsl(var(--descending_Column_Base_Hue), var(--descending_Column_Base_Saturation), calc(var(--descending_Column_Base_Lightness) * var(--active_Lightness_Multiplier)));
+			}
+
+			/* Last-sorted ascending column variations */
+			.last_Sorted_Header.ascending_Column, .last_Sorted_Header.ascending_Column::after
+			{
+				background-color: hsl(var(--ascending_Column_Base_Hue), var(--ascending_Column_Base_Saturation), calc(var(--ascending_Column_Base_Lightness) * var(--last_Sorted_Column_Lightness_Multiplier)));
+			}
+
+			.last_Sorted_Header.ascending_Column:hover, .last_Sorted_Header.ascending_Column:hover::after
+			{
+				background-color: hsl(var(--ascending_Column_Base_Hue), var(--ascending_Column_Base_Saturation), calc(var(--ascending_Column_Base_Lightness) * var(--last_Sorted_Column_Lightness_Multiplier) * var(--hovered_Lightness_Multiplier)));
+			}
+
+			.last_Sorted_Header.ascending_Column:focus, .last_Sorted_Header.ascending_Column:focus::after
+			{
+				background-color: hsl(var(--ascending_Column_Base_Hue), var(--ascending_Column_Base_Saturation), calc(var(--ascending_Column_Base_Lightness) * var(--last_Sorted_Column_Lightness_Multiplier) * var(--focused_Lightness_Multiplier)));
+			}
+
+			table thead th.last_Sorted_Header.ascending_Column:hover:focus, table thead th.last_Sorted_Header.ascending_Column:hover:focus::after
+			{
+				background-color: hsl(var(--ascending_Column_Base_Hue), var(--ascending_Column_Base_Saturation), calc(var(--ascending_Column_Base_Lightness) * var(--last_Sorted_Column_Lightness_Multiplier) * var(--hovered_Lightness_Multiplier) * var(--focused_Lightness_Multiplier)));
+			}
+
+			table thead th.last_Sorted_Header.ascending_Column:is(:active, #specificity_Increaser), table thead th.last_Sorted_Header.ascending_Column:is(:active, #specificity_Increaser)::after
+			{
+				background-color: hsl(var(--ascending_Column_Base_Hue), var(--ascending_Column_Base_Saturation), calc(var(--ascending_Column_Base_Lightness) * var(--last_Sorted_Column_Lightness_Multiplier) * var(--active_Lightness_Multiplier)));
+			}
+
+			/* Last-sorted descending column variations */
+			.last_Sorted_Header.descending_Column, .last_Sorted_Header.descending_Column::after
+			{
+				background-color: hsl(var(--descending_Column_Base_Hue), var(--descending_Column_Base_Saturation), calc(var(--descending_Column_Base_Lightness) * var(--last_Sorted_Column_Lightness_Multiplier)));
+			}
+
+			.last_Sorted_Header.descending_Column:hover, .last_Sorted_Header.descending_Column:hover::after
+			{
+				background-color: hsl(var(--descending_Column_Base_Hue), var(--descending_Column_Base_Saturation), calc(var(--descending_Column_Base_Lightness) * var(--last_Sorted_Column_Lightness_Multiplier) * var(--hovered_Lightness_Multiplier)));
+			}
+
+			.last_Sorted_Header.descending_Column:focus, .last_Sorted_Header.descending_Column:focus::after
+			{
+				background-color: hsl(var(--descending_Column_Base_Hue), var(--descending_Column_Base_Saturation), calc(var(--descending_Column_Base_Lightness) * var(--last_Sorted_Column_Lightness_Multiplier) * var(--focused_Lightness_Multiplier)));
+			}
+
+			table thead th.last_Sorted_Header.descending_Column:hover:focus, table thead th.last_Sorted_Header.descending_Column:hover:focus::after
+			{
+				background-color: hsl(var(--descending_Column_Base_Hue), var(--descending_Column_Base_Saturation), calc(var(--descending_Column_Base_Lightness) * var(--last_Sorted_Column_Lightness_Multiplier) * var(--hovered_Lightness_Multiplier) * var(--focused_Lightness_Multiplier)));
+			}
+
+			table thead th.last_Sorted_Header.descending_Column:is(:active, #specificity_Increaser), table thead th.last_Sorted_Header.descending_Column:is(:active, #specificity_Increaser)::after
+			{
+				background-color: hsl(var(--descending_Column_Base_Hue), var(--descending_Column_Base_Saturation), calc(var(--descending_Column_Base_Lightness) * var(--last_Sorted_Column_Lightness_Multiplier) * var(--active_Lightness_Multiplier)));
+			}
+
+			table tbody tr
 			{
 				height: 38px;
 				border-left: 1px solid black;
 				border-right: 1px solid black;
 			}
 
-			tbody tr:nth-child(odd of [style*="display: table-row"])
+			table tbody tr:nth-child(odd of [style*="display: table-row"])
 			{
 				background-color: rgba(255, 255, 255, 1.0);
 			}
 
-			tbody tr:nth-child(even of [style*="display: table-row"])
+			table tbody tr:nth-child(even of [style*="display: table-row"])
 			{
 				background-color: rgba(225, 225, 225, 1.0)
 			}
 
-			td
+			table tbody tr td
 			{
 				text-align: center;
 				border-left: 1px solid rgba(0, 0, 0, 0.05);
 				border-right: 1px solid rgba(0, 0, 0, 0.05);
 			}
 
-			td:first-child
+			table tbody tr td:first-child
 			{
 				border-left: 1px solid black;
 			}
 
-			td:last-child
+			table tbody tr td:last-child
 			{
 				border-right: 1px solid black;
 			}
@@ -130,6 +337,7 @@
 			{
 				width: 60px;
 				min-width: 60px;
+				max-width: 60px;
 			}
 
 			.numerical_Input_List_Column
@@ -218,6 +426,17 @@
 				line-height: 1rem;
 			}
 
+			#table_Options_Holder
+			{
+				width: 620px;
+			}
+
+			#saving_Buttons_Holder
+			{
+				display: flex;
+				justify-content: space-between;
+			}
+
 			#autocomplete_Adventures_Error_Message
 			{
 				background-color: rgba(128, 32, 32, 1);
@@ -226,203 +445,234 @@
 		</style>
 	</head>
 	<body>
-		<div style = "width: 800px"><button onclick = "save_To_Local_Storage()">Save to Local Storage</button><button onclick = "delete_Local_Storage()">Delete Local Storage</button><a id = "download_Raw_String_Link" download = "JSON_Table.js" draggable = "false"><button onclick = "convert_Table_To_JSON()">Save to computer</button></a><button onclick = "toggle_Visibility(this, 'filters_Section', 'Filters')" id = "filters_Section_Toggle_Button">Show Filters</button><span id = "number_Of_Items_Sorted"></span><br></div>
-		<div id = "filters_Section" style = "display: none; width: 680px"">
+		<button onclick = "toggle_Collapse_Target_Element(this, 'table_Options_Holder')" class = "collapse_Toggle_Button">Show Table Options</button><br>
+		<div id = "table_Options_Holder" class = "expandable_Element expanded_Element">
 			<br>
-			<span class = "filter_Title">Filter Completed: </span><input type = "checkbox" onchange = "filter_Table_Rows()" id = "filter_Completed_Checkbox"><br>
+			<div id = "saving_Buttons_Holder"><button onclick = "save_To_Local_Storage()">Save to Local Storage</button><button onclick = "delete_Local_Storage()">Delete Local Storage</button><a id = "download_JSON_Table_Link" download = "JSON_Table.js" draggable = "false"><button onclick = "download_JSON_Table()">Save to computer</button></a></div>
 			<br>
-			Adventure Types:<br>
-			<span class = "indented_Filter_Title">Standard: </span><input type = "checkbox" onchange = "filter_Table_Rows()" id = "filter_Standard_Checkbox"><br>
-			<span class = "indented_Filter_Title">Raid: </span><input type = "checkbox" onchange = "filter_Table_Rows()" id = "filter_Raid_Checkbox"><br>
-			<span class = "indented_Filter_Title">Solo Quest: </span><input type = "checkbox" onchange = "filter_Table_Rows()" id = "filter_Solo_Quest_Checkbox"><br>
-			<span class = "indented_Filter_Title">Reaper Unavailable: </span><input type = "checkbox" onchange = "filter_Table_Rows()" id = "filter_Reaper_Unavailable_Checkbox"><br>
-			<span class = "indented_Filter_Title">Challenge: </span><input type = "checkbox" onchange = "filter_Table_Rows()" id = "filter_Challenge_Checkbox"><br>
-			<br>
-			<span class = "filter_Title"><button onclick = "toggle_Visibility(this, 'adventure_Packs_Selection_Section', 'Adventure Packs')">Show Adventure Packs</button></span><br>
-			<div onchange = "filter_Table_Rows()" id = "adventure_Packs_Selection_Section" style = "display: none"><!--Update from the supporting code in generate_Adventure_Pack_Filters.js-->
-				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Guide_to_Free_to_Play">Free to Play</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "Free to Play"><br>
-				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Against_the_Slave_Lords">Against the Slave Lords</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "Against the Slave Lords"><br>
-				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Attack_on_Stormreach">Attack on Stormreach</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "Attack on Stormreach"><br>
-				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Delera's_Tomb">Delera's Tomb</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "Delera's Tomb"><br>
-				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Zawabi's_Refuge">Demon Sands</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "Demon Sands"><br>
-				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Devil_Assault">Devil Assault</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "Devil Assault"><br>
-				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Disciples_of_Rage">Disciples of Rage</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "Disciples of Rage"><br>
-				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Dragonblood_Prophecy">Dragonblood Prophecy</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "Dragonblood Prophecy"><br>
-				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Eveningstar_Challenge_Pack">Eveningstar Challenge Pack</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "Eveningstar Challenge Pack"><br>
-				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Fables_of_the_Feywild">Fables of the Feywild</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "Fables of the Feywild"><br>
-				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Fall_of_the_Night_Brigade">Fall of the Night Brigade</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "Fall of the Night Brigade"><br>
-				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Grip_of_the_Hidden_Hand">Grip of the Hidden Hand</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "Grip of the Hidden Hand"><br>
-				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Harbinger_of_Madness">Harbinger of Madness</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "Harbinger of Madness"><br>
-				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Heart_of_Madness">Heart of Madness</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "Heart of Madness"><br>
-				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Hunter_and_Hunted">Hunter and Hunted</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "Hunter and Hunted"><br>
-				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Keep_on_the_Borderlands">Keep on the Borderlands</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "Keep on the Borderlands"><br>
-				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Magic_of_Myth_Drannor">Magic of Myth Drannor</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "Magic of Myth Drannor"><br>
-				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Masterminds_of_Sharn">Masterminds of Sharn</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "Masterminds of Sharn"><br>
-				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Menace_of_the_Underdark_(adventure_pack)">Menace of the Underdark</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "Menace of the Underdark"><br>
-				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Mists_of_Ravenloft">Mists of Ravenloft</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "Mists of Ravenloft"><br>
-				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Peril_of_the_Planar_Eyes">Peril of the Planar Eyes</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "Peril of the Planar Eyes"><br>
-				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Phiarlan_Carnival">Phiarlan Carnival</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "Phiarlan Carnival"><br>
-				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Reign_of_Madness">Reign of Madness</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "Reign of Madness"><br>
-				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Ruins_of_Gianthold">Ruins of Gianthold</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "Ruins of Gianthold"><br>
-				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Secrets_of_the_Artificers">Secrets of the Artificers</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "Secrets of the Artificers"><br>
-				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Sentinels_of_Stormreach">Sentinels of Stormreach</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "Sentinels of Stormreach"><br>
-				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Shadow_Under_Thunderholme">Shadow Under Thunderholme</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "Shadow Under Thunderholme"><br>
-				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Shadowfell_Conspiracy">Shadowfell Conspiracy</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "Shadowfell Conspiracy"><br>
-				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Sinister_Secret_of_Saltmarsh">Sinister Secret of Saltmarsh</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "Sinister Secret of Saltmarsh"><br>
-				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Slice_of_Life">Slice of Life</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "Slice of Life"><br>
-				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Sorrowdusk_Isle">Sorrowdusk Isle</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "Sorrowdusk Isle"><br>
-				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Tangleroot_Gorge">Tangleroot Gorge</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "Tangleroot Gorge"><br>
-				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Tavern_Tales">Tavern Tales</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "Tavern Tales"><br>
-				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/The_Catacombs">The Catacombs</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "The Catacombs"><br>
-				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/The_Chill_of_Ravenloft">The Chill of Ravenloft</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "The Chill of Ravenloft"><br>
-				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/The_Devil's_Gambit">The Devil's Gambit</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "The Devil's Gambit"><br>
-				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/The_Devils_of_Shavarath">The Devils of Shavarath</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "The Devils of Shavarath"><br>
-				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/The_Dragons'_Hand">The Dragons' Hand</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "The Dragons' Hand"><br>
-				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/The_Dreaming_Dark">The Dreaming Dark</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "The Dreaming Dark"><br>
-				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/The_Druid's_Deep">The Druid's Deep</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "The Druid's Deep"><br>
-				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/The_Haunted_Halls_of_Eveningstar">The Haunted Halls of Eveningstar</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "The Haunted Halls of Eveningstar"><br>
-				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/The_High_Road_of_Shadows">The High Road of Shadows</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "The High Road of Shadows"><br>
-				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/The_Isle_of_Dread">The Isle of Dread</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "The Isle of Dread"><br>
-				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/The_Lost_Gatekeepers">The Lost Gatekeepers</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "The Lost Gatekeepers"><br>
-				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/The_Mines_of_Tethyamar">The Mines of Tethyamar</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "The Mines of Tethyamar"><br>
-				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Litany_of_the_Dead_Part_1">The Necropolis, Part 1</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "The Necropolis, Part 1"><br>
-				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Litany_of_the_Dead_Part_2">The Necropolis, Part 2</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "The Necropolis, Part 2"><br>
-				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Litany_of_the_Dead_Part_3">The Necropolis, Part 3</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "The Necropolis, Part 3"><br>
-				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Litany_of_the_Dead_Part_4">The Necropolis, Part 4</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "The Necropolis, Part 4"><br>
-				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/The_Path_of_Inspiration">The Path of Inspiration</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "The Path of Inspiration"><br>
-				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Reaver's_Refuge">The Reaver's Reach</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "The Reaver's Reach"><br>
-				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/The_Red_Fens">The Red Fens</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "The Red Fens"><br>
-				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/The_Restless_Isles">The Restless Isles</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "The Restless Isles"><br>
-				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Ruins_of_Threnal">The Ruins of Threnal</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "The Ruins of Threnal"><br>
-				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/The_Seal_of_Shan-To-Kor">The Seal of Shan-To-Kor</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "The Seal of Shan-To-Kor"><br>
-				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/The_Sharn_Syndicate">The Sharn Syndicate</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "The Sharn Syndicate"><br>
-				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/The_Soul_Splitter">The Soul Splitter</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "The Soul Splitter"><br>
-				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/The_Temple_of_Elemental_Evil">The Temple of Elemental Evil</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "The Temple of Elemental Evil"><br>
-				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/The_Vale_of_Twilight">The Vale of Twilight</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "The Vale of Twilight"><br>
-				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Vault_of_Night">The Vault of Night</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "The Vault of Night"><br>
-				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Three-Barrel_Cove">Three-Barrel Cove</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "Three-Barrel Cove"><br>
-				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Trials_of_the_Archons">Trials of the Archons</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "Trials of the Archons"><br>
-				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Vaults_of_the_Artificers">Vaults of the Artificers</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "Vaults of the Artificers"><br>
-				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Vecna_Unleashed">Vecna Unleashed</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "Vecna Unleashed"><br>
-				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/White_Plume_Mountain_and_Other_Tales">White Plume Mountain and Other Tales</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "White Plume Mountain and Other Tales"><br>
-			</div><br>
-			<span class = "filter_Title"><button onclick = "toggle_Visibility(this, 'sagas_Selection_Section', 'Saga Filters')">Show Saga Filters</button></span><br>
-			<div onchange = "filter_Table_Rows()" id = "sagas_Selection_Section" style = "display: none"><!--Update from the supporting code in generate_Adventure_Pack_Filters.js-->
-				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Sinister_Secret_of_Saltmarsh_(Heroic)">Sinister Secret of Saltmarsh (Heroic)</a>: </span><input type = "checkbox" class = "saga_Checkbox" value = "Sinister Secret of Saltmarsh (Heroic)"><br>
-				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/The_Pirates_of_the_Thunder_Sea_(Heroic)">The Pirates of the Thunder Sea (Heroic)</a>: </span><input type = "checkbox" class = "saga_Checkbox" value = "The Pirates of the Thunder Sea (Heroic)"><br>
-				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Fables_of_the_Feywild_(Heroic)">Fables of the Feywild (Heroic)</a>: </span><input type = "checkbox" class = "saga_Checkbox" value = "Fables of the Feywild (Heroic)"><br>
-				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Isle_of_Dread_(Heroic)">Isle of Dread (Heroic)</a>: </span><input type = "checkbox" class = "saga_Checkbox" value = "Isle of Dread (Heroic)"><br>
-				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/The_Chill_of_Ravenloft_(Heroic)">The Chill of Ravenloft (Heroic)</a>: </span><input type = "checkbox" class = "saga_Checkbox" value = "The Chill of Ravenloft (Heroic)"><br>
-				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Mists_of_Ravenloft_(Heroic)">Mists of Ravenloft (Heroic)</a>: </span><input type = "checkbox" class = "saga_Checkbox" value = "Mists of Ravenloft (Heroic)"><br>
-				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Magic_of_Myth_Drannor_(Heroic)">Magic of Myth Drannor (Heroic)</a>: </span><input type = "checkbox" class = "saga_Checkbox" value = "Magic of Myth Drannor (Heroic)"><br>
-				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/In_the_Wastes_of_Gianthold_(Heroic)">In the Wastes of Gianthold (Heroic)</a>: </span><input type = "checkbox" class = "saga_Checkbox" value = "In the Wastes of Gianthold (Heroic)"><br>
-				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Perils_of_Cormyr_(Heroic)">Perils of Cormyr (Heroic)</a>: </span><input type = "checkbox" class = "saga_Checkbox" value = "Perils of Cormyr (Heroic)"><br>
-				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Masterminds_of_Sharn_(Heroic)">Masterminds of Sharn (Heroic)</a>: </span><input type = "checkbox" class = "saga_Checkbox" value = "Masterminds of Sharn (Heroic)"><br>
-				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Cogs_Explorer_Dungeons_(Heroic)">Cogs Explorer Dungeons (Heroic)</a>: </span><input type = "checkbox" class = "saga_Checkbox" value = "Cogs Explorer Dungeons (Heroic)"><br>
-				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Honor_of_the_Huntsilvers_(Heroic)">Honor of the Huntsilvers (Heroic)</a>: </span><input type = "checkbox" class = "saga_Checkbox" value = "Honor of the Huntsilvers (Heroic)"><br>
-				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Vecna_Unleashed_(Heroic)">Vecna Unleashed (Heroic)</a>: </span><input type = "checkbox" class = "saga_Checkbox" value = "Vecna Unleashed (Heroic)"><br>
-				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/The_Pirates_of_the_Thunder_Sea_(Epic)">The Pirates of the Thunder Sea (Epic)</a>: </span><input type = "checkbox" class = "saga_Checkbox" value = "The Pirates of the Thunder Sea (Epic)"><br>
-				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Perils_of_Cormyr_(Epic)">Perils of Cormyr (Epic)</a>: </span><input type = "checkbox" class = "saga_Checkbox" value = "Perils of Cormyr (Epic)"><br>
-				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Menace_of_the_Underdark_(Epic)">Menace of the Underdark (Epic)</a>: </span><input type = "checkbox" class = "saga_Checkbox" value = "Menace of the Underdark (Epic)"><br>
-				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/The_Planeswalker's_Path_(Epic)">The Planes-walker's Path (Epic)</a>: </span><input type = "checkbox" class = "saga_Checkbox" value = "The Planes-walker's Path (Epic)"><br>
-				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/The_End_of_Eberron_(Epic)">The End of Eberron (Epic)</a>: </span><input type = "checkbox" class = "saga_Checkbox" value = "The End of Eberron (Epic)"><br>
-				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Honor_of_the_Huntsilvers_(Epic)">Honor of the Huntsilvers (Epic)</a>: </span><input type = "checkbox" class = "saga_Checkbox" value = "Honor of the Huntsilvers (Epic)"><br>
-				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/In_the_Wastes_of_Gianthold_(Epic)">In the Wastes of Gianthold (Epic)</a>: </span><input type = "checkbox" class = "saga_Checkbox" value = "In the Wastes of Gianthold (Epic)"><br>
-				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Mists_of_Ravenloft_(Epic)">Mists of Ravenloft (Legendary)</a>: </span><input type = "checkbox" class = "saga_Checkbox" value = "Mists of Ravenloft (Legendary)"><br>
-				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Masterminds_of_Sharn_(Legendary)">Masterminds of Sharn (Legendary)</a>: </span><input type = "checkbox" class = "saga_Checkbox" value = "Masterminds of Sharn (Legendary)"><br>
-				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Sinister_Secret_of_Saltmarsh_(Legendary)">Sinister Secret of Saltmarsh (Legendary)</a>: </span><input type = "checkbox" class = "saga_Checkbox" value = "Sinister Secret of Saltmarsh (Legendary)"><br>
-				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Cogs_Explorer_Dungeons_(Epic)">Cogs Explorer Dungeons (Legendary)</a>: </span><input type = "checkbox" class = "saga_Checkbox" value = "Cogs Explorer Dungeons (Legendary)"><br>
-				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Fables_of_the_Feywild_(Legendary)">Fables of the Feywild (Legendary)</a>: </span><input type = "checkbox" class = "saga_Checkbox" value = "Fables of the Feywild (Legendary)"><br>
-				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Isle_of_Dread_(Legendary)">Isle of Dread (Legendary)</a>: </span><input type = "checkbox" class = "saga_Checkbox" value = "Isle of Dread (Legendary)"><br>
-				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Vecna_Unleashed_(Legendary)">Vecna Unleashed (Legendary)</a>: </span><input type = "checkbox" class = "saga_Checkbox" value = "Vecna Unleashed (Legendary)"><br>
-				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Magic_of_Myth_Drannor_(Legendary)">Magic of Myth Drannor (Legendary)</a>: </span><input type = "checkbox" class = "saga_Checkbox" value = "Magic of Myth Drannor (Legendary)"><br>
-				<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/The_Chill_of_Ravenloft_(Legendary)">The Chill of Ravenloft (Legendary)</a>: </span><input type = "checkbox" class = "saga_Checkbox" value = "The Chill of Ravenloft (Legendary)"><br>
-			</div><br>
-			<span class = "filter_Title">Level: </span><input type = "number" onchange = "filter_Table_Rows()" class = "filter_Number_Input" id = "level_Lower_Limit_Input_Box" value = "1" min = "1"> to <input type = "number" onchange = "filter_Table_Rows()" class = "filter_Number_Input" id = "level_Upper_Limit_Input_Box" value = "37" min = "1"><br>
-			<span class = "filter_Title">Total Experience: </span><input type = "number" onchange = "filter_Table_Rows()" class = "filter_Number_Input" id = "total_Experience_Lower_Limit_Input_Box" value = "0" min = "0"> to <input type = "number" onchange = "filter_Table_Rows()" class = "filter_Number_Input" id = "total_Experience_Upper_Limit_Input_Box" value = "1000000" min = "0"><br>
-			<span class = "filter_Title">Total Time: </span><input type = "number" onchange = "filter_Table_Rows()" class = "filter_Number_Input" id = "time_Lower_Limit_Input_Box" value = "0" min = "0"> to <input type = "number" onchange = "filter_Table_Rows()" class = "filter_Number_Input" id = "time_Upper_Limit_Input_Box" value = "120" min = "0"><br>
-			<span class = "filter_Title">Available Favor: </span><input type = "number" onchange = "filter_Table_Rows()" class = "filter_Number_Input" id = "available_Favor_Lower_Limit_Input_Box" value = "0" min = "0"> to <input type = "number" onchange = "filter_Table_Rows()" class = "filter_Number_Input" id = "available_Favor_Upper_Limit_Input_Box" value = "42" min = "0"><br>
-			<span class = "filter_Title">Total Favor: </span><input type = "number" onchange = "filter_Table_Rows()" class = "filter_Number_Input" id = "total_Favor_Lower_Limit_Input_Box" value = "0" min = "0"> to <input type = "number" onchange = "filter_Table_Rows()" class = "filter_Number_Input" id = "total_Favor_Upper_Limit_Input_Box" value = "42" min = "0"><br>
-			<br>
-			Weight:<br>
-			<span class = "filter_Title">1 / Experience Weight: </span><input type = "number" value = 5000 step = "1000" onchange = "update_Table_Columns('total_Weight, total_Weight_Over_Time')" class = "filter_Number_Input" id = "experience_Weight_Input_Box"><br>
-			<span class = "filter_Title">1 / Reaper Experience Weight: </span><input type = "number" value = 500 step = "100" onchange = "update_Table_Columns('total_Weight, total_Weight_Over_Time')" class = "filter_Number_Input" id = "reaper_Experience_Weight_Input_Box"><br>
-			<span class = "filter_Title">1 / Favor Weight: </span><input type = "number" value = 4 step = "1" onchange = "update_Table_Columns('total_Weight, total_Weight_Over_Time')" class = "filter_Number_Input" id = "favor_Weight_Input_Box"><br>
-			<span class = "filter_Title">1 / Collectable Weight: </span><input type = "number" value = 7.5 step = ".5" onchange = "update_Table_Columns('total_Weight, total_Weight_Over_Time')" class = "filter_Number_Input" id = "collectable_Weight_Input_Box"><br>
-			<span class = "filter_Title">1 / Sentient Experience Weight: </span><input type = "number" value = 500 step = "100" onchange = "update_Table_Columns('total_Weight, total_Weight_Over_Time')" class = "filter_Number_Input" id = "sentient_Experience_Weight_Input_Box"><br>
-			<span class = "filter_Title">Reaper Fragment Weight: </span><input type = "number" value = 10 step = "1" onchange = "update_Table_Columns('total_Weight, total_Weight_Over_Time')" class = "filter_Number_Input" id = "reaper_Fragment_Weight_Input_Box"><br>
-			<span class = "filter_Title">Custom Weight Multiplier: </span><input type = "number" value = 1 step = ".1" onchange = "update_Table_Columns('total_Weight, total_Weight_Over_Time')" class = "filter_Number_Input" id = "custom_Weight_Multiplier_Input_Box"><br>
-			<span class = "filter_Title">Minimum Weight / Time: </span><input type = "number" value = 0 step = ".05" onchange = "filter_Table_Rows()" class = "filter_Number_Input" id = "weight_Over_Time_Lower_Limit_Input_Box"><br>
-			<br>
-			<span class = "filter_Title">Show only if contains phrases: </span><input type = "text" onchange = "filter_Table_Rows()" class = "filter_Text_Input" id = "contains_Phrases_Input_Box"><br>
-			<span class = "filter_Title">Show only if does not contain: </span><input type = "text" onchange = "filter_Table_Rows()" class = "filter_Text_Input" id = "does_Not_Contain_Phrases_Input_Box"><br>
-			<br>
-			<span class = "filter_Title"><button onclick = "toggle_Visibility(this, 'column_Display_Options', 'Column Options')">Show Column Options</button></span><br>
-			<div id = "column_Display_Options" style = "display: none">
-				<span class = "filter_Title">Completed: </span><input type = "checkbox" onchange = "set_Column_Visibility(0, this.checked)" id = "filter_Column_Completed" checked><br>
-				<span class = "filter_Title">Level: </span><input type = "checkbox" onchange = "set_Column_Visibility(1, this.checked)" id = "filter_Column_Level" checked><br>
-				<span class = "filter_Title">Adventure Tier: </span><input type = "checkbox" onchange = "set_Column_Visibility(2, this.checked)" id = "filter_Column_Adventure_Tier"><br>
-				<span class = "filter_Title">Available Adventure Tiers: </span><input type = "checkbox" onchange = "set_Column_Visibility(3, this.checked)" id = "filter_Column_Available_Adventure_Tiers"><br>
-				<span class = "filter_Title">Adventure Name: </span><input type = "checkbox" onchange = "set_Column_Visibility(4, this.checked)" id = "filter_Column_Adventure_Name" checked><br>
-				<span class = "filter_Title">Adventure Link: </span><input type = "checkbox" onchange = "set_Column_Visibility(5, this.checked)" id = "filter_Column_Adventure_Link"><br>
-				<span class = "filter_Title">Adventure Type: </span><input type = "checkbox" onchange = "set_Column_Visibility(6, this.checked)" id = "filter_Column_Adventure_Type"><br>
-				<span class = "filter_Title">Adventure Length: </span><input type = "checkbox" onchange = "set_Column_Visibility(7, this.checked)" id = "filter_Column_Adventure_Length"><br>
-				<span class = "filter_Title">Location: </span><input type = "checkbox" onchange = "set_Column_Visibility(8, this.checked)" id = "filter_Column_Location" checked><br>
-				<span class = "filter_Title">Location Link: </span><input type = "checkbox" onchange = "set_Column_Visibility(9, this.checked)" id = "filter_Column_Location_Link"><br>
-				<span class = "filter_Title">Adventure Pack: </span><input type = "checkbox" onchange = "set_Column_Visibility(10, this.checked)" id = "filter_Column_Adventure_Pack" checked><br>
-				<span class = "filter_Title">Adventure Pack_Link: </span><input type = "checkbox" onchange = "set_Column_Visibility(11, this.checked)" id = "filter_Column_Adventure_Pack_Link"><br>
-				<span class = "filter_Title">Saga Contribution: </span><input type = "checkbox" onchange = "set_Column_Visibility(12, this.checked)" id = "filter_Column_Saga_Contribution" checked><br>
-				<span class = "filter_Title">Saga Link: </span><input type = "checkbox" onchange = "set_Column_Visibility(13, this.checked)" id = "filter_Column_Saga_Link"><br>
-				<span class = "filter_Title">Saga Experience: </span><input type = "checkbox" onchange = "set_Column_Visibility(14, this.checked)" id = "filter_Column_Saga_Experience"><br>
-				<span class = "filter_Title">Base Experience: </span><input type = "checkbox" onchange = "set_Column_Visibility(15, this.checked)" id = "filter_Column_Base_Experience"><br>
-				<span class = "filter_Title">Experience Modifiers: </span><input type = "checkbox" onchange = "set_Column_Visibility(16, this.checked)" id = "filter_Column_Experience_Modifiers" checked><br>
-				<span class = "filter_Title">Optional Objectives: </span><input type = "checkbox" onchange = "set_Column_Visibility(17, this.checked)" id = "filter_Column_Optional_Objectives" checked><br>
-				<span class = "filter_Title">Total Experience: </span><input type = "checkbox" onchange = "set_Column_Visibility(18, this.checked)" id = "filter_Column_Total_Experience" checked><br>
-				<span class = "filter_Title">Reaper Experience: </span><input type = "checkbox" onchange = "set_Column_Visibility(19, this.checked)" id = "filter_Column_Reaper_Experience" checked><br>
-				<span class = "filter_Title">Total Favor: </span><input type = "checkbox" onchange = "set_Column_Visibility(20, this.checked)" id = "filter_Column_Total_Favor"><br>
-				<span class = "filter_Title">Available Favor: </span><input type = "checkbox" onchange = "set_Column_Visibility(21, this.checked)" id = "filter_Column_Available_Favor" checked><br>
-				<span class = "filter_Title">Collectables: </span><input type = "checkbox" onchange = "set_Column_Visibility(22, this.checked)" id = "filter_Column_Collectables" checked><br>
-				<span class = "filter_Title">Average Sentient Experience: </span><input type = "checkbox" onchange = "set_Column_Visibility(23, this.checked)" id = "filter_Column_Average_Sentient_Experience" checked><br>
-				<span class = "filter_Title">Average Reaper Fragments: </span><input type = "checkbox" onchange = "set_Column_Visibility(24, this.checked)" id = "filter_Column_Average_Reaper_Fragments" checked><br>
-				<span class = "filter_Title">Custom Weight: </span><input type = "checkbox" onchange = "set_Column_Visibility(25, this.checked)" id = "filter_Column_Custom_Weight" checked><br>
-				<span class = "filter_Title">Total Weight: </span><input type = "checkbox" onchange = "set_Column_Visibility(26, this.checked)" id = "filter_Column_Total_Weight" checked><br>
-				<span class = "filter_Title">Base Time: </span><input type = "checkbox" onchange = "set_Column_Visibility(27, this.checked)" id = "filter_Column_Base_Time" checked><br>
-				<span class = "filter_Title">Travel Time: </span><input type = "checkbox" onchange = "set_Column_Visibility(28, this.checked)" id = "filter_Column_Travel_Time" checked><br>
-				<span class = "filter_Title">Total Time: </span><input type = "checkbox" onchange = "set_Column_Visibility(29, this.checked)" id = "filter_Column_Total_Time" checked><br>
-				<span class = "filter_Title">Total Weight Over Time: </span><input type = "checkbox" onchange = "set_Column_Visibility(30, this.checked)" id = "filter_Column_Total_Weight_Over_Time" checked><br>
-				<span class = "filter_Title">Damage Reduction Information: </span><input type = "checkbox" onchange = "set_Column_Visibility(31, this.checked)" id = "filter_Column_Damage_Reduction_Information"><br>
-				<span class = "filter_Title">Notes: </span><input type = "checkbox" onchange = "set_Column_Visibility(32, this.checked)" id = "filter_Column_Notes" checked><br>
+			<button onclick = "toggle_Collapse_Target_Element(this, 'filters_Section')" class = "collapse_Toggle_Button">Show Filters</button> <span id = "number_Of_Items_Sorted"></span><br>
+				<div id = "filters_Section" class = "expandable_Element">
+				<br>
+				<span class = "filter_Title">Filter Completed: </span><input type = "checkbox" onchange = "filter_Table_Rows()" id = "filter_Completed_Checkbox"><br>
+				<br>
+				<button onclick = "toggle_Collapse_Target_Element(this, 'adventure_Types_Selection_Section')" class = "collapse_Toggle_Button">Show Adventure Types</button><br>
+				<div onchange = "filter_Table_Rows()" id = "adventure_Types_Selection_Section" class = "expandable_Element">
+					<br>
+					Adventure Types Filters:<br>
+					<br>
+					<button onclick = "invert_Checkboxes('adventure_Type_Checkbox')" class = "invert_Group_Button">Invert all Adventure Types</button><br>
+					<br>
+					<span class = "indented_Filter_Title">Standard: </span><input type = "checkbox" onchange = "filter_Table_Rows()" id = "filter_Standard_Checkbox" class = "adventure_Type_Checkbox"><br>
+					<span class = "indented_Filter_Title">Raid: </span><input type = "checkbox" onchange = "filter_Table_Rows()" id = "filter_Raid_Checkbox" class = "adventure_Type_Checkbox"><br>
+					<span class = "indented_Filter_Title">Solo Quest: </span><input type = "checkbox" onchange = "filter_Table_Rows()" id = "filter_Solo_Quest_Checkbox" class = "adventure_Type_Checkbox"><br>
+					<span class = "indented_Filter_Title">Reaper Unavailable: </span><input type = "checkbox" onchange = "filter_Table_Rows()" id = "filter_Reaper_Unavailable_Checkbox" class = "adventure_Type_Checkbox"><br>
+					<span class = "indented_Filter_Title">Challenge: </span><input type = "checkbox" onchange = "filter_Table_Rows()" id = "filter_Challenge_Checkbox" class = "adventure_Type_Checkbox"><br>
+				</div>
+				<br>
+				<button onclick = "toggle_Collapse_Target_Element(this, 'adventure_Packs_Selection_Section')" class = "collapse_Toggle_Button">Show Adventure Packs</button><br>
+				<div onchange = "filter_Table_Rows()" id = "adventure_Packs_Selection_Section" class = "expandable_Element">
+					<br>
+					Adventure Pack Filters:<br>
+					<br>
+					<button onclick = "invert_Checkboxes('adventure_Pack_Checkbox')" class = "invert_Group_Button">Invert all Adventure Packs</button><br>
+					<br><!--Update from the supporting code in generate_Adventure_Pack_Filters.js-->
+					<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Guide_to_Free_to_Play">Free to Play</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "Free to Play"><br>
+					<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Against_the_Slave_Lords">Against the Slave Lords</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "Against the Slave Lords"><br>
+					<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Attack_on_Stormreach">Attack on Stormreach</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "Attack on Stormreach"><br>
+					<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Delera's_Tomb">Delera's Tomb</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "Delera's Tomb"><br>
+					<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Zawabi's_Refuge">Demon Sands</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "Demon Sands"><br>
+					<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Devil_Assault">Devil Assault</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "Devil Assault"><br>
+					<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Disciples_of_Rage">Disciples of Rage</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "Disciples of Rage"><br>
+					<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Dragonblood_Prophecy">Dragonblood Prophecy</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "Dragonblood Prophecy"><br>
+					<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Eveningstar_Challenge_Pack">Eveningstar Challenge Pack</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "Eveningstar Challenge Pack"><br>
+					<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Fables_of_the_Feywild">Fables of the Feywild</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "Fables of the Feywild"><br>
+					<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Fall_of_the_Night_Brigade">Fall of the Night Brigade</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "Fall of the Night Brigade"><br>
+					<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Grip_of_the_Hidden_Hand">Grip of the Hidden Hand</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "Grip of the Hidden Hand"><br>
+					<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Harbinger_of_Madness">Harbinger of Madness</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "Harbinger of Madness"><br>
+					<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Heart_of_Madness">Heart of Madness</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "Heart of Madness"><br>
+					<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Hunter_and_Hunted">Hunter and Hunted</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "Hunter and Hunted"><br>
+					<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Keep_on_the_Borderlands">Keep on the Borderlands</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "Keep on the Borderlands"><br>
+					<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Magic_of_Myth_Drannor">Magic of Myth Drannor</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "Magic of Myth Drannor"><br>
+					<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Masterminds_of_Sharn">Masterminds of Sharn</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "Masterminds of Sharn"><br>
+					<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Menace_of_the_Underdark_(adventure_pack)">Menace of the Underdark</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "Menace of the Underdark"><br>
+					<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Mists_of_Ravenloft">Mists of Ravenloft</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "Mists of Ravenloft"><br>
+					<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Peril_of_the_Planar_Eyes">Peril of the Planar Eyes</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "Peril of the Planar Eyes"><br>
+					<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Phiarlan_Carnival">Phiarlan Carnival</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "Phiarlan Carnival"><br>
+					<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Reign_of_Madness">Reign of Madness</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "Reign of Madness"><br>
+					<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Ruins_of_Gianthold">Ruins of Gianthold</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "Ruins of Gianthold"><br>
+					<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Secrets_of_the_Artificers">Secrets of the Artificers</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "Secrets of the Artificers"><br>
+					<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Sentinels_of_Stormreach">Sentinels of Stormreach</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "Sentinels of Stormreach"><br>
+					<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Shadow_Under_Thunderholme">Shadow Under Thunderholme</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "Shadow Under Thunderholme"><br>
+					<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Shadowfell_Conspiracy">Shadowfell Conspiracy</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "Shadowfell Conspiracy"><br>
+					<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Sinister_Secret_of_Saltmarsh">Sinister Secret of Saltmarsh</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "Sinister Secret of Saltmarsh"><br>
+					<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Slice_of_Life">Slice of Life</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "Slice of Life"><br>
+					<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Sorrowdusk_Isle">Sorrowdusk Isle</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "Sorrowdusk Isle"><br>
+					<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Tangleroot_Gorge">Tangleroot Gorge</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "Tangleroot Gorge"><br>
+					<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Tavern_Tales">Tavern Tales</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "Tavern Tales"><br>
+					<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/The_Catacombs">The Catacombs</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "The Catacombs"><br>
+					<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/The_Chill_of_Ravenloft">The Chill of Ravenloft</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "The Chill of Ravenloft"><br>
+					<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/The_Devil's_Gambit">The Devil's Gambit</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "The Devil's Gambit"><br>
+					<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/The_Devils_of_Shavarath">The Devils of Shavarath</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "The Devils of Shavarath"><br>
+					<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/The_Dragons'_Hand">The Dragons' Hand</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "The Dragons' Hand"><br>
+					<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/The_Dreaming_Dark">The Dreaming Dark</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "The Dreaming Dark"><br>
+					<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/The_Druid's_Deep">The Druid's Deep</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "The Druid's Deep"><br>
+					<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/The_Haunted_Halls_of_Eveningstar">The Haunted Halls of Eveningstar</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "The Haunted Halls of Eveningstar"><br>
+					<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/The_High_Road_of_Shadows">The High Road of Shadows</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "The High Road of Shadows"><br>
+					<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/The_Isle_of_Dread">The Isle of Dread</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "The Isle of Dread"><br>
+					<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/The_Lost_Gatekeepers">The Lost Gatekeepers</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "The Lost Gatekeepers"><br>
+					<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/The_Mines_of_Tethyamar">The Mines of Tethyamar</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "The Mines of Tethyamar"><br>
+					<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Litany_of_the_Dead_Part_1">The Necropolis, Part 1</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "The Necropolis, Part 1"><br>
+					<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Litany_of_the_Dead_Part_2">The Necropolis, Part 2</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "The Necropolis, Part 2"><br>
+					<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Litany_of_the_Dead_Part_3">The Necropolis, Part 3</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "The Necropolis, Part 3"><br>
+					<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Litany_of_the_Dead_Part_4">The Necropolis, Part 4</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "The Necropolis, Part 4"><br>
+					<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/The_Path_of_Inspiration">The Path of Inspiration</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "The Path of Inspiration"><br>
+					<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Reaver's_Refuge">The Reaver's Reach</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "The Reaver's Reach"><br>
+					<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/The_Red_Fens">The Red Fens</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "The Red Fens"><br>
+					<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/The_Restless_Isles">The Restless Isles</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "The Restless Isles"><br>
+					<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Ruins_of_Threnal">The Ruins of Threnal</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "The Ruins of Threnal"><br>
+					<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/The_Seal_of_Shan-To-Kor">The Seal of Shan-To-Kor</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "The Seal of Shan-To-Kor"><br>
+					<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/The_Sharn_Syndicate">The Sharn Syndicate</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "The Sharn Syndicate"><br>
+					<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/The_Soul_Splitter">The Soul Splitter</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "The Soul Splitter"><br>
+					<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/The_Temple_of_Elemental_Evil">The Temple of Elemental Evil</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "The Temple of Elemental Evil"><br>
+					<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/The_Vale_of_Twilight">The Vale of Twilight</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "The Vale of Twilight"><br>
+					<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Vault_of_Night">The Vault of Night</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "The Vault of Night"><br>
+					<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Three-Barrel_Cove">Three-Barrel Cove</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "Three-Barrel Cove"><br>
+					<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Trials_of_the_Archons">Trials of the Archons</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "Trials of the Archons"><br>
+					<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Vaults_of_the_Artificers">Vaults of the Artificers</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "Vaults of the Artificers"><br>
+					<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Vecna_Unleashed">Vecna Unleashed</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "Vecna Unleashed"><br>
+					<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/White_Plume_Mountain_and_Other_Tales">White Plume Mountain and Other Tales</a>: </span><input type = "checkbox" class = "adventure_Pack_Checkbox" value = "White Plume Mountain and Other Tales"><br>
+				</div><br>
+				<span class = "filter_Title"><button onclick = "toggle_Collapse_Target_Element(this, 'sagas_Selection_Section')" class = "collapse_Toggle_Button">Show Saga Filters</button></span><br>
+				<div onchange = "filter_Table_Rows()" id = "sagas_Selection_Section" class = "expandable_Element">
+					<br>
+					Saga Contribution Filters:<br>
+					<br>
+					<button onclick = "invert_Checkboxes('saga_Checkbox')" class = "invert_Group_Button">Invert all Saga Filters</button><br>
+					<br><!--Update the following from the supporting code in generate_Adventure_Pack_Filters.js-->
+					<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Sinister_Secret_of_Saltmarsh_(Heroic)">Sinister Secret of Saltmarsh (Heroic)</a>: </span><input type = "checkbox" class = "saga_Checkbox" value = "Sinister Secret of Saltmarsh (Heroic)"><br>
+					<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/The_Pirates_of_the_Thunder_Sea_(Heroic)">The Pirates of the Thunder Sea (Heroic)</a>: </span><input type = "checkbox" class = "saga_Checkbox" value = "The Pirates of the Thunder Sea (Heroic)"><br>
+					<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Fables_of_the_Feywild_(Heroic)">Fables of the Feywild (Heroic)</a>: </span><input type = "checkbox" class = "saga_Checkbox" value = "Fables of the Feywild (Heroic)"><br>
+					<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Isle_of_Dread_(Heroic)">Isle of Dread (Heroic)</a>: </span><input type = "checkbox" class = "saga_Checkbox" value = "Isle of Dread (Heroic)"><br>
+					<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/The_Chill_of_Ravenloft_(Heroic)">The Chill of Ravenloft (Heroic)</a>: </span><input type = "checkbox" class = "saga_Checkbox" value = "The Chill of Ravenloft (Heroic)"><br>
+					<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Mists_of_Ravenloft_(Heroic)">Mists of Ravenloft (Heroic)</a>: </span><input type = "checkbox" class = "saga_Checkbox" value = "Mists of Ravenloft (Heroic)"><br>
+					<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Magic_of_Myth_Drannor_(Heroic)">Magic of Myth Drannor (Heroic)</a>: </span><input type = "checkbox" class = "saga_Checkbox" value = "Magic of Myth Drannor (Heroic)"><br>
+					<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/In_the_Wastes_of_Gianthold_(Heroic)">In the Wastes of Gianthold (Heroic)</a>: </span><input type = "checkbox" class = "saga_Checkbox" value = "In the Wastes of Gianthold (Heroic)"><br>
+					<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Perils_of_Cormyr_(Heroic)">Perils of Cormyr (Heroic)</a>: </span><input type = "checkbox" class = "saga_Checkbox" value = "Perils of Cormyr (Heroic)"><br>
+					<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Masterminds_of_Sharn_(Heroic)">Masterminds of Sharn (Heroic)</a>: </span><input type = "checkbox" class = "saga_Checkbox" value = "Masterminds of Sharn (Heroic)"><br>
+					<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Cogs_Explorer_Dungeons_(Heroic)">Cogs Explorer Dungeons (Heroic)</a>: </span><input type = "checkbox" class = "saga_Checkbox" value = "Cogs Explorer Dungeons (Heroic)"><br>
+					<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Honor_of_the_Huntsilvers_(Heroic)">Honor of the Huntsilvers (Heroic)</a>: </span><input type = "checkbox" class = "saga_Checkbox" value = "Honor of the Huntsilvers (Heroic)"><br>
+					<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Vecna_Unleashed_(Heroic)">Vecna Unleashed (Heroic)</a>: </span><input type = "checkbox" class = "saga_Checkbox" value = "Vecna Unleashed (Heroic)"><br>
+					<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/The_Pirates_of_the_Thunder_Sea_(Epic)">The Pirates of the Thunder Sea (Epic)</a>: </span><input type = "checkbox" class = "saga_Checkbox" value = "The Pirates of the Thunder Sea (Epic)"><br>
+					<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Perils_of_Cormyr_(Epic)">Perils of Cormyr (Epic)</a>: </span><input type = "checkbox" class = "saga_Checkbox" value = "Perils of Cormyr (Epic)"><br>
+					<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Menace_of_the_Underdark_(Epic)">Menace of the Underdark (Epic)</a>: </span><input type = "checkbox" class = "saga_Checkbox" value = "Menace of the Underdark (Epic)"><br>
+					<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/The_Planeswalker's_Path_(Epic)">The Planes-walker's Path (Epic)</a>: </span><input type = "checkbox" class = "saga_Checkbox" value = "The Planes-walker's Path (Epic)"><br>
+					<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/The_End_of_Eberron_(Epic)">The End of Eberron (Epic)</a>: </span><input type = "checkbox" class = "saga_Checkbox" value = "The End of Eberron (Epic)"><br>
+					<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Honor_of_the_Huntsilvers_(Epic)">Honor of the Huntsilvers (Epic)</a>: </span><input type = "checkbox" class = "saga_Checkbox" value = "Honor of the Huntsilvers (Epic)"><br>
+					<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/In_the_Wastes_of_Gianthold_(Epic)">In the Wastes of Gianthold (Epic)</a>: </span><input type = "checkbox" class = "saga_Checkbox" value = "In the Wastes of Gianthold (Epic)"><br>
+					<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Mists_of_Ravenloft_(Epic)">Mists of Ravenloft (Legendary)</a>: </span><input type = "checkbox" class = "saga_Checkbox" value = "Mists of Ravenloft (Legendary)"><br>
+					<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Masterminds_of_Sharn_(Legendary)">Masterminds of Sharn (Legendary)</a>: </span><input type = "checkbox" class = "saga_Checkbox" value = "Masterminds of Sharn (Legendary)"><br>
+					<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Sinister_Secret_of_Saltmarsh_(Legendary)">Sinister Secret of Saltmarsh (Legendary)</a>: </span><input type = "checkbox" class = "saga_Checkbox" value = "Sinister Secret of Saltmarsh (Legendary)"><br>
+					<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Cogs_Explorer_Dungeons_(Epic)">Cogs Explorer Dungeons (Legendary)</a>: </span><input type = "checkbox" class = "saga_Checkbox" value = "Cogs Explorer Dungeons (Legendary)"><br>
+					<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Fables_of_the_Feywild_(Legendary)">Fables of the Feywild (Legendary)</a>: </span><input type = "checkbox" class = "saga_Checkbox" value = "Fables of the Feywild (Legendary)"><br>
+					<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Isle_of_Dread_(Legendary)">Isle of Dread (Legendary)</a>: </span><input type = "checkbox" class = "saga_Checkbox" value = "Isle of Dread (Legendary)"><br>
+					<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Vecna_Unleashed_(Legendary)">Vecna Unleashed (Legendary)</a>: </span><input type = "checkbox" class = "saga_Checkbox" value = "Vecna Unleashed (Legendary)"><br>
+					<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/Magic_of_Myth_Drannor_(Legendary)">Magic of Myth Drannor (Legendary)</a>: </span><input type = "checkbox" class = "saga_Checkbox" value = "Magic of Myth Drannor (Legendary)"><br>
+					<span class = "adventure_Pack_Filter_Title"><a href = "https://ddowiki.com/page/The_Chill_of_Ravenloft_(Legendary)">The Chill of Ravenloft (Legendary)</a>: </span><input type = "checkbox" class = "saga_Checkbox" value = "The Chill of Ravenloft (Legendary)"><br>
+				</div><br>
+				Minimum and Maximum Filters:<br>
+				<span class = "indented_Filter_Title">Level: </span><input type = "number" onchange = "filter_Table_Rows()" class = "filter_Number_Input" id = "level_Lower_Limit_Input_Box" value = "1" min = "1"> to <input type = "number" onchange = "filter_Table_Rows()" class = "filter_Number_Input" id = "level_Upper_Limit_Input_Box" value = "37" min = "1"><br>
+				<span class = "indented_Filter_Title">Total Experience: </span><input type = "number" onchange = "filter_Table_Rows()" class = "filter_Number_Input" id = "total_Experience_Lower_Limit_Input_Box" value = "0" min = "0"> to <input type = "number" onchange = "filter_Table_Rows()" class = "filter_Number_Input" id = "total_Experience_Upper_Limit_Input_Box" value = "1000000" min = "0"><br>
+				<span class = "indented_Filter_Title">Total Time: </span><input type = "number" onchange = "filter_Table_Rows()" class = "filter_Number_Input" id = "time_Lower_Limit_Input_Box" value = "0" min = "0"> to <input type = "number" onchange = "filter_Table_Rows()" class = "filter_Number_Input" id = "time_Upper_Limit_Input_Box" value = "120" min = "0"><br>
+				<span class = "indented_Filter_Title">Available Favor: </span><input type = "number" onchange = "filter_Table_Rows()" class = "filter_Number_Input" id = "available_Favor_Lower_Limit_Input_Box" value = "0" min = "0"> to <input type = "number" onchange = "filter_Table_Rows()" class = "filter_Number_Input" id = "available_Favor_Upper_Limit_Input_Box" value = "42" min = "0"><br>
+				<span class = "indented_Filter_Title">Total Favor: </span><input type = "number" onchange = "filter_Table_Rows()" class = "filter_Number_Input" id = "total_Favor_Lower_Limit_Input_Box" value = "0" min = "0"> to <input type = "number" onchange = "filter_Table_Rows()" class = "filter_Number_Input" id = "total_Favor_Upper_Limit_Input_Box" value = "42" min = "0"><br>
+				<br>
+				Weight:<br>
+				<span class = "filter_Title">1 / Experience Weight: </span><input type = "number" value = 5000 step = "1000" onchange = "update_Table_Columns('total_Weight, total_Weight_Over_Time')" class = "filter_Number_Input" id = "experience_Weight_Input_Box"><br>
+				<span class = "filter_Title">1 / Reaper Experience Weight: </span><input type = "number" value = 500 step = "100" onchange = "update_Table_Columns('total_Weight, total_Weight_Over_Time')" class = "filter_Number_Input" id = "reaper_Experience_Weight_Input_Box"><br>
+				<span class = "filter_Title">1 / Favor Weight: </span><input type = "number" value = 4 step = "1" onchange = "update_Table_Columns('total_Weight, total_Weight_Over_Time')" class = "filter_Number_Input" id = "favor_Weight_Input_Box"><br>
+				<span class = "filter_Title">1 / Collectable Weight: </span><input type = "number" value = 7.5 step = ".5" onchange = "update_Table_Columns('total_Weight, total_Weight_Over_Time')" class = "filter_Number_Input" id = "collectable_Weight_Input_Box"><br>
+				<span class = "filter_Title">1 / Sentient Experience Weight: </span><input type = "number" value = 500 step = "100" onchange = "update_Table_Columns('total_Weight, total_Weight_Over_Time')" class = "filter_Number_Input" id = "sentient_Experience_Weight_Input_Box"><br>
+				<span class = "filter_Title">Reaper Fragment Weight: </span><input type = "number" value = 10 step = "1" onchange = "update_Table_Columns('total_Weight, total_Weight_Over_Time')" class = "filter_Number_Input" id = "reaper_Fragment_Weight_Input_Box"><br>
+				<span class = "filter_Title">Custom Weight Multiplier: </span><input type = "number" value = 1 step = ".1" onchange = "update_Table_Columns('total_Weight, total_Weight_Over_Time')" class = "filter_Number_Input" id = "custom_Weight_Multiplier_Input_Box"><br>
+				<span class = "filter_Title">Minimum Weight / Time: </span><input type = "number" value = 0 step = ".05" onchange = "filter_Table_Rows()" class = "filter_Number_Input" id = "weight_Over_Time_Lower_Limit_Input_Box"><br>
+				<br>
+				<span class = "filter_Title">Show only if contains phrases: </span><input type = "text" onchange = "filter_Table_Rows()" class = "filter_Text_Input" id = "contains_Phrases_Input_Box"><br>
+				<span class = "filter_Title">Show only if does not contain: </span><input type = "text" onchange = "filter_Table_Rows()" class = "filter_Text_Input" id = "does_Not_Contain_Phrases_Input_Box"><br>
+				<br>
+				<span class = "filter_Title"><button onclick = "toggle_Collapse_Target_Element(this, 'column_Display_Options')" class = "collapse_Toggle_Button">Show Column Options</button></span><br>
+				<div id = "column_Display_Options" class = "expandable_Element">
+					<br>
+					Column Display Options:<br>
+					<br>
+					<span class = "filter_Title">Completed: </span><input type = "checkbox" onchange = "set_Column_Visibility(0, this.checked)" id = "filter_Column_Completed" checked><br>
+					<span class = "filter_Title">Level: </span><input type = "checkbox" onchange = "set_Column_Visibility(1, this.checked)" id = "filter_Column_Level" checked><br>
+					<span class = "filter_Title">Adventure Tier: </span><input type = "checkbox" onchange = "set_Column_Visibility(2, this.checked)" id = "filter_Column_Adventure_Tier"><br>
+					<span class = "filter_Title">Available Adventure Tiers: </span><input type = "checkbox" onchange = "set_Column_Visibility(3, this.checked)" id = "filter_Column_Available_Adventure_Tiers"><br>
+					<span class = "filter_Title">Adventure Name: </span><input type = "checkbox" onchange = "set_Column_Visibility(4, this.checked)" id = "filter_Column_Adventure_Name" checked><br>
+					<span class = "filter_Title">Adventure Link: </span><input type = "checkbox" onchange = "set_Column_Visibility(5, this.checked)" id = "filter_Column_Adventure_Link"><br>
+					<span class = "filter_Title">Adventure Type: </span><input type = "checkbox" onchange = "set_Column_Visibility(6, this.checked)" id = "filter_Column_Adventure_Type"><br>
+					<span class = "filter_Title">Adventure Length: </span><input type = "checkbox" onchange = "set_Column_Visibility(7, this.checked)" id = "filter_Column_Adventure_Length"><br>
+					<span class = "filter_Title">Location: </span><input type = "checkbox" onchange = "set_Column_Visibility(8, this.checked)" id = "filter_Column_Location" checked><br>
+					<span class = "filter_Title">Location Link: </span><input type = "checkbox" onchange = "set_Column_Visibility(9, this.checked)" id = "filter_Column_Location_Link"><br>
+					<span class = "filter_Title">Adventure Pack: </span><input type = "checkbox" onchange = "set_Column_Visibility(10, this.checked)" id = "filter_Column_Adventure_Pack" checked><br>
+					<span class = "filter_Title">Adventure Pack_Link: </span><input type = "checkbox" onchange = "set_Column_Visibility(11, this.checked)" id = "filter_Column_Adventure_Pack_Link"><br>
+					<span class = "filter_Title">Saga Contribution: </span><input type = "checkbox" onchange = "set_Column_Visibility(12, this.checked)" id = "filter_Column_Saga_Contribution" checked><br>
+					<span class = "filter_Title">Saga Link: </span><input type = "checkbox" onchange = "set_Column_Visibility(13, this.checked)" id = "filter_Column_Saga_Link"><br>
+					<span class = "filter_Title">Saga Experience: </span><input type = "checkbox" onchange = "set_Column_Visibility(14, this.checked)" id = "filter_Column_Saga_Experience"><br>
+					<span class = "filter_Title">Base Experience: </span><input type = "checkbox" onchange = "set_Column_Visibility(15, this.checked)" id = "filter_Column_Base_Experience"><br>
+					<span class = "filter_Title">Experience Modifiers: </span><input type = "checkbox" onchange = "set_Column_Visibility(16, this.checked)" id = "filter_Column_Experience_Modifiers" checked><br>
+					<span class = "filter_Title">Optional Objectives: </span><input type = "checkbox" onchange = "set_Column_Visibility(17, this.checked)" id = "filter_Column_Optional_Objectives" checked><br>
+					<span class = "filter_Title">Total Experience: </span><input type = "checkbox" onchange = "set_Column_Visibility(18, this.checked)" id = "filter_Column_Total_Experience" checked><br>
+					<span class = "filter_Title">Reaper Experience: </span><input type = "checkbox" onchange = "set_Column_Visibility(19, this.checked)" id = "filter_Column_Reaper_Experience" checked><br>
+					<span class = "filter_Title">Total Favor: </span><input type = "checkbox" onchange = "set_Column_Visibility(20, this.checked)" id = "filter_Column_Total_Favor"><br>
+					<span class = "filter_Title">Available Favor: </span><input type = "checkbox" onchange = "set_Column_Visibility(21, this.checked)" id = "filter_Column_Available_Favor" checked><br>
+					<span class = "filter_Title">Collectables: </span><input type = "checkbox" onchange = "set_Column_Visibility(22, this.checked)" id = "filter_Column_Collectables" checked><br>
+					<span class = "filter_Title">Average Sentient Experience: </span><input type = "checkbox" onchange = "set_Column_Visibility(23, this.checked)" id = "filter_Column_Average_Sentient_Experience" checked><br>
+					<span class = "filter_Title">Average Reaper Fragments: </span><input type = "checkbox" onchange = "set_Column_Visibility(24, this.checked)" id = "filter_Column_Average_Reaper_Fragments" checked><br>
+					<span class = "filter_Title">Custom Weight: </span><input type = "checkbox" onchange = "set_Column_Visibility(25, this.checked)" id = "filter_Column_Custom_Weight" checked><br>
+					<span class = "filter_Title">Total Weight: </span><input type = "checkbox" onchange = "set_Column_Visibility(26, this.checked)" id = "filter_Column_Total_Weight" checked><br>
+					<span class = "filter_Title">Base Time: </span><input type = "checkbox" onchange = "set_Column_Visibility(27, this.checked)" id = "filter_Column_Base_Time" checked><br>
+					<span class = "filter_Title">Travel Time: </span><input type = "checkbox" onchange = "set_Column_Visibility(28, this.checked)" id = "filter_Column_Travel_Time" checked><br>
+					<span class = "filter_Title">Total Time: </span><input type = "checkbox" onchange = "set_Column_Visibility(29, this.checked)" id = "filter_Column_Total_Time" checked><br>
+					<span class = "filter_Title">Total Weight Over Time: </span><input type = "checkbox" onchange = "set_Column_Visibility(30, this.checked)" id = "filter_Column_Total_Weight_Over_Time" checked><br>
+					<span class = "filter_Title">Damage Reduction Information: </span><input type = "checkbox" onchange = "set_Column_Visibility(31, this.checked)" id = "filter_Column_Damage_Reduction_Information"><br>
+					<span class = "filter_Title">Notes: </span><input type = "checkbox" onchange = "set_Column_Visibility(32, this.checked)" id = "filter_Column_Notes" checked><br>
+				</div>
+				<br>
+				<button onclick = "reset_Filters()">Reset Filters</button>
 			</div>
 			<br>
-			<button onclick = "reset_Filters()">Reset Filters</button>
-		</div>
-		<br>
-		<div>
-			<span>Personal Experience Multiplier: </span><input type = "number" onblur = "update_Table_Columns('optional_Objectives, total_Experience, reaper_Experience, total_Weight, total_Weight_Over_Time')" onkeydown = "if(event.key === 'Enter' || event.key === ' '){update_Table_Columns('optional_Objectives, total_Experience, reaper_Experience, total_Weight, total_Weight_Over_Time')}" id = "personal_Experience_Multiplier_Input_Box" value = "1.3" min = "0" step = "0.05"><br>
-			<span>Server Bonus: </span><input type = "number" onblur = "update_Table_Columns('optional_Objectives, total_Experience, reaper_Experience, total_Weight, total_Weight_Over_Time')" onkeydown = "if(event.key === 'Enter' || event.key === ' '){update_Table_Columns('optional_Objectives, total_Experience, reaper_Experience, total_Weight, total_Weight_Over_Time')}" id = "server_Modifier_Input_Box" value = "0" min = "0" step = "0.05"><br>
-			<span>Assumed Reaper Level: </span><input type = "number" onchange = "update_Table_Columns('reaper_Experience, total_Weight, total_Weight_Over_Time')" id = "assumed_Reaper_Level_Input_Box" value = "1" min = "1" max = "10" step = "1"><br>
-			<span>Include Saga Experience portion in each adventure: </span><input type = "checkbox" onchange = "update_Table_Columns('total_Experience, total_Weight, total_Weight_Over_Time')" id = "include_Saga_Experience_In_Total_Experience_Checkbox" checked>
-		</div>
-		<div>
+			<button onclick = "toggle_Collapse_Target_Element(this, 'global_Modifiers_Section')" class = "collapse_Toggle_Button">Show Global Modifiers</button><br>
+			<div id = "global_Modifiers_Section" class = "expandable_Element">
+				<br>
+				<span>Personal Experience Multiplier: </span><input type = "number" onblur = "update_Table_Columns('optional_Objectives, total_Experience, reaper_Experience, total_Weight, total_Weight_Over_Time')" onkeydown = "if(event.key === 'Enter' || event.key === ' '){update_Table_Columns('optional_Objectives, total_Experience, reaper_Experience, total_Weight, total_Weight_Over_Time')}" id = "personal_Experience_Multiplier_Input_Box" value = "1.3" min = "0" step = "0.05"><br>
+				<span>Server Bonus: </span><input type = "number" onblur = "update_Table_Columns('optional_Objectives, total_Experience, reaper_Experience, total_Weight, total_Weight_Over_Time')" onkeydown = "if(event.key === 'Enter' || event.key === ' '){update_Table_Columns('optional_Objectives, total_Experience, reaper_Experience, total_Weight, total_Weight_Over_Time')}" id = "server_Modifier_Input_Box" value = "0" min = "0" step = "0.05"><br>
+				<span>Assumed Reaper Level: </span><input type = "number" onchange = "update_Table_Columns('reaper_Experience, total_Weight, total_Weight_Over_Time')" id = "assumed_Reaper_Level_Input_Box" value = "1" min = "1" max = "10" step = "1"><br>
+				<span>Include Saga Experience portion in each adventure: </span><input type = "checkbox" onchange = "update_Table_Columns('total_Experience, total_Weight, total_Weight_Over_Time')" id = "include_Saga_Experience_In_Total_Experience_Checkbox" checked>
+			</div>
 			<br>
-			<span>Character Name: </span><input type = "text" id = "character_Name_Input_Box"><br>
-			<span>Character Server: </span><select id = "server_Dropdown_Menu">
-				<button><selectedcontent></selectedcontent></button>
-				<option value = "Cormyr">Cormyr</option>
-				<option value = "Moonsea">Moonsea</option>
-				<option value = "Shadowdale">Shadowdale</option>
-				<option value = "Thrane">Thrane</option>
-			</select><br>
-			<span>Autocomplete Adventures On Exit: </span><input type = "checkbox" onclick = "toggle_Location_Retrieval()" id = "autocomplete_Adventures_On_Exit_Checkbox"><span id = "autocomplete_Adventures_Error_Message"></span><br>
-			<span>Current Character: </span><span id = "current_Character_Name">-</span><br>
-			<span>Current Level: </span><span id = "current_Character_Level">1</span><br>
-			<span>Highest Level of Group Members: </span><span id = "highest_Level_Of_Group_Members">1</span><br>
-			<!--<span>Current Group Size: </span><span id = "current_Group_Size">-</span><br>-->
-			<span>Current Adventure: </span><span id = "current_Adventure">None</span><br>
-			<span>Current Location: </span><span id = "current_Location">Unknown Location</span><br>
-			<br>
-			<span>Last Completed Adventure: </span><span id = "last_Completed_Adventure_Name">None</span><br>
-			<span>Minutes Taken: </span><span id = "last_Completed_Adventure_Duration">None</span><br>
+			<button onclick = "toggle_Collapse_Target_Element(this, 'autocomplete_Section')" class = "collapse_Toggle_Button">Hide Autocomplete Options</button><br>
+			<div id = "autocomplete_Section" class = "expandable_Element expanded_Element">
+				<br>
+				<span>Character Name: </span><input type = "text" id = "character_Name_Input_Box"><br>
+				<span>Character Server: </span><select id = "server_Dropdown_Menu">
+					<button><selectedcontent></selectedcontent></button>
+					<option value = "Cormyr">Cormyr</option>
+					<option value = "Moonsea">Moonsea</option>
+					<option value = "Shadowdale">Shadowdale</option>
+					<option value = "Thrane">Thrane</option>
+				</select><br>
+				<span>Autocomplete Adventures On Exit: </span><input type = "checkbox" onclick = "toggle_Location_Retrieval()" id = "autocomplete_Adventures_On_Exit_Checkbox"><span id = "autocomplete_Adventures_Error_Message"></span><br>
+				<span>Current Character: </span><span id = "current_Character_Name">-</span><br>
+				<span>Current Level: </span><span id = "current_Character_Level">1</span><br>
+				<span>Highest Level of Group Members: </span><span id = "highest_Level_Of_Group_Members">1</span><br>
+				<!--<span>Current Group Size: </span><span id = "current_Group_Size">-</span><br>-->
+				<span>Current Adventure: </span><span id = "current_Adventure">None</span><br>
+				<span>Current Location: </span><span id = "current_Location">Unknown Location</span><br>
+				<br>
+				<span>Last Completed Adventure: </span><span id = "last_Completed_Adventure_Name">None</span><br>
+				<span>Minutes Taken: </span><span id = "last_Completed_Adventure_Duration">None</span><br>
+			</div>
 		</div>
 		<br>
 		<table><!--Columns and initial entries are overwritten in the generate_Table_Headers and generate_Initial_Table functions, but are copied here to give a smoother page start. Update by copying the initial landing page table elements from the browser into these sections-->
@@ -453,7 +703,7 @@
 
 			let table_Body_Element = document.getElementById("table_Body");
 			let table_Header_Row_Element = document.getElementById("table_Header_Row");
-			let download_Raw_String_Link_Element = document.getElementById("download_Raw_String_Link");
+			let download_JSON_Table_Link_Element = document.getElementById("download_JSON_Table_Link");
 
 			let filter_Completed_Checkbox_Element = document.getElementById("filter_Completed_Checkbox");
 
@@ -539,7 +789,10 @@
 				{
 					let new_Header = document.createElement("TH");
 					new_Header.textContent = column_Properties[i].displayName;
-					new_Header.setAttribute("onclick", "sort_Table(" + i + ")");
+					new_Header.dataset.text_content = new_Header.textContent;
+					new_Header.tabIndex = 0;
+					new_Header.onclick = function(){sort_Table(i)};
+					new_Header.onkeydown = function(){if(event.key === 'Enter' || event.key === ' '){event.preventDefault(); sort_Table(i);}};
 
 					// Add column type class
 					if(column_Properties[i].type === "Alphabetical")
@@ -875,6 +1128,29 @@
 						}
 					}
 				}
+			}
+
+			function toggle_Collapse_Target_Element(triggering_Button, toggled_Element_ID_String)
+			{
+				if(triggering_Button.textContent[0] === 'S')
+				{
+					triggering_Button.textContent = "Hide" + triggering_Button.textContent.slice(4);
+				}
+				else
+				{
+					triggering_Button.textContent = "Show" + triggering_Button.textContent.slice(4);
+				}
+				document.getElementById(toggled_Element_ID_String).classList.toggle("expanded_Element");
+			}
+
+			function invert_Checkboxes(checkbox_Class_Name)
+			{
+				let checkboxes_To_Invert = document.getElementsByClassName(checkbox_Class_Name);
+				for(let i = 0; i < checkboxes_To_Invert.length; i++)
+				{
+					checkboxes_To_Invert[i].checked = !checkboxes_To_Invert[i].checked;
+				}
+				filter_Table_Rows();
 			}
 
 			let experience_Modifier_Names = ["Delving Bonus","First-time Difficulty", "Tome of Learning", "Daily Bonus", "Persistence", "Flawless Victory", "Kills", "Traps", "Secret Doors", "Breakables", "Quest Ransack", "Over-level Penalty", "Power-leveling Penalty", "Reentry", "Late Entry", "Other"];
@@ -1409,6 +1685,7 @@
 				table_Header_Row_Element.children[current_Sort_Selection].classList.remove("last_Sorted_Header");
 				current_Sort_Selection = sort_Selection;
 				table_Header_Row_Element.children[current_Sort_Selection].classList.add("last_Sorted_Header");
+				await new Promise(resolve => setTimeout(resolve, 1));
 
 				table_Body_Array.sort(generic_Stable_Sort);
 
@@ -1442,9 +1719,71 @@
 				}
 			}
 
+			function convert_Table_Body_Array_To_Custom_JSON()
+			{
+				let custom_JSON_Table_String = "[\n";
+				for(let i = 0; i < table_Body_Array.length; i++)
+				{
+					custom_JSON_Table_String = custom_JSON_Table_String + "{\n";
+					for(let j = 0; j < column_Properties.length; j++)
+					{
+						custom_JSON_Table_String = custom_JSON_Table_String + "\t\"" +index_To_Column_Name_Array[j] + "\": ";
+						if(column_Properties[j].type === "Alphabetical")
+						{
+							custom_JSON_Table_String = custom_JSON_Table_String + "\"" + table_Body_Array[i][index_To_Column_Name_Array[j]] + "\"";
+						}
+						else if(column_Properties[j].name === "experience_Modifiers")
+						{
+							custom_JSON_Table_String = custom_JSON_Table_String + "[";
+							for(let k = 0; k < table_Body_Array[i].experience_Modifiers.length; k++)
+							{
+								custom_JSON_Table_String = custom_JSON_Table_String + table_Body_Array[i][index_To_Column_Name_Array[j]][k] + (k === table_Body_Array[i].experience_Modifiers.length - 1 ? "" : ", ");
+							}
+							custom_JSON_Table_String = custom_JSON_Table_String + "]";
+						}
+						else if(column_Properties[j].name === "optional_Objectives")
+						{
+							custom_JSON_Table_String = custom_JSON_Table_String + "[";
+							for(let k = 0; k < table_Body_Array[i].optional_Objectives.length; k++)
+							{
+								custom_JSON_Table_String = custom_JSON_Table_String + "{\"title\": \"" + table_Body_Array[i][index_To_Column_Name_Array[j]][k].title + "\", \"value\": " + table_Body_Array[i][index_To_Column_Name_Array[j]][k].value + ", \"experience\": 0, \"included\": " + table_Body_Array[i][index_To_Column_Name_Array[j]][k].included + "}" + (k === table_Body_Array[i].optional_Objectives.length - 1 ? "" : ", ");
+							}
+							custom_JSON_Table_String = custom_JSON_Table_String + "]";
+						}
+						else if(column_Properties[j].calculated === true)
+						{
+							custom_JSON_Table_String = custom_JSON_Table_String + "0";
+						}
+						else
+						{
+							custom_JSON_Table_String = custom_JSON_Table_String + table_Body_Array[i][index_To_Column_Name_Array[j]];
+						}
+						if(j !== column_Properties.length - 1)
+						{
+							custom_JSON_Table_String = custom_JSON_Table_String + ",\n";
+						}
+						else
+						{
+							custom_JSON_Table_String = custom_JSON_Table_String + "\n";
+						}
+					}
+					if(i !== table_Body_Array.length - 1)
+					{
+						custom_JSON_Table_String = custom_JSON_Table_String + "},\n";
+					}
+					else
+					{
+						custom_JSON_Table_String = custom_JSON_Table_String + "}\n";
+					}
+				}
+				custom_JSON_Table_String = custom_JSON_Table_String + "]";
+
+				return custom_JSON_Table_String;
+			}
+
 			function save_To_Local_Storage()
 			{
-				window.localStorage.setItem("table_Body_Data", JSON.stringify(table_Body_Array));
+				window.localStorage.setItem("table_Body_Data", convert_Table_Body_Array_To_Custom_JSON());
 
 				window.localStorage.setItem("table_Filter_Level_Lower_Limit", level_Lower_Limit_Input_Box_Element.value);
 				window.localStorage.setItem("table_Filter_Level_Upper_Limit", level_Upper_Limit_Input_Box_Element.value);
@@ -1493,7 +1832,7 @@
 				}
 			}
 
-			function convert_Table_To_JSON()
+			function download_JSON_Table()
 			{
 				let JSON_Table_String = "let column_Properties = [\n";
 				for(let i = 0; i < column_Properties.length; i++)
@@ -1526,64 +1865,12 @@
 				+ "for(let i = 0; i < column_Properties.length; i++)\n{\n"
 				+ "\tcolumn_Name_To_Array_Index[column_Properties[i].name] = i;\n"
 				+ "\tindex_To_Column_Name_Array.push(column_Properties[i].name);\n}\n\n"
-				+ "let table_Body_Array = [\n";
-				for(let i = 0; i < table_Body_Array.length; i++)
-				{
-					JSON_Table_String = JSON_Table_String + "{\n";
-					for(let j = 0; j < column_Properties.length; j++)
-					{
-						JSON_Table_String = JSON_Table_String + "\t" +index_To_Column_Name_Array[j] + ": ";
-						if(column_Properties[j].type === "Alphabetical")
-						{
-							JSON_Table_String = JSON_Table_String + "\"" + table_Body_Array[i][index_To_Column_Name_Array[j]] + "\"";
-						}
-						else if(column_Properties[j].name === "experience_Modifiers")
-						{
-							JSON_Table_String = JSON_Table_String + "[";
-							for(let k = 0; k < table_Body_Array[i].experience_Modifiers.length; k++)
-							{
-								JSON_Table_String = JSON_Table_String + table_Body_Array[i][index_To_Column_Name_Array[j]][k] + (k === table_Body_Array[i].experience_Modifiers.length - 1 ? "" : ", ");
-							}
-							JSON_Table_String = JSON_Table_String + "]";
-						}
-						else if(column_Properties[j].name === "optional_Objectives")
-						{
-							JSON_Table_String = JSON_Table_String + "[";
-							for(let k = 0; k < table_Body_Array[i].optional_Objectives.length; k++)
-							{
-								JSON_Table_String = JSON_Table_String + "{title: \"" + table_Body_Array[i][index_To_Column_Name_Array[j]][k].title + "\", value: " + table_Body_Array[i][index_To_Column_Name_Array[j]][k].value + ", experience: 0, included: " + table_Body_Array[i][index_To_Column_Name_Array[j]][k].included + "}" + (k === table_Body_Array[i].optional_Objectives.length - 1 ? "" : ", ");
-							}
-							JSON_Table_String = JSON_Table_String + "]";
-						}
-						else if(column_Properties[j].calculated === true)
-						{
-							JSON_Table_String = JSON_Table_String + "0";
-						}
-						else
-						{
-							JSON_Table_String = JSON_Table_String + table_Body_Array[i][index_To_Column_Name_Array[j]];
-						}
-						if(j !== column_Properties.length - 1)
-						{
-							JSON_Table_String = JSON_Table_String + ",\n";
-						}
-						else
-						{
-							JSON_Table_String = JSON_Table_String + "\n";
-						}
-					}
-					if(i !== table_Body_Array.length - 1)
-					{
-						JSON_Table_String = JSON_Table_String + "},\n";
-					}
-					else
-					{
-						JSON_Table_String = JSON_Table_String + "}\n";
-					}
-				}
-				JSON_Table_String = JSON_Table_String + "];";
+				+ "let table_Body_Array = ";
+//				JSON_Table_String = JSON_Table_String + JSON.stringify(table_Body_Array, [...index_To_Column_Name_Array, "title", "value", "experience", "included"], '\t');	//Not used because it expands sub-objects, uses calculated fields, and doesn't format as preferred, so a manual string building method is used
+				JSON_Table_String = JSON_Table_String + convert_Table_Body_Array_To_Custom_JSON();
+				JSON_Table_String = JSON_Table_String + ";";
 
-				window.URL.revokeObjectURL(download_Raw_String_Link_Element.href);
+				window.URL.revokeObjectURL(download_JSON_Table_Link_Element.href);
 				let table_Blob = new Blob
 				(
 					[JSON_Table_String],
@@ -1591,7 +1878,7 @@
 						type: 'text/javascript'
 					}
 				);
-				download_Raw_String_Link_Element.href = window.URL.createObjectURL(table_Blob);
+				download_JSON_Table_Link_Element.href = window.URL.createObjectURL(table_Blob);
 			}
 
 			function table_Data_Changed(table_Row, table_Column)
@@ -1715,20 +2002,6 @@
 				}
 				filter_Table_Rows();
 				window.onbeforeunload = function(){return true};	//Sets a warning if the user navigates away after making changes, warning is removed when local storage is saved
-			}
-
-			function toggle_Visibility(triggering_Button, toggled_Element_ID_String, button_String)
-			{
-				if(document.getElementById(toggled_Element_ID_String).style.display === "block")
-				{
-					triggering_Button.textContent = "Show " + button_String;
-					document.getElementById(toggled_Element_ID_String).style.display = "none";
-				}
-				else
-				{
-					triggering_Button.textContent = "Hide " + button_String;
-					document.getElementById(toggled_Element_ID_String).style.display = "block";
-				}
 			}
 
 			function reset_Filters()
