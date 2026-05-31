@@ -1,0 +1,479 @@
+/*Variable declarations*/
+:root
+{
+	--hovered_Lightness_Multiplier: 0.90;
+	--focused_Lightness_Multiplier: 0.85;
+	--active_Lightness_Multiplier: 1.15;
+
+	--collapse_Button_Base_Hue: 60;
+	--collapse_Button_Base_Saturation: 100%;
+	--collapse_Button_Base_Lightness: 50%;
+
+	--ascending_Column_Base_Hue: 221;
+	--ascending_Column_Base_Saturation: 100%;
+	--ascending_Column_Base_Lightness: 65%;
+	--descending_Column_Base_Hue: 26;
+	--descending_Column_Base_Saturation: 100%;
+	--descending_Column_Base_Lightness: 55%;
+	--last_Sorted_Column_Lightness_Multiplier: 0.75;
+}
+
+/*Input styles*/
+input[type="checkbox"]
+{
+	cursor: pointer;
+}
+
+select, ::picker(select)	/*Utilizes customizable selects*/
+{
+	appearance: base-select;
+	cursor: pointer;
+}
+
+
+/*Button variants styles*/
+button
+{
+	width: 190px;
+	cursor: pointer;
+}
+
+.collapse_Toggle_Button
+{
+	background-color: hsl(var(--collapse_Button_Base_Hue), var(--collapse_Button_Base_Saturation), var(--collapse_Button_Base_Lightness));
+}
+
+.collapse_Toggle_Button:hover
+{
+	background-color: hsl(var(--collapse_Button_Base_Hue), var(--collapse_Button_Base_Saturation), calc(var(--collapse_Button_Base_Lightness) * var(--hovered_Lightness_Multiplier)));
+}
+
+.collapse_Toggle_Button:focus
+{
+	background-color: hsl(var(--collapse_Button_Base_Hue), var(--collapse_Button_Base_Saturation), calc(var(--collapse_Button_Base_Lightness) * var(--focused_Lightness_Multiplier)));
+}
+
+.collapse_Toggle_Button:hover:focus
+{
+	background-color: hsl(var(--collapse_Button_Base_Hue), var(--collapse_Button_Base_Saturation), calc(var(--collapse_Button_Base_Lightness) * var(--hovered_Lightness_Multiplier) * var(--focused_Lightness_Multiplier)));
+}
+
+.collapse_Toggle_Button:is(:active, #specificity_Increaser)	/*:is(x, #y) is used to increase the specificity to prioritize it over :hover:focus elements*/
+{
+	background-color: hsl(var(--collapse_Button_Base_Hue), var(--collapse_Button_Base_Saturation), calc(var(--collapse_Button_Base_Lightness) * var(--active_Lightness_Multiplier)));
+}
+
+.invert_Group_Button
+{
+	background-color: purple;
+	color: rgba(255, 255, 64, 1);
+}
+
+
+/*Option area styles*/
+.expandable_Element
+{
+	display: none;
+	opacity: 0;
+	height: auto;
+	margin: 1px;
+	padding: 0 0 5px 0;
+	border-bottom: 2px inset rgb(0, 100, 0);
+	border-top: 2px inset rgb(0, 144, 0);
+	border-left: 2px inset rgb(0, 144, 0);
+	border-right: 2px inset rgb(0, 100, 0);
+	box-shadow: -2px -2px 2px black;
+	overflow: hidden;
+	transition:
+		opacity .2s,
+		display .08s allow-discrete;
+}
+
+.expanded_Element
+{
+	display: block;
+	opacity: 1;
+	overflow: hidden;
+}
+
+@starting-style
+{
+	.expanded_Element
+	{
+		opacity: 0;
+		display: block;
+	}
+}
+
+.equally_Spaced_Buttons
+{
+	display: flex;
+	justify-content: space-between;
+}
+
+
+.filter_Title
+{
+	width: 210px;
+	display: inline-block;
+	white-space: nowrap;
+}
+
+.indented_Filter_Title
+{
+	width: 160px;
+	margin-left: 50px;
+	display: inline-block;
+	white-space: nowrap;
+}
+
+.adventure_Pack_Filter_Title
+{
+	width: 260px;
+	display: inline-block;
+	white-space: nowrap;
+}
+
+.filter_Number_Input
+{
+	width: 70px;
+}
+
+.filter_Text_Input
+{
+	width: 164px;
+}
+
+#table_Options_Holder
+{
+	width: 620px;
+}
+
+#autocomplete_Adventures_Error_Message
+{
+	background-color: rgba(128, 32, 32, 1);
+	color: rgba(255, 255, 128, 1);
+}
+
+
+/*Table and descendent styles*/
+table
+{
+	box-sizing: border-box;
+	border-spacing: 0;
+	border-bottom: 1px solid black;
+}
+
+table thead tr
+{
+	top: 0;
+	margin: 0;
+	padding: 0;
+	border: 1px solid black;
+}
+
+table thead th
+{
+	position: sticky;
+	top: 0;
+	cursor: pointer;
+	border: 1px solid black;
+	max-width: 0;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+table thead th:hover, table thead th:focus
+{
+	overflow: visible;
+	z-index: 2;
+	outline: none;
+}
+
+/*Used to expand column names on hover or when tabbed to without interfering with the rest of the layout*/
+table thead th:hover::after, table thead th:focus::after
+{
+	content: attr(data-text_content);
+	position: absolute;
+	color: rgba(0, 0, 0, 0);
+	top: 0;
+	left: 0;
+	bottom: 0;
+	width: calc-size(auto, size + 2px);
+	min-width: 100%;
+	border-right: 2px solid black;
+	z-index: -1;
+	pointer-events: none;
+}
+
+table thead th:focus::after
+{
+	border: 1px solid white;
+}
+
+/*Ascending column variations*/
+.ascending_Column
+{
+	background-color: hsl(var(--ascending_Column_Base_Hue), var(--ascending_Column_Base_Saturation), var(--ascending_Column_Base_Lightness));
+}
+
+.ascending_Column:hover, .ascending_Column:hover::after
+{
+	background-color: hsl(var(--ascending_Column_Base_Hue), var(--ascending_Column_Base_Saturation), calc(var(--ascending_Column_Base_Lightness) * var(--hovered_Lightness_Multiplier)));
+}
+
+.ascending_Column:focus, .ascending_Column:focus::after
+{
+	background-color: hsl(var(--ascending_Column_Base_Hue), var(--ascending_Column_Base_Saturation), calc(var(--ascending_Column_Base_Lightness) * var(--focused_Lightness_Multiplier)));
+}
+
+table thead th.ascending_Column:hover:focus, table thead th.ascending_Column:hover:focus::after
+{
+	background-color: hsl(var(--ascending_Column_Base_Hue), var(--ascending_Column_Base_Saturation), calc(var(--ascending_Column_Base_Lightness) * var(--hovered_Lightness_Multiplier) * var(--focused_Lightness_Multiplier)));
+}
+
+table thead th.ascending_Column:is(:active, #specificity_Increaser), table thead th.ascending_Column:is(:active, #specificity_Increaser)::after	/*:is(x, #y) is used to increase the specificity to prioritize it over :hover:focus elements*/
+{
+	background-color: hsl(var(--ascending_Column_Base_Hue), var(--ascending_Column_Base_Saturation), calc(var(--ascending_Column_Base_Lightness) * var(--active_Lightness_Multiplier)));
+}
+
+/*Descending column variations*/
+.descending_Column
+{
+	background-color: hsl(var(--descending_Column_Base_Hue), var(--descending_Column_Base_Saturation), var(--descending_Column_Base_Lightness));
+}
+
+.descending_Column:hover, .descending_Column:hover::after
+{
+	background-color: hsl(var(--descending_Column_Base_Hue), var(--descending_Column_Base_Saturation), calc(var(--descending_Column_Base_Lightness) * var(--hovered_Lightness_Multiplier)));
+}
+
+.descending_Column:focus, .descending_Column:focus::after
+{
+	background-color: hsl(var(--descending_Column_Base_Hue), var(--descending_Column_Base_Saturation), calc(var(--descending_Column_Base_Lightness) * var(--focused_Lightness_Multiplier)));
+}
+
+table thead th.descending_Column:hover:focus, table thead th.descending_Column:hover:focus::after
+{
+	background-color: hsl(var(--descending_Column_Base_Hue), var(--descending_Column_Base_Saturation), calc(var(--descending_Column_Base_Lightness) * var(--hovered_Lightness_Multiplier) * var(--focused_Lightness_Multiplier)));
+}
+
+table thead th.descending_Column:is(:active, #specificity_Increaser), table thead th.descending_Column:is(:active, #specificity_Increaser)::after	/*:is(x, #y) is used to increase the specificity to prioritize it over :hover:focus elements*/
+{
+	background-color: hsl(var(--descending_Column_Base_Hue), var(--descending_Column_Base_Saturation), calc(var(--descending_Column_Base_Lightness) * var(--active_Lightness_Multiplier)));
+}
+
+/*Last-sorted ascending column variations*/
+.last_Sorted_Header.ascending_Column, .last_Sorted_Header.ascending_Column::after
+{
+	background-color: hsl(var(--ascending_Column_Base_Hue), var(--ascending_Column_Base_Saturation), calc(var(--ascending_Column_Base_Lightness) * var(--last_Sorted_Column_Lightness_Multiplier)));
+}
+
+.last_Sorted_Header.ascending_Column:hover, .last_Sorted_Header.ascending_Column:hover::after
+{
+	background-color: hsl(var(--ascending_Column_Base_Hue), var(--ascending_Column_Base_Saturation), calc(var(--ascending_Column_Base_Lightness) * var(--last_Sorted_Column_Lightness_Multiplier) * var(--hovered_Lightness_Multiplier)));
+}
+
+.last_Sorted_Header.ascending_Column:focus, .last_Sorted_Header.ascending_Column:focus::after
+{
+	background-color: hsl(var(--ascending_Column_Base_Hue), var(--ascending_Column_Base_Saturation), calc(var(--ascending_Column_Base_Lightness) * var(--last_Sorted_Column_Lightness_Multiplier) * var(--focused_Lightness_Multiplier)));
+}
+
+table thead th.last_Sorted_Header.ascending_Column:hover:focus, table thead th.last_Sorted_Header.ascending_Column:hover:focus::after
+{
+	background-color: hsl(var(--ascending_Column_Base_Hue), var(--ascending_Column_Base_Saturation), calc(var(--ascending_Column_Base_Lightness) * var(--last_Sorted_Column_Lightness_Multiplier) * var(--hovered_Lightness_Multiplier) * var(--focused_Lightness_Multiplier)));
+}
+
+table thead th.last_Sorted_Header.ascending_Column:is(:active, #specificity_Increaser), table thead th.last_Sorted_Header.ascending_Column:is(:active, #specificity_Increaser)::after
+{
+	background-color: hsl(var(--ascending_Column_Base_Hue), var(--ascending_Column_Base_Saturation), calc(var(--ascending_Column_Base_Lightness) * var(--last_Sorted_Column_Lightness_Multiplier) * var(--active_Lightness_Multiplier)));
+}
+
+/*Last-sorted descending column variations*/
+.last_Sorted_Header.descending_Column, .last_Sorted_Header.descending_Column::after
+{
+	background-color: hsl(var(--descending_Column_Base_Hue), var(--descending_Column_Base_Saturation), calc(var(--descending_Column_Base_Lightness) * var(--last_Sorted_Column_Lightness_Multiplier)));
+}
+
+.last_Sorted_Header.descending_Column:hover, .last_Sorted_Header.descending_Column:hover::after
+{
+	background-color: hsl(var(--descending_Column_Base_Hue), var(--descending_Column_Base_Saturation), calc(var(--descending_Column_Base_Lightness) * var(--last_Sorted_Column_Lightness_Multiplier) * var(--hovered_Lightness_Multiplier)));
+}
+
+.last_Sorted_Header.descending_Column:focus, .last_Sorted_Header.descending_Column:focus::after
+{
+	background-color: hsl(var(--descending_Column_Base_Hue), var(--descending_Column_Base_Saturation), calc(var(--descending_Column_Base_Lightness) * var(--last_Sorted_Column_Lightness_Multiplier) * var(--focused_Lightness_Multiplier)));
+}
+
+table thead th.last_Sorted_Header.descending_Column:hover:focus, table thead th.last_Sorted_Header.descending_Column:hover:focus::after
+{
+	background-color: hsl(var(--descending_Column_Base_Hue), var(--descending_Column_Base_Saturation), calc(var(--descending_Column_Base_Lightness) * var(--last_Sorted_Column_Lightness_Multiplier) * var(--hovered_Lightness_Multiplier) * var(--focused_Lightness_Multiplier)));
+}
+
+table thead th.last_Sorted_Header.descending_Column:is(:active, #specificity_Increaser), table thead th.last_Sorted_Header.descending_Column:is(:active, #specificity_Increaser)::after
+{
+	background-color: hsl(var(--descending_Column_Base_Hue), var(--descending_Column_Base_Saturation), calc(var(--descending_Column_Base_Lightness) * var(--last_Sorted_Column_Lightness_Multiplier) * var(--active_Lightness_Multiplier)));
+}
+
+/*Table body styles*/
+table tbody tr
+{
+	height: 38px;
+	border-left: 1px solid black;
+	border-right: 1px solid black;
+}
+
+table tbody tr:nth-child(odd of [style*="display: table-row"])
+{
+	background-color: rgba(255, 255, 255, 1.0);
+}
+
+table tbody tr:nth-child(even of [style*="display: table-row"])
+{
+	background-color: rgba(225, 225, 225, 1.0)
+}
+
+table tbody tr td
+{
+	text-align: center;
+	border-left: 1px solid rgba(0, 0, 0, 0.05);
+	border-right: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+table tbody tr td:first-child
+{
+	border-left: 1px solid black;
+}
+
+table tbody tr td:last-child
+{
+	border-right: 1px solid black;
+}
+
+.alphabetical_Column
+{
+	width: 110px;
+	min-width: 110px;
+}
+
+.numerical_Column
+{
+	width: 60px;
+	min-width: 60px;
+	max-width: 60px;
+}
+
+.object_List_Column
+{
+	width: 225px;
+	min-width: 225px;
+}
+
+.object_List_Table_Data
+{
+	box-sizing: border-box;
+	text-align: left;
+}
+
+/*Chest styles*/
+.main_Chest_Properties
+{
+	max-width: 225px;
+}
+
+
+/*Item list styles*/
+.item_Single_Entry
+{
+	display: flex;
+	flex-wrap: nowrap;
+	max-width: 225px;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.item_Single_Entry:hover
+{
+	overflow: visible;
+}
+
+/*Experience Modifiers styles*/
+.experience_Modifier_Single_Entry
+{
+	display: flex;
+	flex-wrap: nowrap;
+	justify-content: space-between;
+	min-width: 225px;
+}
+
+.experience_Modifier_Title
+{
+	width: 75%;
+	height: 1rem;
+}
+
+.experience_Modifier_Value
+{
+	box-sizing: border-box;
+	width: 20%;
+	height: 1rem;
+	border: 0.0625rem solid black;
+	padding: 0px;
+}
+
+/*Optional Objectives styles*/
+.optional_Objective_Single_Entry
+{
+	width: 225px;
+	min-width: 225px;
+	max-width: 225px;
+	display: flex;
+	flex-wrap: nowrap;
+}
+
+.optional_Objective_Title
+{
+	box-sizing: border-box;
+	width: 120px;
+	height: 1rem;
+	line-height: 1rem;
+	/*overflow: hidden; When optional titles are added, change the element to a span and reactivate styling. Play around and try to get the spacing equal to the input boxes
+	white-space: nowrap;
+	text-overflow: ellipsis;*/
+}
+
+/*.optional_Objective_Title:hover
+{
+	height: auto;
+	text-overflow: clip;
+	white-space: wrap;
+}*/
+
+.optional_Objective_Value
+{
+	box-sizing: border-box;
+	margin: 0px;
+	width: 25%;
+	height: 1rem;
+	padding: 0px;
+}
+
+.optional_Objective_Experience
+{
+	box-sizing: border-box;
+	width: 50px;
+	height: 1rem;
+	line-height: 1rem;
+}
+
+.optional_Objective_Checkbox
+{
+	border: 1px solid black;
+	margin: 0px;
+	margin-left: auto;
+	box-sizing: border-box;
+	width: 1rem;
+	height: 1rem;
+	line-height: 1rem;
+}
